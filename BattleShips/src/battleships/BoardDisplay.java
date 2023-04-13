@@ -10,35 +10,24 @@ package battleships;
  */
 public class BoardDisplay {
 
-    // 2d array to store board
-    private int[][] board;
-    private int x;
-    private int y;
-
-    public BoardDisplay(int x, int y) {
-        this.x = x;
-        // limit y value to between letters in alphabet
-        if (y <= 26) {
-            this.board = new int[y][x];
-            this.y = y;
-        } else{
-            this.board = new int[26][x];
-            this.y = 26;
-        }
+    private Board gameBoard;
+    
+    public BoardDisplay(Board board){
+        this.gameBoard = board;
     }
-
+    
     public void printBoard() {
 
         // print top of board
         System.out.print("    ");
-        for (int i = 1; i <= x; i++) {
+        for (int i = 1; i <= this.gameBoard.getX(); i++) {
             System.out.print(i + " ");
         }
         System.out.println("\n");
 
         // print board
         char letter = 'A';
-        for (int[] row : board) {
+        for (int[] row : this.gameBoard.cells) {
             // print letter coordinates
             System.out.print(letter + "   ");
             letter++;
@@ -48,10 +37,6 @@ public class BoardDisplay {
             System.out.println("");
         }
 
-    }
-    
-    public int[][] getBoard(){
-        return this.board;
     }
 
 }
