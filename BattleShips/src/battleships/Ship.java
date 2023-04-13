@@ -11,9 +11,16 @@ package battleships;
 
 public class Ship {
     int length;
-    int[] position;
+    int x;
+    int y;
     Boolean horizontal;
     
+    public Ship(int length, int x, int y, Boolean horizontal){
+        this.length = length;
+        this.x = x;
+        this.y = y;
+        this.horizontal = horizontal;
+    }
 
     
 }
