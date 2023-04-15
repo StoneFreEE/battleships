@@ -21,7 +21,7 @@ public class BoardDisplay {
         // print top of board
         System.out.print("    ");
         for (int i = 1; i <= this.gameBoard.getX(); i++) {
-            System.out.print(i + " ");
+            System.out.print(String.format("%2d", i) + " ");
         }
         System.out.println("\n");
 
@@ -29,14 +29,13 @@ public class BoardDisplay {
         char letter = 'A';
         for (int[] row : this.gameBoard.cells) {
             // print letter coordinates
-            System.out.print(letter + "   ");
-            letter++;
+            System.out.print(letter++ + "   ");
             for (int element : row) {
-                System.out.print(element + " ");
+                System.out.print(String.format("%2d", element) + " ");
             }
             System.out.println("");
         }
-
+        System.out.println("");
     }
 
 }

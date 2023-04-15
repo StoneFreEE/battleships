@@ -4,6 +4,10 @@
  */
 package battleships;
 
+import java.awt.Point;
+import java.util.HashMap;
+import java.util.HashSet;
+
 /**
  *
  * @author 64272
@@ -11,16 +15,22 @@ package battleships;
 
 public class Ship {
     int length;
-    int x;
-    int y;
-    Boolean horizontal;
+    Point origin;
+    Point endPoint;
     
-    public Ship(int length, int x, int y, Boolean horizontal){
+    public Ship(int length, Point origin){
         this.length = length;
-        this.x = x;
-        this.y = y;
-        this.horizontal = horizontal;
+        this.origin = origin;
+        this.endPoint = new Point();
     }
+    
+    public Ship(int length, Point origin, Point end){
+        this.length = length;
+        this.origin = origin;
+        this.endPoint = end;
+    }
+    
+    
 
     
 }
