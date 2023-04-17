@@ -5,7 +5,6 @@
 package battleships;
 
 import java.awt.Point;
-import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -13,11 +12,12 @@ import java.util.HashSet;
  * @author 64272
  */
 // idk where to put this but might need later
-// 3 states, none, ship, deadship
+// 3 states, none, ship, deadship, sunkship
 enum States {
     NONE,
     SHIP,
-    DEADSHIP
+    DEADSHIP,
+    SUNKSHIP
 }
 // alter cells on cells
 // display cells
@@ -27,22 +27,19 @@ public class Board {
 
     // 2d array to store cells
     public int[][] cells;
-    private int x;
-    private int y;
+    private int length;
 
-    public Board(int x, int y) {
-        this.x = x;
-        // limit y value to between letters in alphabet
-        if (y <= 26) {
-            this.cells = new int[y][x];
-            this.y = y;
+    public Board(int length) {
+        // limit length value to between letters in alphabet
+        if (length <= 26) {
+            this.cells = new int[length][length];
+            this.length = length;
         } else {
-            this.cells = new int[26][x];
-            this.y = 26;
+            this.cells = new int[26][length];
+            this.length = 26;
         }
     }
 
-    // TODO create place ship method
     // Updates cells based on ship object passed in
     public void placeShip(Ship ship) {
         // change from display coordinates to cell coordinates
@@ -60,7 +57,7 @@ public class Board {
                 }
             }
         }
-        // Check if horizontla using origin and end point x
+        // Check if horizontla using origin and end point length
         if ((int) ship.origin.getX() != (int) ship.endPoint.getX()) {
             // Check if going left or right
             boolean orientation = (int) ship.origin.getX() < (int) ship.endPoint.getX();
@@ -75,20 +72,14 @@ public class Board {
             }
         }
     }
-    
-    public boolean isFree(Point point) {
-        if (cells[(int)point.getY()][(int)point.getX()] == States.SHIP.ordinal()) {
-            return false;
-        }
-        return true;
+
+    public int getLength() {
+        return this.length;
     }
 
-    public int getX() {
-        return this.x;
-    }
-
-    public HashSet<Point> checkPossible(Point origin, Ship ship) {
-        HashSet<Point> possiblePoints = new HashSet<Point>();
+    // FINDS ALL POSSIBLE POINTS
+    public HashSet<Point> checkPossible(Ship ship) {
+        HashSet<Point> possiblePoints = new HashSet<>();
         // If statements checks possible points within boundaries
         // For loop checks for already existing ships on board
         boolean place = true;
@@ -103,7 +94,7 @@ public class Board {
             }
             place = true;
         }
-        if (!(ship.origin.getX() + (ship.length - 1) > this.x - 1)) {
+        if (!(ship.origin.getX() + (ship.length - 1) > this.length - 1)) {
             for (int i = 0; i < ship.length; i++) {
                 if (cells[(int) ship.origin.getY()][(int) ship.origin.getX() + i] == States.SHIP.ordinal()) {
                     place = false;
@@ -125,7 +116,7 @@ public class Board {
             }
             place = true;
         }
-        if (!(ship.origin.getY() + (ship.length - 1) > this.y - 1)) {
+        if (!(ship.origin.getY() + (ship.length - 1) > this.length - 1)) {
             for (int i = 0; i < ship.length; i++) {
                 if (cells[(int) ship.origin.getY() + i][(int) ship.origin.getX()] == States.SHIP.ordinal()) {
                     place = false;
@@ -151,7 +142,7 @@ public class Board {
             // Get last digits of text etc. a10 -> 10
             int digit = Integer.parseInt(text.substring(1));
             // Check within boundaries
-            if (!(Character.isAlphabetic(ch)) || digit < 0 || digit > x || ch > (y - 1 + 'A')) {
+            if (!(Character.isAlphabetic(ch)) || digit < 0 || digit > length || ch > (length - 1 + 'A')) {
                 return null;
             }
             Point newPoint = new Point(digit - 1, ch - 'A');
@@ -159,12 +150,46 @@ public class Board {
         } catch (NumberFormatException e) {
             return null;
         }
-        
-    }
-}
 
-// TODO check if ship has been sunk
-// TODO update state of cells after each turn
-// placing ship idea !
-// when placing ships place using origin of leftmost point (if ship horizontal)
-// or topmost point (if ship vertical)
+    }
+
+    public void printBoard() {
+
+        // print top of board
+        System.out.print("    ");
+        for (int i = 1; i <= this.getLength(); i++) {
+            System.out.print(String.format("%2d", i) + " ");
+        }
+        System.out.println("\n");
+
+        // print board
+        char letter = 'A';
+        for (int[] row : this.cells) {
+            // print letter coordinates
+            System.out.print(letter++ + "   ");
+            for (int element : row) {
+                //switch (element){
+                //  case States.SHIP.ordinal() -> colour = ANSI_GREEN;  
+                //  }
+
+                System.out.print(String.format("%2d", element) + " ");
+
+            }
+            System.out.println("");
+        }
+        System.out.println("");
+    }
+
+    // returns true if free (not ship)
+    public boolean isFree(Point point) {
+        return cells[(int) point.getY()][(int) point.getX()] != States.SHIP.ordinal();
+    }
+    
+    // returns true if cell is deadship
+    public boolean isHit(Point point){
+        return cells[(int) point.getY()][(int) point.getX()] == States.DEADSHIP.ordinal();
+    }
+
+
+    // TODO create isShip, isHit, isSunk functions
+}
