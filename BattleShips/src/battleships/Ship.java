@@ -12,25 +12,22 @@ import java.util.HashSet;
  *
  * @author 64272
  */
-
 public class Ship {
+
     int length;
     Point origin;
     Point endPoint;
-    
-    public Ship(int length, Point origin){
+
+    public Ship(int length, Point origin) {
         this.length = length;
         this.origin = origin;
         this.endPoint = new Point();
     }
-    
-    public Ship(int length, Point origin, Point end){
+
+    public Ship(int length, Point origin, Point end) {
         this.length = length;
         this.origin = origin;
         this.endPoint = end;
     }
-    
-    
 
-    
 }

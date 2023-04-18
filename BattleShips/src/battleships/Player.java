@@ -5,6 +5,7 @@
 package battleships;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -14,18 +15,24 @@ import java.util.Scanner;
  */
 public class Player {
 
-    Board board;
+    Board playerBoard;
     int shipsSunk;
+    ArrayList<Ship> ships;
+
+    public Player() {
+        this.shipsSunk = 0;
+    }
 
     public void initBoard(int boardLength, int[] shipLengths) {
+        ships = new ArrayList<>();
+
         Scanner scanner = new Scanner(System.in);
 
-        this.board = new Board(boardLength);
+        this.playerBoard = new Board(boardLength);
 
         int nShips = shipLengths.length;
 
         for (int i = 0; i < nShips; i++) {
-            board.printBoard();
             System.out.println("Placing ship of length " + shipLengths[i]);
             HashSet<Point> possiblePoints = new HashSet<>();
             Point userOrigin = new Point();
@@ -33,10 +40,10 @@ public class Player {
             do {
                 System.out.println("Pick an origin (e.g C4): ");
                 String originResponse = scanner.nextLine();
-                userOrigin = board.parsePoint(originResponse);
+                userOrigin = playerBoard.parsePoint(originResponse);
                 if (userOrigin != null) {
                     Ship ship = new Ship(shipLengths[i], userOrigin);
-                    possiblePoints = board.checkPossible(ship);
+                    possiblePoints = playerBoard.checkPossible(ship);
                     if (possiblePoints.isEmpty()) {
                         System.out.println("No possible end points found");
                         System.out.println("Choose another origin");
@@ -45,7 +52,7 @@ public class Player {
                     System.out.println("Invalid origin");
                 }
                 System.out.println("");
-            } while (possiblePoints.isEmpty() || !board.isFree(userOrigin) || userOrigin == null);
+            } while (possiblePoints.isEmpty() || !playerBoard.isFree(userOrigin) || userOrigin == null);
 
             Point userEnd = new Point();
             do {
@@ -57,10 +64,10 @@ public class Player {
                     System.out.println("- " + letter + "" + ((int) point.getX() + 1));
                 }
                 String endResponse = scanner.nextLine();
-                userEnd = board.parsePoint(endResponse);
+                userEnd = playerBoard.parsePoint(endResponse);
                 if (possiblePoints.contains(userEnd) && userEnd != null) {
                     Ship newShip = new Ship(shipLengths[i], userOrigin, userEnd);
-                    board.placeShip(newShip);
+                    playerBoard.placeShip(newShip);
                 } else {
                     System.out.println("Invalid end point");
                 }
@@ -68,16 +75,26 @@ public class Player {
         }
     }
 
+    //places all ships at x = 0 
     public void testingInitBoard(int boardLength, int[] shipLengths) {
-        this.board = new Board(boardLength);
-        for (int i = 0; i < shipLengths.length; i++){
-            Ship ship = new Ship(shipLengths[i], new Point(0, i), new Point(shipLengths[i], i));
-            this.board.placeShip(ship);
+        ships = new ArrayList<>();
+
+        this.playerBoard = new Board(boardLength);
+
+        for (int i = 0; i < shipLengths.length; i++) {
+            Ship ship = new Ship(shipLengths[i], new Point(0, i), new Point(shipLengths[i] - 1, i));
+            ships.add(ship);
+            this.playerBoard.placeShip(ship);
         }
     }
 
-    // TODO create method for firing cannon
-    // Ask player which coordinate they want to fire cannon at
-    // use olviers prompt parsing thing for this
-    // 
+    // wins if all battleships are sunk
+    // updates shipsSunk
+    public Boolean checkLose() {
+        this.shipsSunk = 0;
+        for (Ship ship : this.ships) {
+            this.shipsSunk += this.playerBoard.isSunk(ship) ? 1 : 0;
+        }
+        return (this.shipsSunk == this.ships.size());
+    }
 }

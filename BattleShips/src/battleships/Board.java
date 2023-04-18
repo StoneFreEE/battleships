@@ -12,12 +12,12 @@ import java.util.HashSet;
  * @author 64272
  */
 // idk where to put this but might need later
-// 3 states, none, ship, deadship, sunkship
+// 3 states, none, ship, deadship
 enum States {
     NONE,
     SHIP,
     DEADSHIP,
-    SUNKSHIP
+    DEADNONE
 }
 // alter cells on cells
 // display cells
@@ -77,7 +77,7 @@ public class Board {
         return this.length;
     }
 
-    // FINDS ALL POSSIBLE POINTS
+    // FINDS ALL POSSIBLE END POINTS
     public HashSet<Point> checkPossible(Ship ship) {
         HashSet<Point> possiblePoints = new HashSet<>();
         // If statements checks possible points within boundaries
@@ -167,12 +167,17 @@ public class Board {
         for (int[] row : this.cells) {
             // print letter coordinates
             System.out.print(letter++ + "   ");
-            for (int element : row) {
-                //switch (element){
-                //  case States.SHIP.ordinal() -> colour = ANSI_GREEN;  
-                //  }
 
-                System.out.print(String.format("%2d", element) + " ");
+            for (int element : row) {
+                if (element == States.DEADNONE.ordinal()) {
+                    System.out.print(" # ");
+                } else if (element == States.DEADSHIP.ordinal()) {
+                    System.out.print(" X ");
+                } else if (element == States.SHIP.ordinal()) {
+                    System.out.print(" O ");
+                } else {
+                    System.out.print(" . ");
+                }
 
             }
             System.out.println("");
@@ -180,16 +185,95 @@ public class Board {
         System.out.println("");
     }
 
-    // returns true if free (not ship)
-    public boolean isFree(Point point) {
-        return cells[(int) point.getY()][(int) point.getX()] != States.SHIP.ordinal();
+    // prints enemy board to player
+    public void printEnemyBoard() {
+        // print top of board
+        System.out.print("    ");
+        for (int i = 1; i <= this.getLength(); i++) {
+            System.out.print(String.format("%2d", i) + " ");
+        }
+        System.out.println("\n");
+
+        // print board
+        char letter = 'A';
+        for (int[] row : this.cells) {
+            // print letter coordinates
+            System.out.print(letter++ + "   ");
+            for (int element : row) {
+                if (element == States.DEADNONE.ordinal()) {
+                    System.out.print(" # ");
+                } else if (element == States.DEADSHIP.ordinal()) {
+                    System.out.print(" X ");
+                } else {
+                    System.out.print(" . ");
+                }
+
+            }
+            System.out.println("");
+        }
+        System.out.println("");
     }
     
-    // returns true if cell is deadship
-    public boolean isHit(Point point){
-        return cells[(int) point.getY()][(int) point.getX()] == States.DEADSHIP.ordinal();
+    // returns true if free (not ship)
+    public boolean isFree(Point point) {
+        return cells[point.y][point.x] != States.SHIP.ordinal();
+    }
+    // returns true if deadship
+    public boolean isHit(Point point) {
+        return cells[point.y][point.x] == States.DEADSHIP.ordinal();
     }
 
+    public boolean isDeadNone(Point point) {
+        return cells[point.y][point.x] == States.DEADNONE.ordinal();
 
-    // TODO create isShip, isHit, isSunk functions
+    }
+    // TODO return true if ship is sunk and false if ship is not sunk
+    public boolean isSunk(Ship ship) {
+        int sunkCellCount = 0;
+
+        // if origin point x is same as end point x, ship is vertical 
+        // if origin point y is higher than endpoint y, ship is oriented top to bottom
+        if (ship.origin.x == ship.endPoint.x) {
+            for (int i = 0; i < ship.length; i++) {
+                // check if all cells of ship are sunk cells
+                if (ship.origin.y > ship.endPoint.y) {
+                    if (this.cells[ship.origin.y - i][ship.origin.x] == States.DEADSHIP.ordinal()) {
+                        sunkCellCount++;
+                    }
+                } else {
+                    if (this.cells[ship.origin.y + i][ship.origin.x] == States.DEADSHIP.ordinal()) {
+                        sunkCellCount++;
+                    }
+                }
+
+            }
+        } else {
+            // if ship is horizontal
+            for (int i = 0; i < ship.length; i++) {
+                // check if all cells of ship are sunk cells
+                // if origin x is greater than endpoint x, ship is oriented from right to left
+                if (ship.origin.x > ship.endPoint.x) {
+                    if (this.cells[ship.origin.y][ship.origin.x - i] == States.DEADSHIP.ordinal()) {
+                        sunkCellCount++;
+                    }
+                } else {
+                    if (this.cells[ship.origin.y][ship.origin.x + i] == States.DEADSHIP.ordinal()) {
+                        sunkCellCount++;
+                    }
+                }
+
+            }
+        }
+        return (sunkCellCount == ship.length);
+    }
+
+    // set cell to dead cell
+    public void setDead(Point point) {
+        if (this.cells[point.y][point.x] == States.SHIP.ordinal()) {
+            this.cells[point.y][point.x] = States.DEADSHIP.ordinal();
+        } else {
+            this.cells[point.y][point.x] = States.DEADNONE.ordinal();
+
+        }
+    }
 }

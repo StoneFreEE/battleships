@@ -5,6 +5,7 @@
 package battleships;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -18,13 +19,18 @@ public class AIEnemy {
 
     Board board;
     int shipsSunk;
+    ArrayList<Ship> ships;
 
+    public AIEnemy() {
+        this.shipsSunk = 0;
+    }
     Random rand = new Random();
 
     // Ship placement randomiser
     public void initBoard(int boardLength, int[] shipLengths) {
+        ships = new ArrayList<>();
         this.board = new Board(boardLength);
-        
+
         // store all generated origin points to check for repitition
         Set<Point> originPoints = new HashSet<Point>();
         Set<Point> possibleEndPoints = new HashSet<Point>();
@@ -47,6 +53,7 @@ public class AIEnemy {
             Point endPoint = returnRandomPoint(possibleEndPoints);
 
             Ship ship = new Ship(shipLength, originPoint, endPoint);
+            ships.add(ship);
 
             this.board.placeShip(ship);
         }
@@ -65,7 +72,14 @@ public class AIEnemy {
         return new Point();
     }
 
-    //TODO Create fire cannon method
-    
-    //TODO Create SMART CANNON SHOOTING METHOD
+    // loses if all battleships are sunk
+    // updates shipsSunk
+    public Boolean checkLose() {
+        this.shipsSunk = 0;
+        for (Ship ship : this.ships) {
+            this.shipsSunk += this.board.isSunk(ship) ? 1 : 0;
+        }
+        return (this.shipsSunk == this.ships.size());
+    }
+
 }
