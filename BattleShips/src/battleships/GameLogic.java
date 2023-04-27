@@ -46,24 +46,32 @@ public class GameLogic {
 
     //initialise AIEnemy's playerBoard and player's playerBoard
     public void startGame(int boardLength, int[] shipLengths) throws IOException {
+        ArrayList<Ship> ships = new ArrayList<Ship>();
         // Prompt for load file board
-        String loadFileResponse = promptYesOrNo("Would you like to load a board file? (y/n)");
-        if (loadFileResponse.equals("y")) {
-            System.out.println("Enter the filename: ");
-            String loadFilename = scanner.nextLine();
-            ArrayList<Ship> ships = loadBoard(loadFilename, boardLength);
-            this.user.initLoadFile(boardLength, shipLengths, ships);
-        }
-        else {
-            this.user.initBoard(boardLength, shipLengths);
-            String saveFileResponse = promptYesOrNo("Would you like to save this board as a file? (y/n)");
-            if (saveFileResponse.equals("y")) {
-                // SAVE
+        do {
+            String loadFileResponse = promptYesOrNo("Would you like to load a board file? (y/n)");
+            if (loadFileResponse.equals("y")) {
                 System.out.println("Filename: ");
-                String saveFilename = scanner.nextLine();
-                saveBoard(saveFilename);
+                String loadFilename = scanner.nextLine();
+                ships = loadBoard(loadFilename, boardLength);
+                if (ships != null) {
+                    this.user.initLoadFile(boardLength, shipLengths, ships);
+                }
+                else {
+                    System.out.println("Invalid filename");
+                }
             }
-        }
+            else {
+                this.user.initBoard(boardLength, shipLengths);
+                String saveFileResponse = promptYesOrNo("Would you like to save this board as a file? (y/n)");
+                if (saveFileResponse.equals("y")) {
+                    // SAVE
+                    System.out.println("Filename: ");
+                    String saveFilename = scanner.nextLine();
+                    saveBoard(saveFilename);
+                }
+            }
+        }while (ships == null);
         this.enemy.initBoard(boardLength, shipLengths);
     }
     
@@ -99,6 +107,9 @@ public class GameLogic {
                     ships.add(ship);
             }
             return ships;
+        }
+        catch (FileNotFoundException e) {
+            return null;
         }
     }
     
