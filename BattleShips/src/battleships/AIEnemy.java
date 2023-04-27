@@ -4,7 +4,6 @@
  */
 package battleships;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
@@ -15,14 +14,10 @@ import java.util.Set;
  * @author 64272
  */
 // 
-public class AIEnemy {
-
-    Board board;
-    int shipsSunk;
-    ArrayList<Ship> ships;
+public class AIEnemy extends Player{
 
     public AIEnemy() {
-        this.shipsSunk = 0;
+        super();
     }
     Random rand = new Random();
 
@@ -71,15 +66,12 @@ public class AIEnemy {
         }
         return new Point();
     }
-
-    // loses if all battleships are sunk
-    // updates shipsSunk
-    public Boolean checkLose() {
+    
+    public boolean checkLose() {
         this.shipsSunk = 0;
         for (Ship ship : this.ships) {
             this.shipsSunk += this.board.isSunk(ship) ? 1 : 0;
         }
         return (this.shipsSunk == this.ships.size());
     }
-
 }
