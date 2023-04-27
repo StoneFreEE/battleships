@@ -1,21 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package battleships;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-/**
- *
- * @author oliver
- */
-public class Database {
+// Manages database of users
+public class UserDatabase {
     private TreeSet<User> users;
     
-    public Database() {
+    public UserDatabase() {
         this.users = new TreeSet<>();
     }
 
@@ -49,7 +42,7 @@ public class Database {
                     break;
                 }
                 else {
-                    System.out.println("You didn't beat you're highscore, better luck next time!");
+                    System.out.println("You didn't beat your highscore, better luck next time!");
                 }
             }
         }

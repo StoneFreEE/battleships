@@ -1,31 +1,24 @@
 package battleships;
 
-import java.awt.Point;
 import java.io.IOException;
 import java.util.Iterator;
 
-/**
- *
- * @author 64272
- */
+
 public class BattleShips {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) throws IOException {
-
-        Board board = new Board(10);
-
+        
+        // Initialise variables and objects
         final int[] shipLengths = {2, 3, 3, 4, 5};
         
         boolean keepGoing = true;
         
         boolean playerWin = false;
         
-        GameLogic game = new GameLogic(new User(), new AIEnemy(), new Database());
+        Gameplay game = new Gameplay(new User(), new AIEnemy(), new UserDatabase());
         game.load();
         
+        // Start the game
         printTitle();
         game.startGame(10, shipLengths);
         
@@ -41,14 +34,18 @@ public class BattleShips {
                 playerWin = true;
             }
         }
-        if (playerWin){
+        if (playerWin){ // print player win and lose messages
             System.out.println("Congrats! Player wins!"); 
         } else{
             System.out.println("Damn. Player loses!");
         }
+        System.out.println("\nFinal Score for Player "+ game.user.getName()+ ": "+game.user.getScore());
+        System.out.println("");
+        // save file to system
         game.saveFile(game.user);
         System.out.println("");
         System.out.println("LeaderBoard: ");
+        // print leaderboard display
         Iterator it = game.database.getUsers().descendingIterator();
                 while(it.hasNext()) {
                     System.out.println(it.next());

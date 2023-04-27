@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package battleships;
 
 import java.util.ArrayList;
@@ -9,19 +5,16 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-/**
- *
- * @author 64272
- */
-// 
-public class AIEnemy extends Player{
+public class AIEnemy extends Player {
+        
+    Random rand = new Random();
 
     public AIEnemy() {
         super();
     }
-    Random rand = new Random();
 
     // Ship placement randomiser
+    @Override
     public void initBoard(int boardLength, int[] shipLengths) {
         ships = new ArrayList<>();
         this.board = new Board(boardLength);
@@ -36,7 +29,7 @@ public class AIEnemy extends Player{
             // if duplicate, reroll origin point
             // if no possible endpoints, reroll origin point
             do {
-                originPoint = new Point(rand.nextInt(board.getLength()), rand.nextInt(board.getLength()));
+                originPoint = new Point(rand.nextInt(Board.BOARD_SIZE), rand.nextInt(Board.BOARD_SIZE));
                 Ship tempShip = new Ship(shipLength, originPoint);
                 possibleEndPoints = board.checkPossible(tempShip);
 
@@ -54,7 +47,7 @@ public class AIEnemy extends Player{
         }
     }
 
-    // returns a random point from a set of points
+    // helper method for initBoard method
     private Point returnRandomPoint(Set<Point> points) {
         int i = 0;
         int randIndex = rand.nextInt(points.size());
@@ -66,7 +59,8 @@ public class AIEnemy extends Player{
         }
         return new Point();
     }
-    
+
+    @Override
     public boolean checkLose() {
         this.shipsSunk = 0;
         for (Ship ship : this.ships) {

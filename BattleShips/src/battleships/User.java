@@ -127,20 +127,8 @@ public class User extends Player implements Comparable<User>{
             this.board.placeShip(ship);
         }
     }
-
-    //places all ships at x = 0 
-    public void testingInitBoard(int boardLength, int[] shipLengths) {
-        ships = new ArrayList<>();
-
-        this.board = new Board(boardLength);
-
-        for (int i = 0; i < shipLengths.length; i++) {
-            Ship ship = new Ship(shipLengths[i], new Point(0, i), new Point(shipLengths[i] - 1, i));
-            ships.add(ship);
-            this.board.placeShip(ship);
-        }
-    }
     
+    @Override
     public boolean checkLose() {
         this.shipsSunk = 0;
         for (Ship ship : this.ships) {

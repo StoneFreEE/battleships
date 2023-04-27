@@ -1,34 +1,23 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package battleships;
 
 import java.util.HashSet;
 
-/**
- *
- * @author 64272
- *
- **/
-// alter cells on cells
-// display cells
-// basically everything game cells related
-
+// Alter game cells
 public class Board {
+
 
     // 2d array to store cells
     public int[][] cells;
-    private int length;
+    public static int BOARD_SIZE;
 
     public Board(int length) {
-        // limit length value to between letters in alphabet
+        // limit BOARD_SIZE value to between letters in alphabet
         if (length <= 26) {
             this.cells = new int[length][length];
-            this.length = length;
+            Board.BOARD_SIZE = length;
         } else {
             this.cells = new int[26][length];
-            this.length = 26;
+            Board.BOARD_SIZE = 26;
         }
     }
 
@@ -48,7 +37,7 @@ public class Board {
                 }
             }
         }
-        // Check if horizontla using origin and end point length
+        // Check if horizontla using origin and end point BOARD_SIZE
         if (ship.origin.getX() != ship.endPoint.getX()) {
             // Check if going left or right
             if (ship.origin.getX() < ship.endPoint.getX()) {
@@ -61,10 +50,6 @@ public class Board {
                 }
             }
         }
-    }
-
-    public int getLength() {
-        return this.length;
     }
 
     // FINDS ALL POSSIBLE END POINTS
@@ -84,7 +69,7 @@ public class Board {
             }
             place = true;
         }
-        if (!(ship.origin.getX() + (ship.length - 1) > this.length - 1)) {
+        if (!(ship.origin.getX() + (ship.length - 1) > Board.BOARD_SIZE - 1)) {
             for (int i = 0; i < ship.length; i++) {
                 if (cells[ship.origin.getY()][ship.origin.getX() + i] == States.SHIP.ordinal()) {
                     place = false;
@@ -106,7 +91,7 @@ public class Board {
             }
             place = true;
         }
-        if (!(ship.origin.getY() + (ship.length - 1) > this.length - 1)) {
+        if (!(ship.origin.getY() + (ship.length - 1) > Board.BOARD_SIZE - 1)) {
             for (int i = 0; i < ship.length; i++) {
                 if (cells[ship.origin.getY() + i][ship.origin.getX()] == States.SHIP.ordinal()) {
                     place = false;
@@ -130,8 +115,8 @@ public class Board {
         try {
             // Get last digits of text etc. a10 -> 10
             int digit = Integer.parseInt(text.substring(1));
-            // Check within boundaries
-            if (!(Character.isAlphabetic(ch)) || digit < 0 || digit > length || ch > (length - 1 + 'A')) {
+            // Check within boundaries and input is an alphabet
+            if (!(Character.isAlphabetic(ch)) || digit <= 0 || digit > BOARD_SIZE || ch > (BOARD_SIZE - 1 + 'A')) {
                 return null;
             }
             Point newPoint = new Point(digit - 1, ch - 'A');
@@ -142,11 +127,16 @@ public class Board {
 
     }
 
+    // returns true if point is within xy boundaries and false if not in boundaries
+    public static boolean isValid(Point point){
+        return (!(point.x > BOARD_SIZE-1) || !(point.x <= 0) || !(point.y > BOARD_SIZE-1) || !(point.y <= 0));
+    }
+    
     public void printBoard() {
 
         // print top of board
         System.out.print("    ");
-        for (int i = 1; i <= this.getLength(); i++) {
+        for (int i = 1; i <= Board.BOARD_SIZE; i++) {
             System.out.print(String.format("%2d", i) + " ");
         }
         System.out.println("\n");
@@ -174,35 +164,6 @@ public class Board {
         System.out.println("");
     }
 
-    // prints enemy board to player
-    public void printEnemyBoard() {
-        // print top of board
-        System.out.print("    ");
-        for (int i = 1; i <= this.getLength(); i++) {
-            System.out.print(String.format("%2d", i) + " ");
-        }
-        System.out.println("\n");
-
-        // print board
-        char letter = 'A';
-        for (int[] row : this.cells) {
-            // print letter coordinates
-            System.out.print(letter++ + "   ");
-            for (int element : row) {
-                if (element == States.MISS.ordinal()) {
-                    System.out.print(" # ");
-                } else if (element == States.HIT.ordinal()) {
-                    System.out.print(" X ");
-                } else {
-                    System.out.print(" . ");
-                }
-
-            }
-            System.out.println("");
-        }
-        System.out.println("");
-    }
-    
     // returns true if free (not ship)
     public boolean isFree(Point point) {
         return this.cells[point.getY()][point.getX()] != States.SHIP.ordinal();
@@ -211,12 +172,10 @@ public class Board {
     public boolean isHit(Point point) {
         return this.cells[point.getY()][point.getX()] == States.HIT.ordinal();
     }
-
     public boolean isMiss(Point point) {
         return this.cells[point.getY()][point.getX()] == States.MISS.ordinal();
-
     }
-    // TODO return true if ship is sunk and false if ship is not sunk
+    //return true if ship is sunk and false if ship is not sunk
     public boolean isSunk(Ship ship) {
         int sunkCellCount = 0;
         // if origin point x is same as end point x, ship is vertical 
@@ -255,8 +214,8 @@ public class Board {
         return (sunkCellCount == ship.length);
     }
 
-    // set cell to dead cell
-    public void setDead(Point point) {
+    // fires cannon at point
+    public void fireAt(Point point) {
         if (this.cells[point.getY()][point.getX()] == States.SHIP.ordinal()) {
             this.cells[point.getY()][point.getX()] = States.HIT.ordinal();
         } else {
