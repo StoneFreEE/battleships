@@ -4,21 +4,13 @@
  */
 package battleships;
 
-import java.awt.Point;
 import java.util.HashSet;
 
 /**
  *
  * @author 64272
- */
-// idk where to put this but might need later
-// 3 states, none, ship, deadship
-enum States {
-    NONE,
-    SHIP,
-    DEADSHIP,
-    DEADNONE
-}
+ *
+ **/
 // alter cells on cells
 // display cells
 // basically everything game cells related
@@ -44,30 +36,28 @@ public class Board {
     public void placeShip(Ship ship) {
         // change from display coordinates to cell coordinates
         // Check if vertical using the origin and end point y
-        if ((int) ship.origin.getY() != (int) ship.endPoint.getY()) {
+        if (ship.origin.getY() != ship.endPoint.getY()) {
             // Check if going up or down
-            boolean orientation = (int) ship.origin.getY() < (int) ship.endPoint.getY();
-            if (orientation) {
-                for (int j = (int) ship.origin.getY(); j < (int) ship.endPoint.getY() + 1; j++) {
-                    cells[j][(int) ship.origin.getX()] = States.SHIP.ordinal();
+            if (ship.origin.getY() < ship.endPoint.getY()) {
+                for (int j = ship.origin.getY(); j < ship.endPoint.getY() + 1; j++) {
+                    cells[j][ship.origin.getX()] = States.SHIP.ordinal();
                 }
             } else {
-                for (int j = (int) ship.endPoint.getY(); j < (int) ship.origin.getY() + 1; j++) {
-                    cells[j][(int) ship.origin.getX()] = States.SHIP.ordinal();
+                for (int j = ship.endPoint.getY(); j < ship.origin.getY() + 1; j++) {
+                    cells[j][ship.origin.getX()] = States.SHIP.ordinal();
                 }
             }
         }
         // Check if horizontla using origin and end point length
-        if ((int) ship.origin.getX() != (int) ship.endPoint.getX()) {
+        if (ship.origin.getX() != ship.endPoint.getX()) {
             // Check if going left or right
-            boolean orientation = (int) ship.origin.getX() < (int) ship.endPoint.getX();
-            if (orientation) {
-                for (int j = (int) ship.origin.getX(); j < (int) ship.endPoint.getX() + 1; j++) {
-                    cells[(int) ship.origin.getY()][j] = States.SHIP.ordinal();
+            if (ship.origin.getX() < ship.endPoint.getX()) {
+                for (int j = ship.origin.getX(); j < ship.endPoint.getX() + 1; j++) {
+                    cells[ship.origin.getY()][j] = States.SHIP.ordinal();
                 }
             } else {
-                for (int j = (int) ship.endPoint.getX(); j < (int) ship.origin.getX() + 1; j++) {
-                    cells[(int) ship.origin.getY()][j] = States.SHIP.ordinal();
+                for (int j = ship.endPoint.getX(); j < ship.origin.getX() + 1; j++) {
+                    cells[ship.origin.getY()][j] = States.SHIP.ordinal();
                 }
             }
         }
@@ -85,47 +75,46 @@ public class Board {
         boolean place = true;
         if (!(ship.origin.getX() - (ship.length - 1) < 0)) {
             for (int i = 0; i < ship.length; i++) {
-                if (cells[(int) ship.origin.getY()][(int) ship.origin.getX() - i] == States.SHIP.ordinal()) {
+                if (cells[ship.origin.getY()][ship.origin.getX() - i] == States.SHIP.ordinal()) {
                     place = false;
                 }
             }
             if (place == true) {
-                possiblePoints.add(new Point((int) ship.origin.getX() - (ship.length - 1), (int) ship.origin.getY()));
+                possiblePoints.add(new Point(ship.origin.getX() - (ship.length - 1), ship.origin.getY()));
             }
             place = true;
         }
         if (!(ship.origin.getX() + (ship.length - 1) > this.length - 1)) {
             for (int i = 0; i < ship.length; i++) {
-                if (cells[(int) ship.origin.getY()][(int) ship.origin.getX() + i] == States.SHIP.ordinal()) {
+                if (cells[ship.origin.getY()][ship.origin.getX() + i] == States.SHIP.ordinal()) {
                     place = false;
                 }
             }
             if (place == true) {
-                possiblePoints.add(new Point((int) ship.origin.getX() + (ship.length - 1), (int) ship.origin.getY()));
+                possiblePoints.add(new Point(ship.origin.getX() + (ship.length - 1), ship.origin.getY()));
             }
             place = true;
         }
         if (!(ship.origin.getY() - (ship.length - 1) < 0)) {
             for (int i = 0; i < ship.length; i++) {
-                if (cells[(int) ship.origin.getY() - i][(int) ship.origin.getX()] == States.SHIP.ordinal()) {
+                if (cells[ship.origin.getY() - i][ship.origin.getX()] == States.SHIP.ordinal()) {
                     place = false;
                 }
             }
             if (place == true) {
-                possiblePoints.add(new Point((int) ship.origin.getX(), (int) ship.origin.getY() - (ship.length - 1)));
+                possiblePoints.add(new Point(ship.origin.getX(), ship.origin.getY() - (ship.length - 1)));
             }
             place = true;
         }
         if (!(ship.origin.getY() + (ship.length - 1) > this.length - 1)) {
             for (int i = 0; i < ship.length; i++) {
-                if (cells[(int) ship.origin.getY() + i][(int) ship.origin.getX()] == States.SHIP.ordinal()) {
+                if (cells[ship.origin.getY() + i][ship.origin.getX()] == States.SHIP.ordinal()) {
                     place = false;
                 }
             }
             if (place == true) {
-                possiblePoints.add(new Point((int) ship.origin.getX(), (int) ship.origin.getY() + (ship.length - 1)));
+                possiblePoints.add(new Point(ship.origin.getX(), ship.origin.getY() + (ship.length - 1)));
             }
-            place = true;
         }
 
         return possiblePoints;
@@ -169,9 +158,9 @@ public class Board {
             System.out.print(letter++ + "   ");
 
             for (int element : row) {
-                if (element == States.DEADNONE.ordinal()) {
+                if (element == States.MISS.ordinal()) {
                     System.out.print(" # ");
-                } else if (element == States.DEADSHIP.ordinal()) {
+                } else if (element == States.HIT.ordinal()) {
                     System.out.print(" X ");
                 } else if (element == States.SHIP.ordinal()) {
                     System.out.print(" O ");
@@ -200,9 +189,9 @@ public class Board {
             // print letter coordinates
             System.out.print(letter++ + "   ");
             for (int element : row) {
-                if (element == States.DEADNONE.ordinal()) {
+                if (element == States.MISS.ordinal()) {
                     System.out.print(" # ");
-                } else if (element == States.DEADSHIP.ordinal()) {
+                } else if (element == States.HIT.ordinal()) {
                     System.out.print(" X ");
                 } else {
                     System.out.print(" . ");
@@ -216,15 +205,15 @@ public class Board {
     
     // returns true if free (not ship)
     public boolean isFree(Point point) {
-        return cells[point.y][point.x] != States.SHIP.ordinal();
+        return this.cells[point.getY()][point.getX()] != States.SHIP.ordinal();
     }
-    // returns true if deadship
+    // returns true if hit
     public boolean isHit(Point point) {
-        return cells[point.y][point.x] == States.DEADSHIP.ordinal();
+        return this.cells[point.getY()][point.getX()] == States.HIT.ordinal();
     }
 
-    public boolean isDeadNone(Point point) {
-        return cells[point.y][point.x] == States.DEADNONE.ordinal();
+    public boolean isMiss(Point point) {
+        return this.cells[point.getY()][point.getX()] == States.MISS.ordinal();
 
     }
     // TODO return true if ship is sunk and false if ship is not sunk
@@ -233,15 +222,15 @@ public class Board {
 
         // if origin point x is same as end point x, ship is vertical 
         // if origin point y is higher than endpoint y, ship is oriented top to bottom
-        if (ship.origin.x == ship.endPoint.x) {
+        if (ship.origin.getX() == ship.endPoint.getY()) {
             for (int i = 0; i < ship.length; i++) {
                 // check if all cells of ship are sunk cells
-                if (ship.origin.y > ship.endPoint.y) {
-                    if (this.cells[ship.origin.y - i][ship.origin.x] == States.DEADSHIP.ordinal()) {
+                if (ship.origin.getY() > ship.endPoint.getY()) {
+                    if (this.cells[ship.origin.getY() - i][ship.origin.getX()] == States.HIT.ordinal()) {
                         sunkCellCount++;
                     }
                 } else {
-                    if (this.cells[ship.origin.y + i][ship.origin.x] == States.DEADSHIP.ordinal()) {
+                    if (this.cells[ship.origin.getY() + i][ship.origin.getX()] == States.HIT.ordinal()) {
                         sunkCellCount++;
                     }
                 }
@@ -252,12 +241,12 @@ public class Board {
             for (int i = 0; i < ship.length; i++) {
                 // check if all cells of ship are sunk cells
                 // if origin x is greater than endpoint x, ship is oriented from right to left
-                if (ship.origin.x > ship.endPoint.x) {
-                    if (this.cells[ship.origin.y][ship.origin.x - i] == States.DEADSHIP.ordinal()) {
+                if (ship.origin.getX() > ship.endPoint.getX()) {
+                    if (this.cells[ship.origin.getY()][ship.origin.getX() - i] == States.HIT.ordinal()) {
                         sunkCellCount++;
                     }
                 } else {
-                    if (this.cells[ship.origin.y][ship.origin.x + i] == States.DEADSHIP.ordinal()) {
+                    if (this.cells[ship.origin.getY()][ship.origin.getX() + i] == States.HIT.ordinal()) {
                         sunkCellCount++;
                     }
                 }
@@ -269,10 +258,10 @@ public class Board {
 
     // set cell to dead cell
     public void setDead(Point point) {
-        if (this.cells[point.y][point.x] == States.SHIP.ordinal()) {
-            this.cells[point.y][point.x] = States.DEADSHIP.ordinal();
+        if (this.cells[point.getY()][point.getX()] == States.SHIP.ordinal()) {
+            this.cells[point.getY()][point.getX()] = States.HIT.ordinal();
         } else {
-            this.cells[point.y][point.x] = States.DEADNONE.ordinal();
+            this.cells[point.getY()][point.getX()] = States.MISS.ordinal();
 
         }
     }
