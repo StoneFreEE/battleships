@@ -219,10 +219,9 @@ public class Board {
     // TODO return true if ship is sunk and false if ship is not sunk
     public boolean isSunk(Ship ship) {
         int sunkCellCount = 0;
-
         // if origin point x is same as end point x, ship is vertical 
         // if origin point y is higher than endpoint y, ship is oriented top to bottom
-        if (ship.origin.getX() == ship.endPoint.getY()) {
+        if (ship.origin.getX() == ship.endPoint.getX()) {
             for (int i = 0; i < ship.length; i++) {
                 // check if all cells of ship are sunk cells
                 if (ship.origin.getY() > ship.endPoint.getY()) {
