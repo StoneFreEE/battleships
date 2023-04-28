@@ -1,13 +1,8 @@
 package battleships;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -17,15 +12,15 @@ public class Gameplay {
     User user;
     UserDatabase database;
     AIEnemy enemy;
-    boolean unique;
     Scanner scanner = new Scanner(System.in);
     FileManager fileManager = new FileManager();
+
+    private Point lastShot = new Point(0, 0);
 
     public Gameplay(User user, AIEnemy enemy, UserDatabase database) {
         this.user = user;
         this.enemy = enemy;
         this.database = database;
-        this.unique = false;
     }
 
     //initialise AIEnemy's board and player's board,
@@ -36,7 +31,7 @@ public class Gameplay {
         do {
             fileManager.printLoadSave(this.user, shipLengths, ships);
         } while (ships.isEmpty());
-        this.enemy.initBoard(boardLength, shipLengths);
+        this.enemy.initBoard(shipLengths);
     }
 
     // Takes one turn
@@ -48,54 +43,6 @@ public class Gameplay {
         this.user.setScore(user.getScore() - 10);
         this.enemyFireCannon();
     }
-
-  /*  private String promptYesOrNo(String question) {
-        String userLoadFile = "";
-        // Loop until valid reponse
-        do {
-            System.out.println(question);
-            userLoadFile = scanner.nextLine().toLowerCase();
-            if (!userLoadFile.equals("y") && !userLoadFile.equals("n")) {
-                System.out.println("Invalid Response, try again");
-            }
-        } while (!userLoadFile.equals("y") && !userLoadFile.equals("n"));
-
-        return userLoadFile;
-    }
-
-    private ArrayList<Ship> loadBoard(String filename, int boardLength) throws FileNotFoundException, IOException {
-        try (BufferedReader inStream = new BufferedReader(new FileReader("./resources/" + filename + ".txt"))) {
-            String line = null;
-            this.user.board = new Board(boardLength);
-            // HashMap to store key/value pairs of origin and end points
-            ArrayList<Ship> ships = new ArrayList<Ship>();
-
-            // Load user textfile
-            while ((line = inStream.readLine()) != null) {
-                // Split between whitespace
-                String[] split = line.split(" ");
-                Point firstPoint = this.user.board.parsePoint(split[0]);
-                Point endPoint = this.user.board.parsePoint(split[1]);
-                int length = Integer.parseInt(split[2]);
-                Ship ship = new Ship(length, firstPoint, endPoint);
-                ships.add(ship);
-            }
-            return ships;
-        } catch (FileNotFoundException e) {
-            return null;
-        }
-    }
-
-    private void saveBoard(String filename) throws FileNotFoundException, IOException {
-        try (PrintWriter pw = new PrintWriter(new FileOutputStream("./resources/" + filename + ".txt", false))) {
-            // Output file
-            for (Ship ship : this.user.ships) {
-                String origin = this.user.translatePoint(ship.origin);
-                String end = this.user.translatePoint(ship.endPoint);
-                pw.println(origin + " " + end + " " + ship.length);
-            }
-        }
-    } */
 
     // player fires cannon at enemy
     private void playerFireCannon() {
@@ -133,29 +80,53 @@ public class Gameplay {
         }
     }
 
-    // enemy fires cannon at player
     private void enemyFireCannon() {
         Random rand = new Random();
         Point point = new Point();
-        do {
-            point = new Point(rand.nextInt(Board.BOARD_SIZE), rand.nextInt(Board.BOARD_SIZE));
-        } while (this.user.board.isHit(point) || this.user.board.isMiss(point));
+
+        // If haven't hit a ship yet, randomly shoot at the board
+        if (user.board.isMiss(lastShot)) {
+            do {
+                point = new Point(rand.nextInt(Board.BOARD_SIZE), rand.nextInt(Board.BOARD_SIZE));
+            } while (this.user.board.isHit(point) || this.user.board.isMiss(point));
+        } else {
+            // If hit a ship last turn, prioritize shooting the surrounding areas
+            int x = lastShot.x;
+            int y = lastShot.y;
+
+            // Check up
+            if (y > 0 && !this.user.board.isHit(new Point(x, y - 1)) && !this.user.board.isMiss(new Point(x, y - 1))) {
+                point = new Point(x, y - 1);
+            } // Check down
+            else if (y < Board.BOARD_SIZE - 1 && !this.user.board.isHit(new Point(x, y + 1)) && !this.user.board.isMiss(new Point(x, y + 1))) {
+                point = new Point(x, y + 1);
+            } // Check left
+            else if (x > 0 && !this.user.board.isHit(new Point(x - 1, y)) && !this.user.board.isMiss(new Point(x - 1, y))) {
+                point = new Point(x - 1, y);
+            } // Check right
+            else if (x < Board.BOARD_SIZE - 1 && !this.user.board.isHit(new Point(x + 1, y)) && !this.user.board.isMiss(new Point(x + 1, y))) {
+                point = new Point(x + 1, y);
+            } // If all surrounding areas have already been shot, randomly shoot at the board
+            else {
+                do {
+                    point = new Point(rand.nextInt(Board.BOARD_SIZE), rand.nextInt(Board.BOARD_SIZE));
+                } while (this.user.board.isHit(point) || this.user.board.isMiss(point));
+            }
+        }
 
         this.user.board.fireAt(point);
-        
-        String coordinate = this.enemy.translatePoint(point);
+        lastShot = point;
 
+        String coordinate = this.enemy.translatePoint(point);
         System.out.println("Enemy Shot: " + coordinate);
 
         boolean isHit = this.user.board.isHit(point);
-
         if (isHit) {
             System.out.println("Enemy got a hit !!\n");
         } else {
             System.out.println("Enemy missed!!");
         }
         System.out.println("");
-
     }
 
     // prints double board display
@@ -226,42 +197,10 @@ public class Gameplay {
     }
 
     public void load() throws FileNotFoundException, IOException {
-        try (BufferedReader inStream = new BufferedReader(new FileReader("./resources/scores.txt"))) {
-            String line = null;
-
-            // Load user textfile
-            while ((line = inStream.readLine()) != null) {
-                String[] split = line.split(" ");
-                User current = new User(split[0], Integer.parseInt(split[1]));
-                this.database.getUsers().add(current);
-            }
-
-            // Get username
-            System.out.println("Enter your name: ");
-            String name = scanner.nextLine();
-            // Check if user in database
-            if ((this.user = this.database.checkUnique(name)) == null) {
-                this.unique = true;
-            }
-            this.user = new User(name);
-        }
+        this.user = this.fileManager.load(this.user, this.database);
     }
 
     public void saveFile(User user) throws FileNotFoundException {
-        // Add new user to database
-        if (this.unique == true) {
-            this.database.getUsers().add(this.user);
-        } // Update user in database
-        else {
-            this.database.updateUser(this.user);
-        }
-
-        try (PrintWriter pw = new PrintWriter(new FileOutputStream("./resources/scores.txt", false))) {
-            // Output file
-            Iterator it = database.getUsers().descendingIterator();
-            while (it.hasNext()) {
-                pw.println(it.next());
-            }
-        }
+        this.fileManager.saveFile(this.user, this.database);
     }
 }

@@ -8,7 +8,7 @@ public class BattleShips {
 
     public static void main(String[] args) throws IOException {
         
-        // Initialise variables and objects
+        // INITIALISE VARIABLES
         final int[] shipLengths = {2, 3, 3, 4, 5};
         
         boolean keepGoing = true;
@@ -18,7 +18,7 @@ public class BattleShips {
         Gameplay game = new Gameplay(new User(), new AIEnemy(), new UserDatabase());
         game.load();
         
-        // Start the game
+        // START GAME
         printTitle();
         game.startGame(10, shipLengths);
         

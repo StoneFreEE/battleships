@@ -4,9 +4,6 @@
  */
 package battleships;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 /**
  *
  * @author 64272

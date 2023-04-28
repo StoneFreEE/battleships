@@ -5,19 +5,15 @@ import java.util.HashSet;
 // Alter game cells
 public class Board {
 
-
     // 2d array to store cells
-    public int[][] cells;
-    public static int BOARD_SIZE;
+    public final static int BOARD_SIZE = 10;
+    public int[][] cells = new int[BOARD_SIZE][BOARD_SIZE];
 
-    public Board(int length) {
-        // limit BOARD_SIZE value to between letters in alphabet
-        if (length <= 26) {
-            this.cells = new int[length][length];
-            Board.BOARD_SIZE = length;
-        } else {
-            this.cells = new int[26][length];
-            Board.BOARD_SIZE = 26;
+    public Board() {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                cells[j][i] = States.NONE.ordinal();
+            }
         }
     }
 
@@ -127,11 +123,6 @@ public class Board {
 
     }
 
-    // returns true if point is within xy boundaries and false if not in boundaries
-    public static boolean isValid(Point point){
-        return (!(point.x > BOARD_SIZE-1) || !(point.x <= 0) || !(point.y > BOARD_SIZE-1) || !(point.y <= 0));
-    }
-    
     public void printBoard() {
 
         // print top of board
@@ -164,18 +155,16 @@ public class Board {
         System.out.println("");
     }
 
-    // returns true if free (not ship)
+    // returns true if not ship
     public boolean isFree(Point point) {
         return this.cells[point.getY()][point.getX()] != States.SHIP.ordinal();
     }
-    // returns true if hit
     public boolean isHit(Point point) {
         return this.cells[point.getY()][point.getX()] == States.HIT.ordinal();
     }
     public boolean isMiss(Point point) {
         return this.cells[point.getY()][point.getX()] == States.MISS.ordinal();
     }
-    //return true if ship is sunk and false if ship is not sunk
     public boolean isSunk(Ship ship) {
         int sunkCellCount = 0;
         // if origin point x is same as end point x, ship is vertical 
@@ -212,6 +201,10 @@ public class Board {
             }
         }
         return (sunkCellCount == ship.length);
+    }
+    // returns true if point is within xy boundaries and false if not in boundaries
+    public static boolean isValid(Point point) {
+        return (!(point.x > BOARD_SIZE - 1) || !(point.x <= 0) || !(point.y > BOARD_SIZE - 1) || !(point.y <= 0));
     }
 
     // fires cannon at point

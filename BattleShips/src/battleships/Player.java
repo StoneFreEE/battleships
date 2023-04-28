@@ -19,10 +19,8 @@ public abstract class Player {
         this.shipsSunk = 0;
     }
     
-    public abstract void initBoard(int boardLength, int[] shipLengths);
+    public abstract void initBoard( int[] shipLengths);
     
-    // loses if all battleships are sunk
-    // updates shipsSunk
     public abstract boolean checkLose();
     
     public String translatePoint(Point point) {

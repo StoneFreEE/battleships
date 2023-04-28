@@ -15,9 +15,9 @@ public class AIEnemy extends Player {
 
     // Ship placement randomiser
     @Override
-    public void initBoard(int boardLength, int[] shipLengths) {
+    public void initBoard( int[] shipLengths) {
         ships = new ArrayList<>();
-        this.board = new Board(boardLength);
+        this.board = new Board();
 
         // store all generated origin points to check for repitition
         Set<Point> originPoints = new HashSet<Point>();

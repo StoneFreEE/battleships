@@ -1,19 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package battleships;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
-import java.util.Set;
 
-/**
- *
- * @author 64272
- */
+
 public class User extends Player implements Comparable<User>{
     private int score;
     private String name;
@@ -56,11 +48,11 @@ public class User extends Player implements Comparable<User>{
         return this.name + " " + this.score;
     }
     
-    public void initBoard(int boardLength, int[] shipLengths, ArrayList<Ship> ships) {
+    public void initBoard( int[] shipLengths, ArrayList<Ship> ships) {
 
         Scanner scanner = new Scanner(System.in);
 
-        this.board = new Board(boardLength);
+        this.board = new Board();
 
         int nShips = shipLengths.length;
 
@@ -118,9 +110,9 @@ public class User extends Player implements Comparable<User>{
         return false;
     }
     
-    public void initLoadFile(int boardLength, int[] shipLengths, ArrayList<Ship> ships) {
+    public void initLoadFile(int[] shipLengths, ArrayList<Ship> ships) {
         this.ships = ships;
-        this.board = new Board(boardLength);
+        this.board = new Board();
 
         for (Ship ship : this.ships) {
             this.board.placeShip(ship);
@@ -161,6 +153,6 @@ public class User extends Player implements Comparable<User>{
     }
 
     @Override
-    public void initBoard(int boardLength, int[] shipLengths) {
+    public void initBoard( int[] shipLengths) {
     }
 }
