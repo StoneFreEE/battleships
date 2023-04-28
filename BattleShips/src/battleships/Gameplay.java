@@ -73,10 +73,10 @@ public class Gameplay {
 
         this.enemy.board.fireAt(userInput);
         if (this.enemy.board.isHit(userInput)) {
-            System.out.println("You got a hit !!\n");
+            System.out.println("\nYou got a hit !!\n");
             this.user.setScore(user.getScore() + 50);
         } else {
-            System.out.println("You missed!!");
+            System.out.println("\nYou missed!!\n");
         }
     }
 
@@ -84,7 +84,7 @@ public class Gameplay {
         Random rand = new Random();
         Point point = new Point();
 
-        // If haven't hit a ship yet, randomly shoot at the board
+        // If havent hit a ship yet, randomly shoot at the board
         if (user.board.isMiss(lastShot)) {
             do {
                 point = new Point(rand.nextInt(Board.BOARD_SIZE), rand.nextInt(Board.BOARD_SIZE));
@@ -129,7 +129,6 @@ public class Gameplay {
         System.out.println("");
     }
 
-    // prints double board display
     public void printBoardDisplay() {
         System.out.println("         || YOUR BOARD ||                        || ENEMY BOARD ||\n");
 

@@ -8,5 +8,6 @@ Hannah 770
 Bob 760
 olfia 750
 Tony 430
+t 300
 Sammi 100
 Nicha 90

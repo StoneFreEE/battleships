@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class User extends Player implements Comparable<User>{
     private int score;
     private String name;
+    
 
     public User() {
         super();
@@ -47,6 +48,10 @@ public class User extends Player implements Comparable<User>{
     public String toString() {
         return this.name + " " + this.score;
     }
+    
+    public void setShips(ArrayList<Ship> ships) {
+    this.ships = ships;
+}
     
     public void initBoard( int[] shipLengths, ArrayList<Ship> ships) {
 
@@ -98,6 +103,7 @@ public class User extends Player implements Comparable<User>{
                     System.out.println("Invalid end point");
                 }
             } while (!contains(possiblePoints, userEnd));
+            this.setShips(ships);
         }
     }
     

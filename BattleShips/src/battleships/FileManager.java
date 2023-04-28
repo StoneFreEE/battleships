@@ -30,12 +30,15 @@ public class FileManager {
             }
         } else {
             user.initBoard(shipLengths, ships);
+            user.board.printBoard();
+            
             String saveFileResponse = promptYesOrNo("Would you like to save this board as a file? (y/n)");
             if (saveFileResponse.equals("y")) {
                 // SAVE
                 System.out.println("Filename: ");
                 String saveFilename = scanner.nextLine();
                 saveBoard(saveFilename, user);
+
             }
         }
     }
@@ -85,10 +88,8 @@ public class FileManager {
 
     // ***************************************
     // END OF METHODS FOR BOARD SAVE / LOAD
-    
     // START OF METHODS FOR USER SAVE / LOAD
     // ***************************************
-    
     // loads users textfile and returns new user object
     public User load(User user, UserDatabase database) throws FileNotFoundException, IOException {
         try (BufferedReader inStream = new BufferedReader(new FileReader("./resources/scores.txt"))) {
