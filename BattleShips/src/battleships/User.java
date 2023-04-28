@@ -56,8 +56,7 @@ public class User extends Player implements Comparable<User>{
         return this.name + " " + this.score;
     }
     
-    public void initBoard(int boardLength, int[] shipLengths) {
-        ships = new ArrayList<>();
+    public void initBoard(int boardLength, int[] shipLengths, ArrayList<Ship> ships) {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -159,5 +158,9 @@ public class User extends Player implements Comparable<User>{
         else {
             return false;
         }
+    }
+
+    @Override
+    public void initBoard(int boardLength, int[] shipLengths) {
     }
 }
