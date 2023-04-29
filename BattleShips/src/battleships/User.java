@@ -95,22 +95,31 @@ public class User extends Player implements Comparable<User>{
                 }
                 String endResponse = scanner.nextLine();
                 userEnd = board.parsePoint(endResponse);
-                if (contains(possiblePoints, userEnd)) {
-                    Ship newShip = new Ship(shipLengths[i], userOrigin, userEnd);
-                    ships.add(newShip);
-                    board.placeShip(newShip);
-                } else {
+                if (userEnd != null) {
+                    if (contains(possiblePoints, userEnd)) {
+                        Ship newShip = new Ship(shipLengths[i], userOrigin, userEnd);
+                        ships.add(newShip);
+                        board.placeShip(newShip);
+                    } 
+                    else {
+                        System.out.println("Invalid end point"); 
+                    }
+                }
+                else {
                     System.out.println("Invalid end point");
                 }
+                System.out.println("");
             } while (!contains(possiblePoints, userEnd));
             this.setShips(ships);
         }
     }
     
     public boolean contains(HashSet<Point> points, Point end) {
-        for (Point point : points) {
-            if (point.equals(end)) {
-                return true;
+        if (end != null) {
+            for (Point point : points) {
+                if (point.equals(end)) {
+                    return true;
+                }
             }
         }
         return false;
