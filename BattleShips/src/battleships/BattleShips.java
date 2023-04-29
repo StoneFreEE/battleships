@@ -3,9 +3,17 @@ package battleships;
 import java.io.IOException;
 import java.util.Iterator;
 
-
+/**
+* Main class for the Battleships game.
+* Initializes game variables and starts the game loop.
+*/
 public class BattleShips {
-
+    /**
+    * Main method for the Battleships game. 
+    * Initializes game variables and starts the game loop.
+    * @param args command line arguments
+    * @throws IOException if there is an error reading or writing to a file
+    */
     public static void main(String[] args) throws IOException {
         
         // INITIALISE VARIABLES
@@ -53,7 +61,10 @@ public class BattleShips {
                 }
         
     }
-
+    
+    /**
+    * Helper method to print the title ASCII art for the game.
+    */
     private static void printTitle() {
         System.out.println("__________    ________________.____     ___________ _________ ___ ___ ._____________  _________\n"
                 + "\\______   \\  /  _  \\__    ___/|    |    \\_   _____//   _____//   |   \\|   \\______   \\/   _____/\n"

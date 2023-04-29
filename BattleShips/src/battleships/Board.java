@@ -2,13 +2,19 @@ package battleships;
 
 import java.util.HashSet;
 
-// Alter game cells
+/**
+ * Represents a game board for battleships.
+ */
 public class Board {
 
-    // 2d array to store cells
+    // the size of the board
     public final static int BOARD_SIZE = 10;
+    // 2d array to store cells
     public int[][] cells = new int[BOARD_SIZE][BOARD_SIZE];
 
+    /**
+     * Constructs a new board and initializes all cells to the NONE state.
+     */
     public Board() {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
@@ -17,7 +23,11 @@ public class Board {
         }
     }
 
-    // Updates cells based on ship object passed in
+    /**
+     * Updates the cells of the board based on the given ship object.
+     *
+     * @param ship the ship object to place on the board.
+     */
     public void placeShip(Ship ship) {
         // change from display coordinates to cell coordinates
         // Check if vertical using the origin and end point y
@@ -48,7 +58,12 @@ public class Board {
         }
     }
 
-    // FINDS ALL POSSIBLE END POINTS
+    /**
+     * Finds all possible end points for placing a ship on the board without overlapping with other ships.
+     *
+     * @param ship the ship object for which to find possible end points.
+     * @return a HashSet of all possible end points.
+     */
     public HashSet<Point> checkPossible(Ship ship) {
         HashSet<Point> possiblePoints = new HashSet<>();
         // If statements checks possible points within boundaries
@@ -101,6 +116,12 @@ public class Board {
         return possiblePoints;
     }
 
+    /**
+     * Parses a string representation of a point, such as "A1", into a Point object.
+     *
+     * @param text the string representation of the point
+     * @return a Point object representing the parsed point, or null if the input is invalid
+     */
     public Point parsePoint(String text) {
         // Check valid lengths
         if (text.length() > 3 || text.length() < 2) {
@@ -120,11 +141,13 @@ public class Board {
         } catch (NumberFormatException e) {
             return null;
         }
-
     }
 
+    /**
+     * Prints the current state of the board, with each cell represented by a symbol
+     * indicating its state.
+     */
     public void printBoard() {
-
         // print top of board
         System.out.print("    ");
         for (int i = 1; i <= Board.BOARD_SIZE; i++) {
@@ -155,16 +178,42 @@ public class Board {
         System.out.println("");
     }
 
-    // returns true if not ship
+    /**
+     * Determines whether a given point is free (not occupied by a ship) on the board.
+     *
+     * @param point the point to check
+     * @return true if the point is free, false otherwise
+     */
     public boolean isFree(Point point) {
         return this.cells[point.getY()][point.getX()] != States.SHIP.ordinal();
     }
+    
+    /**
+     * Determines whether a given point represents a hit on a ship on the board.
+     *
+     * @param point the point to check
+     * @return true if the point represents a hit, false otherwise
+     */
     public boolean isHit(Point point) {
         return this.cells[point.getY()][point.getX()] == States.HIT.ordinal();
     }
+    
+    /**
+     * Determines whether a given point represents a miss on the board.
+     *
+     * @param point the point to check
+     * @return true if the point represents a miss, false otherwise
+     */
     public boolean isMiss(Point point) {
         return this.cells[point.getY()][point.getX()] == States.MISS.ordinal();
     }
+    
+    /**
+     * Determines whether a given ship is sunk on the board, based on the state of its cells.
+     *
+     * @param ship the ship to check
+     * @return true if the ship is sunk, false otherwise
+     */
     public boolean isSunk(Ship ship) {
         int sunkCellCount = 0;
         // if origin point x is same as end point x, ship is vertical 
@@ -202,18 +251,28 @@ public class Board {
         }
         return (sunkCellCount == ship.length);
     }
-    // returns true if point is within xy boundaries and false if not in boundaries
+    
+    /**
+     * Determines whether a given point is within the boundaries of the board.
+     *
+     * @param point the point to check
+     * @return true if the point is within the boundaries, false otherwise
+     */
     public static boolean isValid(Point point) {
         return (!(point.x > BOARD_SIZE - 1) || !(point.x <= 0) || !(point.y > BOARD_SIZE - 1) || !(point.y <= 0));
     }
 
-    // fires cannon at point
+    /**
+     * Fires a cannon at the given point on the board, marking it as HIT if it is occupied
+     * by a ship, or as MISS otherwise.
+     *
+     * @param point the point to fire at
+     */
     public void fireAt(Point point) {
         if (this.cells[point.getY()][point.getX()] == States.SHIP.ordinal()) {
             this.cells[point.getY()][point.getX()] = States.HIT.ordinal();
         } else {
             this.cells[point.getY()][point.getX()] = States.MISS.ordinal();
-
         }
     }
 }
