@@ -48,7 +48,7 @@ public class BattleShips {
             System.out.println("Damn. Player loses!");
         }
         game.printBoardDisplay();
-        System.out.println("\nFinal Score for Player "+ game.user.getName()+ ": "+game.user.getScore());
+        System.out.println("\nFinal Score for "+ game.user.getName()+ ": " + game.user.getScore());
         System.out.println("");
         // save file to system
         game.saveFile(game.user);

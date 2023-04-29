@@ -68,6 +68,14 @@ public class Point {
         Point point = (Point) o;
         return point.getX() == this.getX() && point.getY() == this.getY();
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + this.x;
+        hash = 29 * hash + this.y;
+        return hash;
+    }
     
     /**
      * Returns a String representation of this Point.

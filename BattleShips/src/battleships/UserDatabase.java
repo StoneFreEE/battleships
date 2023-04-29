@@ -44,9 +44,7 @@ public class UserDatabase {
      * @param o the User object to update
      */
     public void updateUser(User o) {
-        Iterator it = users.iterator();
-        while (it.hasNext()) {
-            User currentUser = (User)it.next();
+        for (User currentUser : users) {
             if (currentUser.equals(o)) {
                 if (o.getScore() > currentUser.getScore()) {
                     System.out.println("You got a highscore!!");

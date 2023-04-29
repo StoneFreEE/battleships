@@ -27,8 +27,8 @@ public class AIEnemy extends Player {
         this.board = new Board();
 
         // store all generated origin points to check for repitition
-        Set<Point> originPoints = new HashSet<Point>();
-        Set<Point> possibleEndPoints = new HashSet<Point>();
+        Set<Point> originPoints = new HashSet<>();
+        Set<Point> possibleEndPoints = new HashSet<>();
         Point originPoint = new Point();
 
         for (int shipLength : shipLengths) {

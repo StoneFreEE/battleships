@@ -2,11 +2,8 @@ package battleships;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * The Game class represents the Battleship game and handles the game logic.
@@ -37,7 +34,6 @@ public class Gameplay {
      *
      * @param boardLength the length of the board
      * @param shipLengths an array of ship lengths
-     * @throws IOException if an I/O error occurs
      */
     public void startGame(int boardLength, int[] shipLengths) {
         // Prompt for load file board

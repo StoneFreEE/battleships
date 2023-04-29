@@ -6,8 +6,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -27,14 +25,11 @@ public class FileManager {
     */
     
     /**
-     * Prompts the user to load a board file and loads the file if the user chooses to do so. If the user does not choose
-     * to load a file, initializes the board and prompts the user to save the board as a file.
+     * Prompts the user to load a board file and loads the file if the user chooses to do so.If the user does not choose
+ to load a file, initializes the board and prompts the user to save the board as a file.
      * 
      * @param user The user playing the game
      * @param shipLengths An array of the lengths of the ships to be placed on the board
-     * @param ships An ArrayList of Ship objects representing the ships on the board
-     * @throws FileNotFoundException If the file to be loaded cannot be found
-     * @throws IOException If an error occurs while reading the input file
      */
     public void printLoadSave(User user, int[] shipLengths){
         // Prompt user to load
@@ -143,8 +138,6 @@ public class FileManager {
     * @param user the User object to be loaded
     * @param database the UserDatabase containing all the users
     * @return the loaded User object
-    * @throws FileNotFoundException if the file cannot be found
-    * @throws IOException if an I/O error occurs while reading the file
     */
     public User load(User user, UserDatabase database) {
         try (BufferedReader inStream = new BufferedReader(new FileReader("./resources/scores.txt"))) {
