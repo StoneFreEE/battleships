@@ -5,8 +5,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-// Manages gameplay actions
+/**
+ * The Game class represents the Battleship game and handles the game logic.
+ */
 public class Gameplay {
 
     User user;
@@ -14,27 +18,38 @@ public class Gameplay {
     AIEnemy enemy;
     Scanner scanner = new Scanner(System.in);
     FileManager fileManager = new FileManager();
-
     private Point lastShot = new Point(0, 0);
 
+    /**
+     * Constructor for the Game class.
+     * @param user the user playing the game.
+     * @param enemy the ai enemy playing the game.
+     * @param database the database object used to store user data.
+     */
     public Gameplay(User user, AIEnemy enemy, UserDatabase database) {
         this.user = user;
         this.enemy = enemy;
         this.database = database;
     }
 
-    //initialise AIEnemy's board and player's board,
-    // also prints save/load prompts
-    public void startGame(int boardLength, int[] shipLengths) throws IOException {
-        ArrayList<Ship> ships = new ArrayList<>();
+    /**
+     * Initialise AIEnemy's board and player's board, also prints save/load prompts
+     *
+     * @param boardLength the length of the board
+     * @param shipLengths an array of ship lengths
+     * @throws IOException if an I/O error occurs
+     */
+    public void startGame(int boardLength, int[] shipLengths) {
         // Prompt for load file board
         do {
-            fileManager.printLoadSave(this.user, shipLengths, ships);
-        } while (ships.isEmpty());
+            fileManager.printLoadSave(this.user, shipLengths);
+        } while (this.user.ships.isEmpty());
         this.enemy.initBoard(shipLengths);
     }
 
-    // Takes one turn
+    /**
+     * Takes one turn
+     */
     public void takeTurn() {
         this.printBoardDisplay();
 
@@ -44,7 +59,9 @@ public class Gameplay {
         this.enemyFireCannon();
     }
 
-    // player fires cannon at enemy
+    /**
+     * Player fires cannon at enemy
+     */
     private void playerFireCannon() {
         Point userInput;
         Boolean repeat;
@@ -80,6 +97,9 @@ public class Gameplay {
         }
     }
 
+    /**
+     * Enemy fires cannon at player
+     */
     private void enemyFireCannon() {
         Random rand = new Random();
         Point point = new Point();
@@ -129,8 +149,12 @@ public class Gameplay {
         System.out.println("");
     }
 
+    /**
+     * Method that prints the current state of the game board.
+     */
     public void printBoardDisplay() {
-        System.out.println("         || YOUR BOARD ||                        || ENEMY BOARD ||\n");
+        System.out.println("         || YOUR BOARD ||                        "
+                + "|| ENEMY BOARD ||\n");
 
         // print top of board
         System.out.print("    ");
@@ -187,18 +211,40 @@ public class Gameplay {
 
     }
 
+    /**
+    * Checks if the player has won the game.
+    *
+    * @return true if the enemy has lost the game, false otherwise.
+    */
     public boolean checkPlayerWin() {
         return (this.enemy.checkLose());
     }
 
+    /**
+    * Checks if the enemy has won the game.
+    *
+    * @return true if the player has lost the game, false otherwise.
+    */
     public boolean checkEnemyWin() {
         return (this.user.checkLose());
     }
 
+    /**
+    * Loads the user data from the file.
+    *
+    * @throws FileNotFoundException if the file is not found.
+    * @throws IOException           if there is an error while reading the file.
+    */
     public void load() throws FileNotFoundException, IOException {
         this.user = this.fileManager.load(this.user, this.database);
     }
 
+    /**
+    * Saves the user data to a file.
+    *
+    * @param user the User object to save.
+    * @throws FileNotFoundException if the file is not found.
+    */
     public void saveFile(User user) throws FileNotFoundException {
         this.fileManager.saveFile(this.user, this.database);
     }

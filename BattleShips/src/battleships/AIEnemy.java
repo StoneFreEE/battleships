@@ -9,11 +9,18 @@ public class AIEnemy extends Player {
         
     Random rand = new Random();
 
+    /**
+     * Constructor for the AIEnemy class.
+     * It calls the constructor of its superclass Player.
+     */
     public AIEnemy() {
         super();
     }
 
-    // Ship placement randomiser
+    /**
+     * Method to randomly place ships on the board for the AIEnemy player.
+     * @param shipLengths an array of integers representing the length of ships to be placed.
+     */
     @Override
     public void initBoard( int[] shipLengths) {
         ships = new ArrayList<>();
@@ -47,7 +54,12 @@ public class AIEnemy extends Player {
         }
     }
 
-    // helper method for initBoard method
+     /**
+     * Helper method for the initBoard method.
+     * It returns a random point from the given set of points.
+     * @param points a set of Point objects to choose from.
+     * @return a randomly chosen Point object from the given set of points.
+     */
     private Point returnRandomPoint(Set<Point> points) {
         int i = 0;
         int randIndex = rand.nextInt(points.size());
@@ -60,6 +72,10 @@ public class AIEnemy extends Player {
         return new Point();
     }
 
+     /**
+     * Method to check if the AIEnemy player has lost the game.
+     * @return a boolean value indicating if all the ships of the AIEnemy player have been sunk or not.
+     */
     @Override
     public boolean checkLose() {
         this.shipsSunk = 0;
