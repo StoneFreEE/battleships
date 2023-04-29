@@ -18,7 +18,7 @@ public abstract class Player {
      * Initializes shipsSunk to 0.
      */
     public Player() {
-        this.ships = new ArrayList<Ship>();
+        this.ships = new ArrayList<>();
         this.shipsSunk = 0;
     }
     

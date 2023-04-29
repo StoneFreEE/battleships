@@ -3,6 +3,7 @@ package battleships;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Scanner;
 
 
@@ -70,6 +71,7 @@ public class User extends Player implements Comparable<User>{
      * 
      * @return a string representation of the user
      */
+    @Override
     public String toString() {
         return this.name + " " + this.score;
     }
@@ -87,8 +89,8 @@ public class User extends Player implements Comparable<User>{
     * Initializes the board for the user by taking input from the console
     * 
     * @param shipLengths the array of lengths of the ships
-    * @param ships       the list of ships
     */
+    @Override
     public void initBoard( int[] shipLengths) {
 
         Scanner scanner = new Scanner(System.in);
@@ -100,7 +102,7 @@ public class User extends Player implements Comparable<User>{
         for (int i = 0; i < nShips; i++) {
             this.board.printBoard();
             System.out.println("Placing ship of length " + shipLengths[i]);
-            HashSet<Point> possiblePoints = new HashSet<Point>();
+            HashSet<Point> possiblePoints = new HashSet<>();
             Point userOrigin = new Point();
 
             do {
@@ -172,7 +174,6 @@ public class User extends Player implements Comparable<User>{
      * Initializes the game board with a set of ships.
      *
      * @param shipLengths An array of ship lengths.
-     * @param ships An ArrayList of Ships.
      */
     public void initLoadFile(int[] shipLengths) {
         this.board = new Board();
@@ -210,7 +211,7 @@ public class User extends Player implements Comparable<User>{
         else {
             // we compare name values
             // if the scores are equal
-            return this.name.compareTo(o.name);
+            return this.name.toUpperCase().compareTo(o.name.toUpperCase());
         }
     }
     
@@ -223,11 +224,14 @@ public class User extends Player implements Comparable<User>{
     @Override
     public boolean equals(Object o) {
         User user = (User)o;
-        if (user.name.equals(this.name)) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return user.name.toUpperCase().equals(this.name.toUpperCase());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + this.score;
+        hash = 79 * hash + Objects.hashCode(this.name);
+        return hash;
     }
 }
