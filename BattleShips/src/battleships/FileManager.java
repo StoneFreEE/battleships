@@ -119,8 +119,8 @@ public class FileManager {
         try (PrintWriter pw = new PrintWriter(new FileOutputStream("./resources/" + filename + ".txt", false))) {
             // Output file
             for (Ship ship : user.ships) {
-                String origin = user.translatePoint(ship.origin);
-                String end = user.translatePoint(ship.endPoint);
+                String origin = Point.translatePoint(ship.origin);
+                String end = Point.translatePoint(ship.endPoint);
                 pw.println(origin + " " + end + " " + ship.length);
             }
         } catch (FileNotFoundException ex) {

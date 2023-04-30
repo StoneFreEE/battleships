@@ -4,8 +4,8 @@ package battleships;
  * A class representing a point in a 2D space with integer x and y coordinates.
  */
 public class Point {
-    public int x;
-    public int y;
+    private int x;
+    private int y;
     
     /**
      * Constructs a Point object with given x and y coordinates.
@@ -85,5 +85,20 @@ public class Point {
     @Override
     public String toString() {
         return this.getX() + "" + this.getY();
+    }
+    
+    /**
+     * Method to translate a Point object into a string representation of the 
+     * coordinates.
+     * 
+     * @param point The Point object to be translated.
+     * @return A string representing the coordinates of the Point.
+     */
+    public static String translatePoint(Point point) {
+        String out = "";
+        out += (char)('A' + point.getY());
+        out += point.getX() + 1;
+
+        return out;
     }
 }
