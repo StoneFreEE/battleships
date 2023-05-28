@@ -259,7 +259,7 @@ public class Board {
      * @return true if the point is within the boundaries, false otherwise
      */
     public static boolean isValid(Point point) {
-        return (!(point.x > BOARD_SIZE - 1) || !(point.x <= 0) || !(point.y > BOARD_SIZE - 1) || !(point.y <= 0));
+        return (!(point.getX() > BOARD_SIZE - 1) || !(point.getX() <= 0) || !(point.getY() > BOARD_SIZE - 1) || !(point.getY() <= 0));
     }
 
     /**

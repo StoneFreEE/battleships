@@ -9,9 +9,9 @@ import java.util.ArrayList;
  * @author oliver
  */
 public abstract class Player {
-    Board board;
-    int shipsSunk;
-    ArrayList<Ship> ships;
+    public Board board;
+    public int shipsSunk;
+    public ArrayList<Ship> ships;
     
      /**
      * Constructor for Player.
@@ -38,19 +38,4 @@ public abstract class Player {
      * @return true if the player has lost, false if not.
      */
     public abstract boolean checkLose();
-    
-    /**
-     * Method to translate a Point object into a string representation of the 
-     * coordinates.
-     * 
-     * @param point The Point object to be translated.
-     * @return A string representing the coordinates of the Point.
-     */
-    public String translatePoint(Point point) {
-        String out = "";
-        out += (char)('A' + point.getY());
-        out += point.getX() + 1;
-
-        return out;
-    }
 }

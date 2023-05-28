@@ -107,8 +107,8 @@ public class Gameplay {
             } while (this.user.board.isHit(point) || this.user.board.isMiss(point));
         } else {
             // If hit a ship last turn, prioritize shooting the surrounding areas
-            int x = lastShot.x;
-            int y = lastShot.y;
+            int x = lastShot.getX();
+            int y = lastShot.getY();
 
             // Check up
             if (y > 0 && !this.user.board.isHit(new Point(x, y - 1)) && !this.user.board.isMiss(new Point(x, y - 1))) {
@@ -133,7 +133,7 @@ public class Gameplay {
         this.user.board.fireAt(point);
         lastShot = point;
 
-        String coordinate = this.enemy.translatePoint(point);
+        String coordinate = Point.translatePoint(point);
         System.out.println("Enemy Shot: " + coordinate);
 
         boolean isHit = this.user.board.isHit(point);
