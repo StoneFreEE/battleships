@@ -173,10 +173,8 @@ public class User extends Player implements Comparable<User>{
     
     /**
      * Initializes the game board with a set of ships.
-     *
-     * @param shipLengths An array of ship lengths.
      */
-    public void initLoadFile(int[] shipLengths) {
+    public void initLoadDatabase() {
         this.board = new Board();
 
         for (Ship ship : this.ships) {

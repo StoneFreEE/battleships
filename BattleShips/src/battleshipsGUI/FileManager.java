@@ -42,7 +42,7 @@ public class FileManager {
             loadBoard(loadFilename, user);
             // Check valid filename
             if (!user.ships.isEmpty()) {
-                user.initLoadFile(shipLengths);
+                user.initLoadDatabase();
             } else {
                 System.out.println("Invalid filename");
             }

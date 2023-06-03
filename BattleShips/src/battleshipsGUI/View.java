@@ -26,6 +26,10 @@ public class View extends JFrame implements Observer{
     private JPanel buttonPanel;
     private Font titleFont = new Font("Menlo", Font.BOLD, 80);
     
+    // Name
+    private JPanel namePanel;
+    private JTextField textField;
+    private JButton enterButton;
     // Game
     public LoadBoardPanel loadBoardPanel;
     
@@ -67,7 +71,7 @@ public class View extends JFrame implements Observer{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Action to perform when the Start button is clicked
-                controller.startGame();
+                promptName();
             }
         });
         buttonPanel.add(startButton);
@@ -86,7 +90,7 @@ public class View extends JFrame implements Observer{
         
         // load board
         loadBoardPanel = new LoadBoardPanel(controller);
-        add(loadBoardPanel);
+        con.add(loadBoardPanel);
     }
     
     public void playGame() {
@@ -108,5 +112,44 @@ public class View extends JFrame implements Observer{
             Object[][] users = (Object[][]) arg;
             displayLeaderboard(users);
         }
+       else if (arg instanceof Boolean) {
+           startGame();
+       }
+    }
+    
+     private void promptName() {
+        namePanel = new JPanel();
+        namePanel.setBounds(250, 400, 300, 150);
+        namePanel.setBackground(Color.BLACK);
+
+        // Get board name
+        textField = new JTextField("Name...");
+        textField.setBackground(Color.BLACK);
+        textField.setForeground(Color.WHITE);
+        textField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                textField.setText(""); // Clear the text field when it is clicked
+            }
+        });
+        
+        namePanel.add(textField);
+
+        enterButton = new JButton("Enter");
+        namePanel.add(enterButton);
+        enterButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = textField.getText();
+                controller.setName(name);
+                namePanel.setVisible(false);
+                controller.startGame();
+            }
+        });
+        
+        // Toggle to enterBoard panel
+        buttonPanel.setVisible(false);
+        namePanel.setVisible(true);
+        add(namePanel);
     }
 }

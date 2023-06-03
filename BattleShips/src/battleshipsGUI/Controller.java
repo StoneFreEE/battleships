@@ -33,4 +33,11 @@ public class Controller {
         model.setBoardName(view.loadBoardPanel.getBoardName());
         
     }
+    
+    public void setName(String name) {
+        model.checkUnique(name);
+    }
+    public void updateScore() {
+        model.updateScore();
+    }
 }

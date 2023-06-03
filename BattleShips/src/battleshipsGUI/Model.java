@@ -25,7 +25,7 @@ public class Model extends Observable {
     private String dbpassword = "pdc";
     private String username = null;
     private String password = null;
-    private int score = 0;
+    private int score;
     private User user;
     private Object[][] users;
     private Board board;
@@ -46,7 +46,7 @@ public class Model extends Observable {
                 statement.executeUpdate("CREATE TABLE " + tableName + " (name VARCHAR(32), score INT)");
             }
             
-            String tableName2 = "Board";
+            String tableName2 = "Boards";
             if (!checkTableExisting(tableName)) {
                 statement.executeUpdate("CREATE TABLE " + tableName2 + " (boardname, VARCHAR(32),"
                         + " origin1 VARCHAR(3), end1 VARCHAR(3), length1 INT,"
@@ -114,14 +114,17 @@ public class Model extends Observable {
     public void setScore(int score) {
         this.score = score;
     }
-
+    
     public void updateScore() {
         try {
             Statement statement = conn.createStatement();
-            statement.executeUpdate("UPDATE UserInfo SET score=" + score + " WHERE name='" + username + "'");
-            System.out.println(username + " " + score);
             
-            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM UserInfo ");
+            ResultSet rs = statement.executeQuery("SELECT score FROM UserInfo WHERE name = '" + username + "'");
+            if (score > rs.getInt(0)) {
+                statement.executeUpdate("UPDATE UserInfo SET score=" + score + " WHERE name='" + username + "'");
+                System.out.println(username + " " + score);
+            }
+            rs = statement.executeQuery("SELECT COUNT(*) FROM UserInfo ");
             int totalUsers = (int)rs.getObject(0);
             users = new Object[totalUsers][3];
             
@@ -149,10 +152,32 @@ public class Model extends Observable {
         try {
             Statement statement = conn.createStatement();
             
-            ResultSet rs = statement.executeQuery("SELECT origin, end, length FROM Boards " 
+            ResultSet rs = statement.executeQuery("SELECT "
+                    + "origin1, end1, length1,"
+                    + "origin2 end2 length2,"
+                    + "origin3 end3 length3,"
+                    + "origin4 end4 length4,"
+                    + "origin5 end5 length5,"
+                    + "FROM Boards " 
                     + "WHERE boardname = '" + boardName + "';");
             
-            
+            if (!rs.next()) {
+                for (int i = 0; i <= 12; i += 3) {
+                    Point firstPoint = user.board.parsePoint(rs.getString(i));
+                    Point endPoint = user.board.parsePoint(rs.getString(i + 1));
+                    Ship ship = new Ship(rs.getInt(i + 2), firstPoint, endPoint);
+                    user.ships.add(ship);
+                }  
+                
+                user.initLoadDatabase();
+            }
+            else {
+                //invalid
+                boolean invalid = true;
+                setChanged();
+                notifyObservers(invalid);
+            }
+             
         } catch (SQLException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
