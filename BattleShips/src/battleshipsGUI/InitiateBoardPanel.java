@@ -20,11 +20,9 @@ public class InitiateBoardPanel extends JPanel {
     
     private JLabel shipLengthLabel;
     private JLabel shipLengthNumberLabel;
-    private GridPane grid;
+    private GridPanel grid;
     
     private int[] shipLengths;
-    
-    private PlayerBoard playerBoard;
     
     private JPanel errorPanel;
     private JLabel errorLabel;
@@ -69,7 +67,7 @@ public class InitiateBoardPanel extends JPanel {
         
         //playerBoard = new PlayerBoard(shipLengths);
         //playerBoard.draw();
-        grid = new GridPane(controller, user);
+        grid = new GridPanel(controller, user);
         grid.setShipLength(shipLengths[index]);
         boardPanel.add(grid);
         

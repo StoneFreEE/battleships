@@ -14,13 +14,13 @@ import javax.swing.*;
  *
  * @author oliver
  */
-public class GridPane extends JPanel {
+public class GridPanel extends JPanel {
     private Board board;
     private boolean placing;
     private Controller controller;
     private int shipLength;
 
-    public GridPane(Controller controller, User user) {
+    public GridPanel(Controller controller, User user) {
         this.controller = controller;
         this.placing = true;
         this.board = user.board;
