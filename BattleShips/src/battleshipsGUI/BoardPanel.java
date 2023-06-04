@@ -22,12 +22,9 @@ public abstract class BoardPanel extends JPanel{
         self = new JPanel();
         self.setLayout(new GridLayout(0,10));
 
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                temp = new JPanel();
-                temp.setBorder(BorderFactory.createLineBorder(Color.blue, 2));
-                temp.setPreferredSize(new Dimension(20, 20)); // for demo purposes only
-                temp.setBackground(Color.GREEN);
+        for (int i = 0; i < 11; i++) {
+            for (int j = 0; j < 11; j++) {
+                temp = getCell();
                 self.add(temp);
             }
         }

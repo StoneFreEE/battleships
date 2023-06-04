@@ -10,6 +10,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +33,7 @@ public class Model extends Observable {
     private Board board;
     private String boardName;
     private int[] shipLengths = {2, 3, 3, 4, 5};
+    private Ship currentShip;
     
     
     public Model() {
@@ -154,6 +157,12 @@ public class Model extends Observable {
         this.boardName = boardName;
     }
     
+    public void setName(String name) {
+        this.user = new User(name);
+        setChanged();
+        notifyObservers(user);
+    }
+    
     public void loadBoard() {
         try {
             Statement statement = conn.createStatement();
@@ -187,5 +196,44 @@ public class Model extends Observable {
         } catch (SQLException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void setOrigin(Coordinate coordinate) {
+        HashSet<Coordinate> possiblePoints = user.board.checkPossible(currentShip);
+        Coordinate[] coordinates = convertToPrimitive(possiblePoints);
+        
+        setChanged();
+        notifyObservers(coordinates);
+    }
+    
+    public void setEnd(Coordinate coordinate) {
+        
+        currentShip.endPoint = coordinate;
+        
+        user.board.placeShip(currentShip);
+        setChanged();
+        notifyObservers(user);
+    }
+    
+    public Coordinate[] convertToPrimitive(HashSet<Coordinate> possiblePoints) {
+        // instanceof doesn't support in 1.8 hashset so convert to primitive
+        Coordinate[] coordinates = new Coordinate[possiblePoints.size()];
+        Iterator itr = possiblePoints.iterator();
+        int i = 0;
+        while (itr.hasNext()) {
+            Coordinate coord = (Coordinate)itr.next();
+            coordinates[i++] = coord;
+        }
+        
+        return coordinates;
+    }
+    
+    public boolean checkValid(Coordinate coordinate, int shipLength) {
+        boolean valid = true;
+        currentShip = new Ship(shipLength, coordinate);
+        valid = user.board.isFree(coordinate) && user.board.isSpace(currentShip);
+        setChanged();
+        notifyObservers(valid);
+        return valid;
     }
 }

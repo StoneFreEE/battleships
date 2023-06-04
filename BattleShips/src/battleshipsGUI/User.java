@@ -1,7 +1,6 @@
 
 package battleshipsGUI;
 
-import battleships.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
@@ -95,8 +94,6 @@ public class User extends Player implements Comparable<User>{
     public void initBoard( int[] shipLengths) {
 
         Scanner scanner = new Scanner(System.in);
-
-        this.board = new Board();
 
         int nShips = shipLengths.length;
 

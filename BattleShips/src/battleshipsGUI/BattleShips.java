@@ -1,6 +1,5 @@
 package battleshipsGUI;
 
-import battleships.*;
 import java.io.IOException;
 import java.util.Iterator;
 

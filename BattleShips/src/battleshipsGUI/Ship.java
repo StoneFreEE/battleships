@@ -1,7 +1,5 @@
 package battleshipsGUI;
 
-import battleships.*;
-
 /**
  * This class represents a Ship object in the game Battleships. It has a length,
  * origin point, and end point. The length represents how many spaces the ship 

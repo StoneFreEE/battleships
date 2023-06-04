@@ -1,7 +1,5 @@
 package battleshipsGUI;
 
-import battleships.*;
-
 /**
  * A class representing a point in a 2D space with integer x and y coordinates.
  */

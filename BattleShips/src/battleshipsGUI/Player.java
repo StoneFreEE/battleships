@@ -1,6 +1,5 @@
 package battleshipsGUI;
 
-import battleships.*;
 import java.util.ArrayList;
 
 /**
@@ -21,6 +20,7 @@ public abstract class Player {
     public Player() {
         this.ships = new ArrayList<>();
         this.shipsSunk = 0;
+        this.board = new Board();
     }
     
      /**

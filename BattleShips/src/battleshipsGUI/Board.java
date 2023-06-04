@@ -1,6 +1,5 @@
 package battleshipsGUI;
 
-import battleships.*;
 import java.util.HashSet;
 
 /**
@@ -187,6 +186,10 @@ public class Board {
      */
     public boolean isFree(Coordinate point) {
         return this.cells[point.getY()][point.getX()] != States.SHIP.ordinal();
+    }
+    
+    public boolean isSpace(Ship ship) {
+        return !checkPossible(ship).isEmpty();
     }
     
     /**

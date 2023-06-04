@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.*;
+import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.*;
@@ -34,6 +35,7 @@ public class View extends JFrame implements Observer{
     // Game
     public LoadBoardPanel loadBoardPanel;
     private InitiateBoardPanel initiateBoardPanel;
+    private User user;
     
     // Score
     private LeaderboardPanel leaderboardPanel;
@@ -98,8 +100,7 @@ public class View extends JFrame implements Observer{
     
     public void initiateBoard(int[] shipLengths) {
         con.removeAll();
-        
-        initiateBoardPanel = new InitiateBoardPanel(controller, shipLengths);
+        initiateBoardPanel = new InitiateBoardPanel(controller, shipLengths, user);
         con.add(initiateBoardPanel);
         con.revalidate();
         con.repaint();
@@ -125,7 +126,21 @@ public class View extends JFrame implements Observer{
             displayLeaderboard(users);
         }
        else if (arg instanceof Boolean) {
-           startGame();
+           boolean valid = (boolean)arg;
+           if (!valid) {
+               displayErrorPlacementMessage();
+           }
+       }
+       else if (arg instanceof User) {
+           user = (User)arg;
+           if (initiateBoardPanel != null)
+           {
+                initiateBoardPanel.updateGrid(user);
+           }
+       }
+       else if (arg instanceof Coordinate[]) {
+          Coordinate[] points = (Coordinate[])arg;
+          initiateBoardPanel.displayPossiblePoints(points);
        }
     }
     
@@ -164,4 +179,8 @@ public class View extends JFrame implements Observer{
         namePanel.setVisible(true);
         add(namePanel);
     }
+     
+     public void displayErrorPlacementMessage() {
+         initiateBoardPanel.displayErrorPlacementMessage();
+     }
 }

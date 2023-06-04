@@ -1,7 +1,6 @@
 
 package battleshipsGUI;
 
-import battleships.*;
 import java.util.Iterator;
 import java.util.TreeSet;
 

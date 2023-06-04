@@ -25,6 +25,7 @@ public class Controller {
     }
     
     public void playGame() {
+        System.out.println("Initialising finished");
         view.playGame();
     }
     
@@ -36,6 +37,7 @@ public class Controller {
     
     public void setName(String name) {
         //model.checkUnique(name);
+        model.setName(name);
     }
     public void updateScore() {
         model.updateScore();
@@ -43,5 +45,18 @@ public class Controller {
     
     public void initiateBoard() {
         view.initiateBoard(model.getShipLengths());
+    }
+    
+    public void setOrigin(Coordinate coordinate) {
+        model.setOrigin(coordinate);
+        
+    }
+    
+    public void setEnd(Coordinate coordinate) {
+        model.setEnd(coordinate);
+    }
+    
+    public boolean checkValid(Coordinate coordinate, int shipLength) {
+        return model.checkValid(coordinate, shipLength);
     }
 }
