@@ -16,7 +16,7 @@ public class Gameplay {
     AIEnemy enemy;
     Scanner scanner = new Scanner(System.in);
     FileManager fileManager = new FileManager();
-    private Point lastShot = new Point(0, 0);
+    private Coordinate lastShot = new Coordinate(0, 0);
 
     /**
      * Constructor for the Game class.
@@ -60,7 +60,7 @@ public class Gameplay {
      * Player fires cannon at enemy
      */
     private void playerFireCannon() {
-        Point userInput;
+        Coordinate userInput;
         Boolean repeat;
 
         // ask player what coordinate to fire cannon at
@@ -99,12 +99,12 @@ public class Gameplay {
      */
     private void enemyFireCannon() {
         Random rand = new Random();
-        Point point = new Point();
+        Coordinate point = new Coordinate();
 
         // If havent hit a ship yet, randomly shoot at the board
         if (user.board.isMiss(lastShot)) {
             do {
-                point = new Point(rand.nextInt(Board.BOARD_SIZE), rand.nextInt(Board.BOARD_SIZE));
+                point = new Coordinate(rand.nextInt(Board.BOARD_SIZE), rand.nextInt(Board.BOARD_SIZE));
             } while (this.user.board.isHit(point) || this.user.board.isMiss(point));
         } else {
             // If hit a ship last turn, prioritize shooting the surrounding areas
@@ -112,21 +112,21 @@ public class Gameplay {
             int y = lastShot.y;
 
             // Check up
-            if (y > 0 && !this.user.board.isHit(new Point(x, y - 1)) && !this.user.board.isMiss(new Point(x, y - 1))) {
-                point = new Point(x, y - 1);
+            if (y > 0 && !this.user.board.isHit(new Coordinate(x, y - 1)) && !this.user.board.isMiss(new Coordinate(x, y - 1))) {
+                point = new Coordinate(x, y - 1);
             } // Check down
-            else if (y < Board.BOARD_SIZE - 1 && !this.user.board.isHit(new Point(x, y + 1)) && !this.user.board.isMiss(new Point(x, y + 1))) {
-                point = new Point(x, y + 1);
+            else if (y < Board.BOARD_SIZE - 1 && !this.user.board.isHit(new Coordinate(x, y + 1)) && !this.user.board.isMiss(new Coordinate(x, y + 1))) {
+                point = new Coordinate(x, y + 1);
             } // Check left
-            else if (x > 0 && !this.user.board.isHit(new Point(x - 1, y)) && !this.user.board.isMiss(new Point(x - 1, y))) {
-                point = new Point(x - 1, y);
+            else if (x > 0 && !this.user.board.isHit(new Coordinate(x - 1, y)) && !this.user.board.isMiss(new Coordinate(x - 1, y))) {
+                point = new Coordinate(x - 1, y);
             } // Check right
-            else if (x < Board.BOARD_SIZE - 1 && !this.user.board.isHit(new Point(x + 1, y)) && !this.user.board.isMiss(new Point(x + 1, y))) {
-                point = new Point(x + 1, y);
+            else if (x < Board.BOARD_SIZE - 1 && !this.user.board.isHit(new Coordinate(x + 1, y)) && !this.user.board.isMiss(new Coordinate(x + 1, y))) {
+                point = new Coordinate(x + 1, y);
             } // If all surrounding areas have already been shot, randomly shoot at the board
             else {
                 do {
-                    point = new Point(rand.nextInt(Board.BOARD_SIZE), rand.nextInt(Board.BOARD_SIZE));
+                    point = new Coordinate(rand.nextInt(Board.BOARD_SIZE), rand.nextInt(Board.BOARD_SIZE));
                 } while (this.user.board.isHit(point) || this.user.board.isMiss(point));
             }
         }
@@ -134,7 +134,7 @@ public class Gameplay {
         this.user.board.fireAt(point);
         lastShot = point;
 
-        String coordinate = Point.translatePoint(point);
+        String coordinate = Coordinate.translatePoint(point);
         System.out.println("Enemy Shot: " + coordinate);
 
         boolean isHit = this.user.board.isHit(point);

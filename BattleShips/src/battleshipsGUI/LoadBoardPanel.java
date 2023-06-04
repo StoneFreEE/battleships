@@ -80,7 +80,7 @@ public class LoadBoardPanel extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // direct user to board initiating panel
-                initiateBoardPanel = new InitiateBoardPanel();
+                controller.initiateBoard();
             }
         });
         

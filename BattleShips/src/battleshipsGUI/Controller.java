@@ -35,9 +35,13 @@ public class Controller {
     }
     
     public void setName(String name) {
-        model.checkUnique(name);
+        //model.checkUnique(name);
     }
     public void updateScore() {
         model.updateScore();
+    }
+    
+    public void initiateBoard() {
+        view.initiateBoard(model.getShipLengths());
     }
 }

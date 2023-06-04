@@ -4,7 +4,7 @@
  */
 package battleshipsGUI;
 
-import java.sql.Connection;
+import java.sql.*;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class Model extends Observable {
     private Connection conn;
-    private String url = "jdbc:derby:localhost:1527/BattleShipDB;create=true";
+    private String url = "jdbc:derby://localhost:1527/BattleShipDB;create=true";
     private String dbusername = "pdc";
     private String dbpassword = "pdc";
     private String username = null;
@@ -30,6 +30,7 @@ public class Model extends Observable {
     private Object[][] users;
     private Board board;
     private String boardName;
+    private int[] shipLengths = {2, 3, 3, 4, 5};
     
     
     public Model() {
@@ -38,7 +39,8 @@ public class Model extends Observable {
     
     public void dbsetup() {
         try {
-            conn = DriverManager.getConnection(url);
+            conn = DriverManager.getConnection(url, dbusername, dbpassword);
+            System.out.println("HI");
             Statement statement = conn.createStatement();
             
             String tableName = "UserInfo";
@@ -47,7 +49,7 @@ public class Model extends Observable {
             }
             
             String tableName2 = "Boards";
-            if (!checkTableExisting(tableName)) {
+            if (!checkTableExisting(tableName2)) {
                 statement.executeUpdate("CREATE TABLE " + tableName2 + " (boardname, VARCHAR(32),"
                         + " origin1 VARCHAR(3), end1 VARCHAR(3), length1 INT,"
                         + " origin2 VARCHAR(3), end2 VARCHAR(3), length2 INT,"
@@ -115,6 +117,10 @@ public class Model extends Observable {
         this.score = score;
     }
     
+    public int[] getShipLengths() {
+        return this.shipLengths;
+    }
+    
     public void updateScore() {
         try {
             Statement statement = conn.createStatement();
@@ -163,8 +169,8 @@ public class Model extends Observable {
             
             if (!rs.next()) {
                 for (int i = 0; i <= 12; i += 3) {
-                    Point firstPoint = user.board.parsePoint(rs.getString(i));
-                    Point endPoint = user.board.parsePoint(rs.getString(i + 1));
+                    Coordinate firstPoint = user.board.parsePoint(rs.getString(i));
+                    Coordinate endPoint = user.board.parsePoint(rs.getString(i + 1));
                     Ship ship = new Ship(rs.getInt(i + 2), firstPoint, endPoint);
                     user.ships.add(ship);
                 }  

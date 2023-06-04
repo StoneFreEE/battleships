@@ -30,8 +30,10 @@ public class View extends JFrame implements Observer{
     private JPanel namePanel;
     private JTextField textField;
     private JButton enterButton;
+    
     // Game
     public LoadBoardPanel loadBoardPanel;
+    private InitiateBoardPanel initiateBoardPanel;
     
     // Score
     private LeaderboardPanel leaderboardPanel;
@@ -85,12 +87,22 @@ public class View extends JFrame implements Observer{
     }
     
     public void startGame() {
-        titlePanel.setVisible(false);
-        buttonPanel.setVisible(false);
+        con.removeAll();
         
         // load board
         loadBoardPanel = new LoadBoardPanel(controller);
         con.add(loadBoardPanel);
+        con.revalidate();
+        con.repaint();
+    }
+    
+    public void initiateBoard(int[] shipLengths) {
+        con.removeAll();
+        
+        initiateBoardPanel = new InitiateBoardPanel(controller, shipLengths);
+        con.add(initiateBoardPanel);
+        con.revalidate();
+        con.repaint();
     }
     
     public void playGame() {
@@ -101,8 +113,8 @@ public class View extends JFrame implements Observer{
         leaderboardPanel = new LeaderboardPanel(users);
         getContentPane().removeAll();
         add(leaderboardPanel);
-        revalidate();
-        repaint();
+        con.revalidate();
+        con.repaint();
     }
     
     @Override
