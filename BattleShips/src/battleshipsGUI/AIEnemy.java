@@ -1,4 +1,4 @@
-package battleships;
+package battleshipsGUI;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -27,16 +27,16 @@ public class AIEnemy extends Player {
         this.board = new Board();
 
         // store all generated origin points to check for repitition
-        Set<Point> originPoints = new HashSet<>();
-        Set<Point> possibleEndPoints = new HashSet<>();
-        Point originPoint = new Point();
+        Set<Coordinate> originPoints = new HashSet<>();
+        Set<Coordinate> possibleEndPoints = new HashSet<>();
+        Coordinate originPoint = new Coordinate();
 
         for (int shipLength : shipLengths) {
 
             // if duplicate, reroll origin point
             // if no possible endpoints, reroll origin point
             do {
-                originPoint = new Point(rand.nextInt(Board.BOARD_SIZE), rand.nextInt(Board.BOARD_SIZE));
+                originPoint = new Coordinate(rand.nextInt(Board.BOARD_SIZE), rand.nextInt(Board.BOARD_SIZE));
                 Ship tempShip = new Ship(shipLength, originPoint);
                 possibleEndPoints = board.checkPossible(tempShip);
 
@@ -45,7 +45,7 @@ public class AIEnemy extends Player {
             //add to set for duplicate checking
             originPoints.add(originPoint);
 
-            Point endPoint = returnRandomPoint(possibleEndPoints);
+            Coordinate endPoint = returnRandomPoint(possibleEndPoints);
 
             Ship ship = new Ship(shipLength, originPoint, endPoint);
             ships.add(ship);
@@ -57,19 +57,19 @@ public class AIEnemy extends Player {
      /**
      * Helper method for the initBoard method.
      * It returns a random point from the given set of points.
-     * @param points a set of Point objects to choose from.
-     * @return a randomly chosen Point object from the given set of points.
+     * @param points a set of Coordinate objects to choose from.
+     * @return a randomly chosen Coordinate object from the given set of points.
      */
-    private Point returnRandomPoint(Set<Point> points) {
+    private Coordinate returnRandomPoint(Set<Coordinate> points) {
         int i = 0;
         int randIndex = rand.nextInt(points.size());
-        for (Point point : points) {
+        for (Coordinate point : points) {
             if (i == randIndex) {
                 return point;
             }
             i++;
         }
-        return new Point();
+        return new Coordinate();
     }
 
      /**

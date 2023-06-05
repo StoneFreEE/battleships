@@ -1,4 +1,4 @@
-package battleships;
+package battleshipsGUI;
 
 import java.io.IOException;
 import java.util.Iterator;

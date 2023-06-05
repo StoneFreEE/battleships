@@ -1,4 +1,4 @@
-package battleships;
+package battleshipsGUI;
 
 import java.util.HashSet;
 
@@ -64,8 +64,8 @@ public class Board {
      * @param ship the ship object for which to find possible end points.
      * @return a HashSet of all possible end points.
      */
-    public HashSet<Point> checkPossible(Ship ship) {
-        HashSet<Point> possiblePoints = new HashSet<>();
+    public HashSet<Coordinate> checkPossible(Ship ship) {
+        HashSet<Coordinate> possiblePoints = new HashSet<>();
         // If statements checks possible points within boundaries
         // For loop checks for already existing ships on board
         boolean place = true;
@@ -76,7 +76,7 @@ public class Board {
                 }
             }
             if (place == true) {
-                possiblePoints.add(new Point(ship.origin.getX() - (ship.length - 1), ship.origin.getY()));
+                possiblePoints.add(new Coordinate(ship.origin.getX() - (ship.length - 1), ship.origin.getY()));
             }
             place = true;
         }
@@ -87,7 +87,7 @@ public class Board {
                 }
             }
             if (place == true) {
-                possiblePoints.add(new Point(ship.origin.getX() + (ship.length - 1), ship.origin.getY()));
+                possiblePoints.add(new Coordinate(ship.origin.getX() + (ship.length - 1), ship.origin.getY()));
             }
             place = true;
         }
@@ -98,7 +98,7 @@ public class Board {
                 }
             }
             if (place == true) {
-                possiblePoints.add(new Point(ship.origin.getX(), ship.origin.getY() - (ship.length - 1)));
+                possiblePoints.add(new Coordinate(ship.origin.getX(), ship.origin.getY() - (ship.length - 1)));
             }
             place = true;
         }
@@ -109,7 +109,7 @@ public class Board {
                 }
             }
             if (place == true) {
-                possiblePoints.add(new Point(ship.origin.getX(), ship.origin.getY() + (ship.length - 1)));
+                possiblePoints.add(new Coordinate(ship.origin.getX(), ship.origin.getY() + (ship.length - 1)));
             }
         }
 
@@ -117,12 +117,12 @@ public class Board {
     }
 
     /**
-     * Parses a string representation of a point, such as "A1", into a Point object.
+     * Parses a string representation of a point, such as "A1", into a Coordinate object.
      *
      * @param text the string representation of the point
-     * @return a Point object representing the parsed point, or null if the input is invalid
+     * @return a Coordinate object representing the parsed point, or null if the input is invalid
      */
-    public Point parsePoint(String text) {
+    public Coordinate parsePoint(String text) {
         // Check valid lengths
         if (text.length() > 3 || text.length() < 2) {
             return null;
@@ -136,7 +136,7 @@ public class Board {
             if (!(Character.isAlphabetic(ch)) || digit <= 0 || digit > BOARD_SIZE || ch > (BOARD_SIZE - 1 + 'A')) {
                 return null;
             }
-            Point newPoint = new Point(digit - 1, ch - 'A');
+            Coordinate newPoint = new Coordinate(digit - 1, ch - 'A');
             return newPoint;
         } catch (NumberFormatException e) {
             return null;
@@ -184,8 +184,12 @@ public class Board {
      * @param point the point to check
      * @return true if the point is free, false otherwise
      */
-    public boolean isFree(Point point) {
+    public boolean isFree(Coordinate point) {
         return this.cells[point.getY()][point.getX()] != States.SHIP.ordinal();
+    }
+    
+    public boolean isSpace(Ship ship) {
+        return !checkPossible(ship).isEmpty();
     }
     
     /**
@@ -194,7 +198,7 @@ public class Board {
      * @param point the point to check
      * @return true if the point represents a hit, false otherwise
      */
-    public boolean isHit(Point point) {
+    public boolean isHit(Coordinate point) {
         return this.cells[point.getY()][point.getX()] == States.HIT.ordinal();
     }
     
@@ -204,7 +208,7 @@ public class Board {
      * @param point the point to check
      * @return true if the point represents a miss, false otherwise
      */
-    public boolean isMiss(Point point) {
+    public boolean isMiss(Coordinate point) {
         return this.cells[point.getY()][point.getX()] == States.MISS.ordinal();
     }
     
@@ -258,8 +262,8 @@ public class Board {
      * @param point the point to check
      * @return true if the point is within the boundaries, false otherwise
      */
-    public static boolean isValid(Point point) {
-        return (!(point.getX() > BOARD_SIZE - 1) || !(point.getX() <= 0) || !(point.getY() > BOARD_SIZE - 1) || !(point.getY() <= 0));
+    public static boolean isValid(Coordinate point) {
+        return (!(point.x > BOARD_SIZE - 1) || !(point.x <= 0) || !(point.y > BOARD_SIZE - 1) || !(point.y <= 0));
     }
 
     /**
@@ -268,7 +272,7 @@ public class Board {
      *
      * @param point the point to fire at
      */
-    public void fireAt(Point point) {
+    public void fireAt(Coordinate point) {
         if (this.cells[point.getY()][point.getX()] == States.SHIP.ordinal()) {
             this.cells[point.getY()][point.getX()] = States.HIT.ordinal();
         } else {

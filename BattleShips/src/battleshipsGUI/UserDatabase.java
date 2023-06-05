@@ -1,5 +1,5 @@
 
-package battleships;
+package battleshipsGUI;
 
 import java.util.Iterator;
 import java.util.TreeSet;
@@ -56,6 +56,6 @@ public class UserDatabase {
                     System.out.println("You didn't beat your highscore, better luck next time!");
                 }
             }
-        }       
-    }   
+        }
+    }
 }

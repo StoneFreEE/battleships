@@ -1,5 +1,5 @@
 
-package battleships;
+package battleshipsGUI;
 
 /**
  * This enumeration represents the possible states of a cell on the game board 

@@ -1,4 +1,4 @@
-package battleships;
+package battleshipsGUI;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -41,7 +41,7 @@ public class FileManager {
             loadBoard(loadFilename, user);
             // Check valid filename
             if (!user.ships.isEmpty()) {
-                user.initLoadFile(shipLengths);
+                user.initLoadDatabase();
             } else {
                 System.out.println("Invalid filename");
             }
@@ -96,8 +96,8 @@ public class FileManager {
             while ((line = inStream.readLine()) != null) {
                 // Split between whitespace
                 String[] split = line.split(" ");
-                Point firstPoint = user.board.parsePoint(split[0]);
-                Point endPoint = user.board.parsePoint(split[1]);
+                Coordinate firstPoint = user.board.parsePoint(split[0]);
+                Coordinate endPoint = user.board.parsePoint(split[1]);
                 int length = Integer.parseInt(split[2]);
                 Ship ship = new Ship(length, firstPoint, endPoint);
                 user.ships.add(ship);
@@ -119,8 +119,8 @@ public class FileManager {
         try (PrintWriter pw = new PrintWriter(new FileOutputStream("./resources/" + filename + ".txt", false))) {
             // Output file
             for (Ship ship : user.ships) {
-                String origin = Point.translatePoint(ship.origin);
-                String end = Point.translatePoint(ship.endPoint);
+                String origin = Coordinate.translatePoint(ship.origin);
+                String end = Coordinate.translatePoint(ship.endPoint);
                 pw.println(origin + " " + end + " " + ship.length);
             }
         } catch (FileNotFoundException ex) {

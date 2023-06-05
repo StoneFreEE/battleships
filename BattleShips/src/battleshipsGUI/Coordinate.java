@@ -1,18 +1,18 @@
-package battleships;
+package battleshipsGUI;
 
 /**
  * A class representing a point in a 2D space with integer x and y coordinates.
  */
-public class Point {
-    private int x;
-    private int y;
+public class Coordinate {
+    public int x;
+    public int y;
     
     /**
      * Constructs a Point object with given x and y coordinates.
      * @param x the x coordinate
      * @param y the y coordinate
      */
-    public Point(int x, int y) {
+    public Coordinate(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -20,13 +20,13 @@ public class Point {
     /**
      * Constructs a Point object with default x and y coordinates of 0.
      */
-    public Point() {
+    public Coordinate() {
         this.x = 0;
         this.y = 0;
     }
 
     /**
-     * Gets the x coordinate of this Point.
+     * Gets the x coordinate of this Coordinate.
      * @return the x coordinate
      */
     public int getX() {
@@ -34,7 +34,7 @@ public class Point {
     }
 
     /**
-     * Sets the x coordinate of this Point to the given value.
+     * Sets the x coordinate of this Coordinate to the given value.
      * @param x the new x coordinate
      */
     public void setX(int x) {
@@ -42,7 +42,7 @@ public class Point {
     }
 
     /**
-     * Gets the y coordinate of this Point.
+     * Gets the y coordinate of this Coordinate.
      * @return the y coordinate
      */
     public int getY() {
@@ -50,7 +50,7 @@ public class Point {
     }
 
     /**
-     * Sets the y coordinate of this Point to the given value.
+     * Sets the y coordinate of this Coordinate to the given value.
      * @param y the new y coordinate
      */
     public void setY(int y) {
@@ -58,14 +58,14 @@ public class Point {
     }
     
     /**
-     * Checks whether this Point is equal to the given object.
+     * Checks whether this Coordinate is equal to the given object.
      * @param o the object to compare to
-     * @return true if the object is a Point with the same x and y coordinates,
-     * false otherwise
+     * @return true if the object is a Coordinate with the same x and y coordinates,
+ false otherwise
      */
     @Override
     public boolean equals(Object o) {
-        Point point = (Point) o;
+        Coordinate point = (Coordinate) o;
         return point.getX() == this.getX() && point.getY() == this.getY();
     }
 
@@ -78,9 +78,9 @@ public class Point {
     }
     
     /**
-     * Returns a String representation of this Point.
-     * @return a string representation of this Point in the format "xy" where 
-     * x and y are the coordinates
+     * Returns a String representation of this Coordinate.
+     * @return a string representation of this Coordinate in the format "xy" where 
+ x and y are the coordinates
      */
     @Override
     public String toString() {
@@ -88,13 +88,13 @@ public class Point {
     }
     
     /**
-     * Method to translate a Point object into a string representation of the 
-     * coordinates.
+     * Method to translate a Coordinate object into a string representation of the 
+ coordinates.
      * 
-     * @param point The Point object to be translated.
-     * @return A string representing the coordinates of the Point.
+     * @param point The Coordinate object to be translated.
+     * @return A string representing the coordinates of the Coordinate.
      */
-    public static String translatePoint(Point point) {
+    public static String translatePoint(Coordinate point) {
         String out = "";
         out += (char)('A' + point.getY());
         out += point.getX() + 1;

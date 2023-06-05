@@ -1,5 +1,5 @@
 
-package battleships;
+package battleshipsGUI;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -95,15 +95,13 @@ public class User extends Player implements Comparable<User>{
 
         Scanner scanner = new Scanner(System.in);
 
-        this.board = new Board();
-
         int nShips = shipLengths.length;
 
         for (int i = 0; i < nShips; i++) {
             this.board.printBoard();
             System.out.println("Placing ship of length " + shipLengths[i]);
-            HashSet<Point> possiblePoints = new HashSet<>();
-            Point userOrigin = new Point();
+            HashSet<Coordinate> possiblePoints = new HashSet<>();
+            Coordinate userOrigin = new Coordinate();
 
             do {
                 System.out.println("Pick an origin (e.g C4): ");
@@ -122,11 +120,11 @@ public class User extends Player implements Comparable<User>{
                 System.out.println("");
             } while (possiblePoints.isEmpty() || !board.isFree(userOrigin) || userOrigin == null);
 
-            Point userEnd = new Point();
+            Coordinate userEnd = new Coordinate();
             do {
                 System.out.println("Pick an end point: ");
                 // Print possible points
-                for (Point point : possiblePoints) {
+                for (Coordinate point : possiblePoints) {
                     char letter = 'A';
                     letter += (char) (int) point.getY();
                     System.out.println("- " + letter + "" + (point.getX() + 1));
@@ -156,12 +154,12 @@ public class User extends Player implements Comparable<User>{
      * Checks if a given point is contained in a HashSet of Points.
      *
      * @param points The HashSet of Points to check.
-     * @param end The Point to check for.
-     * @return true if the Point is contained in the HashSet, false otherwise.
+     * @param end The Coordinate to check for.
+     * @return true if the Coordinate is contained in the HashSet, false otherwise.
      */
-    public boolean contains(HashSet<Point> points, Point end) {
+    public boolean contains(HashSet<Coordinate> points, Coordinate end) {
         if (end != null) {
-            for (Point point : points) {
+            for (Coordinate point : points) {
                 if (point.equals(end)) {
                     return true;
                 }
@@ -172,10 +170,8 @@ public class User extends Player implements Comparable<User>{
     
     /**
      * Initializes the game board with a set of ships.
-     *
-     * @param shipLengths An array of ship lengths.
      */
-    public void initLoadFile(int[] shipLengths) {
+    public void initLoadDatabase() {
         this.board = new Board();
 
         for (Ship ship : this.ships) {

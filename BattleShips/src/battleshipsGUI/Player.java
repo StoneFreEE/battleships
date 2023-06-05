@@ -1,4 +1,4 @@
-package battleships;
+package battleshipsGUI;
 
 import java.util.ArrayList;
 
@@ -9,9 +9,9 @@ import java.util.ArrayList;
  * @author oliver
  */
 public abstract class Player {
-    public Board board;
-    public int shipsSunk;
-    public ArrayList<Ship> ships;
+    Board board;
+    int shipsSunk;
+    ArrayList<Ship> ships;
     
      /**
      * Constructor for Player.
@@ -20,6 +20,7 @@ public abstract class Player {
     public Player() {
         this.ships = new ArrayList<>();
         this.shipsSunk = 0;
+        this.board = new Board();
     }
     
      /**

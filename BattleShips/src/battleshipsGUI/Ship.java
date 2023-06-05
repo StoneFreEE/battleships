@@ -1,4 +1,4 @@
-package battleships;
+package battleshipsGUI;
 
 /**
  * This class represents a Ship object in the game Battleships. It has a length,
@@ -12,8 +12,8 @@ package battleships;
 public class Ship {
 
     public int length;
-    public Point origin;
-    public Point endPoint;
+    public Coordinate origin;
+    public Coordinate endPoint;
 
     /**
      * Constructor for creating a Ship object with just a length and origin 
@@ -22,10 +22,10 @@ public class Ship {
      * @param length the length of the ship
      * @param origin the starting position of the ship on the game board
      */
-    public Ship(int length, Point origin) {
+    public Ship(int length, Coordinate origin) {
         this.length = length;
         this.origin = origin;
-        this.endPoint = new Point();
+        this.endPoint = new Coordinate();
     }
 
     /**
@@ -36,7 +36,7 @@ public class Ship {
      * @param origin the starting position of the ship on the game board
      * @param end the ending position of the ship on the game board
      */
-    public Ship(int length, Point origin, Point end) {
+    public Ship(int length, Coordinate origin, Coordinate end) {
         this.length = length;
         this.origin = origin;
         this.endPoint = end;
