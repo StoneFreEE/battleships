@@ -19,59 +19,71 @@ import javax.swing.*;
  *
  * @author oliver
  */
-public class View extends JFrame implements Observer{
+public class View extends JFrame implements Observer {
+
+    private Model model;
+    
     // Title
     public JPanel titlePanel;
     public JLabel titleLabel;
     public JButton startButton;
     private JPanel buttonPanel;
     private Font titleFont = new Font("Menlo", Font.BOLD, 80);
-    
+
     // Name
     private JPanel namePanel;
     private JTextField textField;
     private JButton enterButton;
-    
+
+    // button font
+    private Font buttonFont = new Font("Menlo", Font.PLAIN, 24);
+
     // Game
     public LoadBoardPanel loadBoardPanel;
-    private InitiateBoardPanel initiateBoardPanel;
+    public PlaceShipPanel placeShipPanel;
     private User user;
-    
+
     // Score
     private LeaderboardPanel leaderboardPanel;
     
     private Controller controller;
-    
+
     private Container con;
-       
-    public View() {
+
+    public View(Model model) {
+        this.model = model;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
-        
+
         getContentPane().setBackground(Color.BLACK);
         setLayout(null);
-        setVisible(true);   
+        setVisible(true);
         con = getContentPane();
-        
+
+        // title 
         titlePanel = new JPanel();
         titlePanel.setBounds(100, 100, 600, 150);
         titlePanel.setBackground(Color.BLACK);
-        
+
         titleLabel = new JLabel("BATTLESHIPS");
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(titleFont);
-        
+
         titlePanel.add(titleLabel);
 
+        // start button
         buttonPanel = new JPanel();
         buttonPanel.setBounds(300, 400, 200, 100);
         buttonPanel.setBackground(Color.BLACK);
-        
+
         JButton startButton = new JButton("START");
         startButton.setBackground(Color.BLACK);
-        startButton.setForeground(Color.BLACK);
-        
+        startButton.setForeground(Color.LIGHT_GRAY);
+        // Set the preferred size of the button
+        startButton.setPreferredSize(new Dimension(200, 50));
+        startButton.setFont(buttonFont);
         startButton.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Action to perform when the Start button is clicked
@@ -87,27 +99,56 @@ public class View extends JFrame implements Observer{
     public void setController(Controller controller) {
         this.controller = controller;
     }
-    
+
     public void startGame() {
         con.removeAll();
-        
+
         // load board
         loadBoardPanel = new LoadBoardPanel(controller);
         con.add(loadBoardPanel);
         con.revalidate();
         con.repaint();
     }
-    
+
     public void initiateBoard(int[] shipLengths) {
         con.removeAll();
-        initiateBoardPanel = new InitiateBoardPanel(controller, shipLengths, user);
-        con.add(initiateBoardPanel);
+        placeShipPanel = new PlaceShipPanel(controller, shipLengths, user);
+        con.add(placeShipPanel);
         con.revalidate();
         con.repaint();
     }
-    
+
     public void playGame() {
-        // Create game grid
+        // make into mvc later
+        controller.setEnemyGrid();
+        
+        // get game grids from model
+        GameGrid playerGrid = model.getPlayerGrid();
+        EnemyGrid enemyGrid = model.getEnemyGrid();
+
+        // Create a new JFrame for the game window
+        JFrame gameFrame = new JFrame();
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameFrame.setSize(1200, 600);
+        gameFrame.setLayout(new GridLayout(1, 2));
+
+        // Create panels for player and enemy grids
+        JPanel playerPanel = new JPanel(new BorderLayout());
+        JPanel enemyPanel = new JPanel(new BorderLayout());
+
+        // Add player and enemy grids to the panels
+        playerPanel.add(playerGrid, BorderLayout.CENTER);
+        enemyPanel.add(enemyGrid, BorderLayout.CENTER);
+
+        // Add panels to the game frame
+        gameFrame.add(playerPanel);
+        gameFrame.add(enemyPanel);
+
+        // Close the previous window
+        dispose();
+
+        // Set the game frame as visible
+        gameFrame.setVisible(true);
     }
 
     public void displayLeaderboard(Object[][] users) {
@@ -117,34 +158,31 @@ public class View extends JFrame implements Observer{
         con.revalidate();
         con.repaint();
     }
-    
+
     @Override
     public void update(Observable o, Object arg) {
-       if (arg instanceof Object[][]) {
+        if (arg instanceof Object[][]) {
             // Handle score update
             Object[][] users = (Object[][]) arg;
             displayLeaderboard(users);
+        } else if (arg instanceof Boolean) {
+            boolean valid = (boolean) arg;
+            if (!valid) {
+                displayErrorPlacementMessage();
+            }
+        } else if (arg instanceof User) {
+            user = (User) arg;
+            if (placeShipPanel != null) {
+                placeShipPanel.updateGrid(user);
+            }
+        } else if (arg instanceof Coordinate[]) {
+            Coordinate[] points = (Coordinate[]) arg;
+            placeShipPanel.displayPossiblePoints(points);
         }
-       else if (arg instanceof Boolean) {
-           boolean valid = (boolean)arg;
-           if (!valid) {
-               displayErrorPlacementMessage();
-           }
-       }
-       else if (arg instanceof User) {
-           user = (User)arg;
-           if (initiateBoardPanel != null)
-           {
-                initiateBoardPanel.updateGrid(user);
-           }
-       }
-       else if (arg instanceof Coordinate[]) {
-          Coordinate[] points = (Coordinate[])arg;
-          initiateBoardPanel.displayPossiblePoints(points);
-       }
     }
-    
-     private void promptName() {
+
+    private void promptName() {
+        // name input panel
         namePanel = new JPanel();
         namePanel.setBounds(250, 400, 300, 150);
         namePanel.setBackground(Color.BLACK);
@@ -153,16 +191,21 @@ public class View extends JFrame implements Observer{
         textField = new JTextField("Name...");
         textField.setBackground(Color.BLACK);
         textField.setForeground(Color.WHITE);
+        textField.setFont(buttonFont);
         textField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 textField.setText(""); // Clear the text field when it is clicked
             }
         });
-        
+
         namePanel.add(textField);
 
+        // enter button
         enterButton = new JButton("Enter");
+        enterButton.setPreferredSize(new Dimension(200, 50));
+        enterButton.setFont(buttonFont);
+        
         namePanel.add(enterButton);
         enterButton.addActionListener(new ActionListener() {
             @Override
@@ -173,14 +216,14 @@ public class View extends JFrame implements Observer{
                 controller.startGame();
             }
         });
-        
+
         // Toggle to enterBoard panel
         buttonPanel.setVisible(false);
         namePanel.setVisible(true);
         add(namePanel);
     }
-     
-     public void displayErrorPlacementMessage() {
-         initiateBoardPanel.displayErrorPlacementMessage();
-     }
+
+    public void displayErrorPlacementMessage() {
+        placeShipPanel.displayErrorPlacementMessage();
+    }
 }

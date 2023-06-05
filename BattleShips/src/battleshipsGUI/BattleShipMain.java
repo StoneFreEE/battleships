@@ -11,9 +11,11 @@ package battleshipsGUI;
 public class BattleShipMain {
     public static void main(String[] args) {
         Model model = new Model();
-        View view = new View();
+        View view = new View(model);
         Controller controller = new Controller(model, view);
-    
+        model.setController(controller);
+        
+        System.out.println(model.getShipLengths().length);
         view.setVisible(true);
     }
 }

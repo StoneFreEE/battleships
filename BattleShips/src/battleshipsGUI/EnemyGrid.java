@@ -12,18 +12,23 @@ import javax.swing.*;
 
 /**
  *
- * @author oliver
+ * @author 64272
  */
-public class GridPanel extends JPanel {
-    private Board board;
-    private boolean placing;
-    private Controller controller;
-    private int shipLength;
+public class EnemyGrid extends JPanel {
 
-    public GridPanel(Controller controller, User user) {
+    private Board board;
+    private boolean placing; // true = placing start, false = placing end of ship
+    private boolean shootingPhase; // track whether in shooting phase or placing ship phase
+    private Controller controller;
+    private Model model;
+    private int[] shipLengths;
+    public GridStates gridState;
+    private boolean startPhase = true;
+
+    public EnemyGrid(Controller controller, Model model,AIEnemy enemy, int[] shipLengths) {
+        this.board = enemy.board;
+
         this.controller = controller;
-        this.placing = true;
-        this.board = user.board;
         setLayout(new GridLayout(board.cells.length, board.cells.length));
         setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
@@ -35,45 +40,39 @@ public class GridPanel extends JPanel {
                 pan.setPreferredSize(new Dimension(45, 45));
                 pan.setBorder(BorderFactory.createLineBorder(Color.WHITE));
                 pan.setBackground(Color.BLACK);
-                pan.addMouseListener(new GridListener(j, i));
+                pan.addMouseListener(new EnemyGrid.GridListener(j, i));
 
-                pan.setName(j+""+i);
+                pan.setName(j + "" + i);
                 add(pan);
             }
         }
+
+        this.gridState = GridStates.SHOOTINGAT;
+        this.model = model;
+        this.shipLengths = shipLengths;
     }
 
-    public void setShipLength(int shipLength) {
-        this.shipLength = shipLength;
-    }
-
-    public void displayPossiblePoints(Coordinate[] points) {
-        for (Coordinate point : points) {
-            int x = point.getX();
-            int y = point.getY();
-            JPanel pan = getComponentAt(x, y);
-            pan.setBackground(Color.YELLOW);
-        }
-    }
-
-    public void updateGrid(User user) {
-        this.board = user.board;
-        user.board.printBoard();
-        this.placing = true;
+    public void updateGrid(AIEnemy enemy) {
+        // Customize how the enemy grid is updated based on the user's board
+        // For example, you can use different colors or symbols to represent ship, miss, or empty cells
+        enemy.board.printBoard();
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 JPanel pan = getComponentAt(j, i);
                 if (board.cells[i][j] == States.SHIP.ordinal()) {
                     pan.setBackground(Color.BLUE);
-                }
-                else if (board.cells[i][j] == States.NONE.ordinal()) {
+                } else if (board.cells[i][j] == States.NONE.ordinal()) {
                     pan.setBackground(Color.BLACK);
+                } else if (board.cells[i][j] == States.MISS.ordinal()) {
+                    pan.setBackground(Color.GRAY);
+                } else if (board.cells[i][j] == States.HIT.ordinal()) {
+                    pan.setBackground(Color.RED);
+
                 }
             }
-        this.placing = false;
         }
     }
-    
+
     public JPanel getComponentAt(int x, int y) {
         Component comp = null;
         String pointString = x + "" + y;
@@ -82,39 +81,37 @@ public class GridPanel extends JPanel {
                 comp = child;
             }
         }
-        return (JPanel)comp;
+        return (JPanel) comp;
     }
-    
+
     private class GridListener extends MouseAdapter {
+
         private int x;
         private int y;
-        
+
         public GridListener(int x, int y) {
             this.x = x;
             this.y = y;
         }
-        
+
         @Override
         public void mouseClicked(MouseEvent e) {
-            JPanel clickedBox = (JPanel)e.getSource();
+            System.out.println("Grid state : " + gridState);
+            if (gridState == GridStates.NOCLICK) {
+                return;
+            }
+            JPanel clickedBox = (JPanel) e.getSource();
             Coordinate point = new Coordinate(x, y);
             System.out.println(point.getX() + "" + point.getY());
-            if (placing) {
-                    if (controller.checkValid(point, shipLength)) {
-                        placing = false;             
-                        clickedBox.setBackground(Color.BLUE);
-                        controller.setOrigin(point);  
-                    }
-            }
-            else {
-                if (clickedBox.getBackground() == Color.YELLOW) {
-                    controller.setEnd(point);
-                    placing = true;
-                    
-                }
+
+            if (gridState == GridStates.SHOOTINGAT) {
+                clickedBox.setBackground(Color.RED);
             }
         }
     }
+
+    public void startShootingPhase() {
+        gridState = GridStates.SHOOTINGAT;
+        startPhase = true;
+    }
 }
-    
-   
