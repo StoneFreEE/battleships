@@ -17,15 +17,15 @@ import javax.swing.*;
 public class EnemyGrid extends JPanel {
 
     private Board board;
-    private boolean placing; // true = placing start, false = placing end of ship
-    private boolean shootingPhase; // track whether in shooting phase or placing ship phase
     private Controller controller;
     private Model model;
     private int[] shipLengths;
     public GridStates gridState;
+    private FrameGame panelGame;
+    
     private boolean startPhase = true;
 
-    public EnemyGrid(Controller controller, Model model,AIEnemy enemy, int[] shipLengths) {
+    public EnemyGrid(Controller controller, Model model, AIEnemy enemy, int[] shipLengths) {
         this.board = enemy.board;
 
         this.controller = controller;
@@ -50,6 +50,10 @@ public class EnemyGrid extends JPanel {
         this.gridState = GridStates.SHOOTINGAT;
         this.model = model;
         this.shipLengths = shipLengths;
+    }
+
+    public void setGamePanel(FrameGame panel) {
+        this.panelGame = panel;
     }
 
     public void updateGrid(AIEnemy enemy) {
@@ -97,15 +101,33 @@ public class EnemyGrid extends JPanel {
         @Override
         public void mouseClicked(MouseEvent e) {
             System.out.println("Grid state : " + gridState);
+            board.printBoard();
             if (gridState == GridStates.NOCLICK) {
                 return;
             }
             JPanel clickedBox = (JPanel) e.getSource();
             Coordinate point = new Coordinate(x, y);
+
             System.out.println(point.getX() + "" + point.getY());
 
             if (gridState == GridStates.SHOOTINGAT) {
-                clickedBox.setBackground(Color.RED);
+                String clickedCell = Coordinate.translatePoint(point);
+
+                panelGame.updateUserClickLabel(clickedCell);
+
+                // if successfully fires at point with no errors
+                if (board.fireAt(point)) {
+                    if (board.isMiss(point)) {
+                        clickedBox.setBackground(Color.GRAY);
+                    } else {
+                        clickedBox.setBackground(Color.RED);
+                    }
+                    panelGame.updateTurn();
+                    panelGame.updateErrorLabel(true);
+                } else{
+                    panelGame.updateErrorLabel(false);
+                }
+
             }
         }
     }

@@ -41,10 +41,19 @@ public class Controller {
         // let player choose ship placement and save it on a gamegrid object
         model.initEnemyGrid();
     }
+    
+    public void linkFrametoGrid(FrameGame panel){
+        model.linkPaneltoGrid(panel);
+    }
+    
+    public void updateTurn(){
+        model.enemyFireCannon();
+    }
 
     public void setPlayerGameGrid() {
         // let player choose ship placement and save it on a gamegrid object
-        model.initPlayerGrid(view.placeShipPanel.getGrid());
+        GameGrid grid = view.placeShipPanel.getGrid();
+        model.initPlayerGrid(grid);
     }
 
     public void setName(String name) {

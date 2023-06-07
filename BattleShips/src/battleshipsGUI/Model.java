@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Observable;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,8 +32,10 @@ public class Model extends Observable {
     private String password = null;
     private int score;
 
+    // enemy user setup
     private User user;
     private AIEnemy enemy;
+    private Coordinate lastShot = new Coordinate(0, 0);
 
     private Object[][] users;
 
@@ -43,7 +46,7 @@ public class Model extends Observable {
     private Ship currentShip;
 
     //
-    private PlaceShipPanel placeShipPanel;
+    private PanelPlaceShip placeShipPanel;
 
     private GameGrid playerGrid;
     private EnemyGrid enemyGrid;
@@ -176,7 +179,7 @@ public class Model extends Observable {
 
     // set grid with ship placements
     public void initPlayerGrid(GameGrid grid) {
-        playerGrid = grid; // Retrieve the GameGrid object from PlaceShipPanel
+        playerGrid = grid; // Retrieve the GameGrid object from PanelPlaceShip
         playerGrid.startShootingPhase();
     }
 
@@ -186,13 +189,70 @@ public class Model extends Observable {
     }
 
     public GameGrid getPlayerGrid() {
-        return this.playerGrid; // Retrieve the GameGrid object from PlaceShipPanel
+        return this.playerGrid; // Retrieve the GameGrid object from PanelPlaceShip
+    }
+
+    public void enemyFireCannon() {
+        Random rand = new Random();
+        Coordinate point = new Coordinate();
+
+        // If havent hit a ship yet, randomly shoot at the board
+        if (user.board.isMiss(lastShot)) {
+            do {
+                point = new Coordinate(rand.nextInt(Board.BOARD_SIZE), rand.nextInt(Board.BOARD_SIZE));
+            } while (this.user.board.isHit(point) || this.user.board.isMiss(point));
+        } else {
+            // If hit a ship last turn, prioritize shooting the surrounding areas
+            int x = lastShot.x;
+            int y = lastShot.y;
+
+            // Check up
+            if (y > 0 && !this.user.board.isHit(new Coordinate(x, y - 1)) && !this.user.board.isMiss(new Coordinate(x, y - 1))) {
+                point = new Coordinate(x, y - 1);
+            } // Check down
+            else if (y < Board.BOARD_SIZE - 1 && !this.user.board.isHit(new Coordinate(x, y + 1)) && !this.user.board.isMiss(new Coordinate(x, y + 1))) {
+                point = new Coordinate(x, y + 1);
+            } // Check left
+            else if (x > 0 && !this.user.board.isHit(new Coordinate(x - 1, y)) && !this.user.board.isMiss(new Coordinate(x - 1, y))) {
+                point = new Coordinate(x - 1, y);
+            } // Check right
+            else if (x < Board.BOARD_SIZE - 1 && !this.user.board.isHit(new Coordinate(x + 1, y)) && !this.user.board.isMiss(new Coordinate(x + 1, y))) {
+                point = new Coordinate(x + 1, y);
+            } // If all surrounding areas have already been shot, randomly shoot at the board
+            else {
+                do {
+                    point = new Coordinate(rand.nextInt(Board.BOARD_SIZE), rand.nextInt(Board.BOARD_SIZE));
+                } while (this.user.board.isHit(point) || this.user.board.isMiss(point));
+            }
+        }
+
+        this.user.board.fireAt(point);
+        lastShot = point;
+
+        String coordinate = Coordinate.translatePoint(point);
+        System.out.println("Enemy Shot: " + coordinate);
+
+        boolean isHit = this.user.board.isHit(point);
+        if (isHit) {
+            this.playerGrid.updateEnemyTargetLabel(coordinate);
+            System.out.println("Enemy got a hit !!\n");
+        } else {
+            this.playerGrid.updateEnemyTargetLabel(coordinate);
+            System.out.println("Enemy missed!!");
+        }
+        System.out.println("");
+        this.playerGrid.updateGrid(user);
+    }
+
+    public void linkPaneltoGrid(FrameGame panel) {
+        this.playerGrid.setGamePanel(panel);
+        this.enemyGrid.setGamePanel(panel);
     }
 
     // update grid before returning
     public EnemyGrid getEnemyGrid() {
         this.enemyGrid.updateGrid(enemy);
-        return this.enemyGrid; // Retrieve the GameGrid object from PlaceShipPanel
+        return this.enemyGrid; // Retrieve the GameGrid object from PanelPlaceShip
     }
 
     public void setName(String name) {
@@ -200,8 +260,8 @@ public class Model extends Observable {
         setChanged();
         notifyObservers(user);
     }
-    
-    public void initEnemy(){
+
+    public void initEnemy() {
         this.enemy = new AIEnemy();
         this.enemy.initBoard(shipLengths);
     }

@@ -22,7 +22,7 @@ import javax.swing.*;
 public class View extends JFrame implements Observer {
 
     private Model model;
-    
+
     // Title
     public JPanel titlePanel;
     public JLabel titleLabel;
@@ -39,13 +39,14 @@ public class View extends JFrame implements Observer {
     private Font buttonFont = new Font("Menlo", Font.PLAIN, 24);
 
     // Game
-    public LoadBoardPanel loadBoardPanel;
-    public PlaceShipPanel placeShipPanel;
+    public PanelLoadBoard loadBoardPanel;
+    public PanelPlaceShip placeShipPanel;
+    public FrameGame frameGame;
     private User user;
 
     // Score
-    private LeaderboardPanel leaderboardPanel;
-    
+    private PanelLeaderboard leaderboardPanel;
+
     private Controller controller;
 
     private Container con;
@@ -104,7 +105,7 @@ public class View extends JFrame implements Observer {
         con.removeAll();
 
         // load board
-        loadBoardPanel = new LoadBoardPanel(controller);
+        loadBoardPanel = new PanelLoadBoard(controller);
         con.add(loadBoardPanel);
         con.revalidate();
         con.repaint();
@@ -112,47 +113,28 @@ public class View extends JFrame implements Observer {
 
     public void initiateBoard(int[] shipLengths) {
         con.removeAll();
-        placeShipPanel = new PlaceShipPanel(controller, shipLengths, user);
+        placeShipPanel = new PanelPlaceShip(controller, shipLengths, user);
         con.add(placeShipPanel);
         con.revalidate();
         con.repaint();
     }
 
     public void playGame() {
-        // make into mvc later
-        controller.setEnemyGrid();
-        
-        // get game grids from model
-        GameGrid playerGrid = model.getPlayerGrid();
-        EnemyGrid enemyGrid = model.getEnemyGrid();
-
-        // Create a new JFrame for the game window
-        JFrame gameFrame = new JFrame();
-        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameFrame.setSize(1200, 600);
-        gameFrame.setLayout(new GridLayout(1, 2));
-
-        // Create panels for player and enemy grids
-        JPanel playerPanel = new JPanel(new BorderLayout());
-        JPanel enemyPanel = new JPanel(new BorderLayout());
-
-        // Add player and enemy grids to the panels
-        playerPanel.add(playerGrid, BorderLayout.CENTER);
-        enemyPanel.add(enemyGrid, BorderLayout.CENTER);
-
-        // Add panels to the game frame
-        gameFrame.add(playerPanel);
-        gameFrame.add(enemyPanel);
-
-        // Close the previous window
         dispose();
+        con.removeAll();
+        frameGame = new FrameGame(controller, model);
+        controller.linkFrametoGrid(frameGame);
 
-        // Set the game frame as visible
-        gameFrame.setVisible(true);
+        con = frameGame.getContentPane();
+        con.revalidate();
+        con.repaint();
+
+       // frameGame.setVisible(true); // Show the new frame
+
     }
 
     public void displayLeaderboard(Object[][] users) {
-        leaderboardPanel = new LeaderboardPanel(users);
+        leaderboardPanel = new PanelLeaderboard(users);
         getContentPane().removeAll();
         add(leaderboardPanel);
         con.revalidate();
@@ -205,7 +187,7 @@ public class View extends JFrame implements Observer {
         enterButton = new JButton("Enter");
         enterButton.setPreferredSize(new Dimension(200, 50));
         enterButton.setFont(buttonFont);
-        
+
         namePanel.add(enterButton);
         enterButton.addActionListener(new ActionListener() {
             @Override

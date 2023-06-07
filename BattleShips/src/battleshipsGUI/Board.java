@@ -59,7 +59,8 @@ public class Board {
     }
 
     /**
-     * Finds all possible end points for placing a ship on the board without overlapping with other ships.
+     * Finds all possible end points for placing a ship on the board without
+     * overlapping with other ships.
      *
      * @param ship the ship object for which to find possible end points.
      * @return a HashSet of all possible end points.
@@ -117,10 +118,12 @@ public class Board {
     }
 
     /**
-     * Parses a string representation of a point, such as "A1", into a Coordinate object.
+     * Parses a string representation of a point, such as "A1", into a
+     * Coordinate object.
      *
      * @param text the string representation of the point
-     * @return a Coordinate object representing the parsed point, or null if the input is invalid
+     * @return a Coordinate object representing the parsed point, or null if the
+     * input is invalid
      */
     public Coordinate parsePoint(String text) {
         // Check valid lengths
@@ -144,8 +147,8 @@ public class Board {
     }
 
     /**
-     * Prints the current state of the board, with each cell represented by a symbol
-     * indicating its state.
+     * Prints the current state of the board, with each cell represented by a
+     * symbol indicating its state.
      */
     public void printBoard() {
         // print top of board
@@ -179,7 +182,8 @@ public class Board {
     }
 
     /**
-     * Determines whether a given point is free (not occupied by a ship) on the board.
+     * Determines whether a given point is free (not occupied by a ship) on the
+     * board.
      *
      * @param point the point to check
      * @return true if the point is free, false otherwise
@@ -187,11 +191,11 @@ public class Board {
     public boolean isFree(Coordinate point) {
         return this.cells[point.getY()][point.getX()] != States.SHIP.ordinal();
     }
-    
+
     public boolean isSpace(Ship ship) {
         return !checkPossible(ship).isEmpty();
     }
-    
+
     /**
      * Determines whether a given point represents a hit on a ship on the board.
      *
@@ -201,7 +205,7 @@ public class Board {
     public boolean isHit(Coordinate point) {
         return this.cells[point.getY()][point.getX()] == States.HIT.ordinal();
     }
-    
+
     /**
      * Determines whether a given point represents a miss on the board.
      *
@@ -211,9 +215,10 @@ public class Board {
     public boolean isMiss(Coordinate point) {
         return this.cells[point.getY()][point.getX()] == States.MISS.ordinal();
     }
-    
+
     /**
-     * Determines whether a given ship is sunk on the board, based on the state of its cells.
+     * Determines whether a given ship is sunk on the board, based on the state
+     * of its cells.
      *
      * @param ship the ship to check
      * @return true if the ship is sunk, false otherwise
@@ -255,7 +260,7 @@ public class Board {
         }
         return (sunkCellCount == ship.length);
     }
-    
+
     /**
      * Determines whether a given point is within the boundaries of the board.
      *
@@ -267,16 +272,22 @@ public class Board {
     }
 
     /**
-     * Fires a cannon at the given point on the board, marking it as HIT if it is occupied
-     * by a ship, or as MISS otherwise.
+     * Fires a cannon at the given point on the board, marking it as HIT if it
+     * is occupied by a ship, or as MISS if the point has no ship. Returns true
+     * if successfully fires a hit or a miss, otherwise returns false.
      *
      * @param point the point to fire at
      */
-    public void fireAt(Coordinate point) {
+    public boolean fireAt(Coordinate point) {
         if (this.cells[point.getY()][point.getX()] == States.SHIP.ordinal()) {
             this.cells[point.getY()][point.getX()] = States.HIT.ordinal();
-        } else {
+            return true;
+
+        } else if (this.cells[point.getY()][point.getX()] == States.NONE.ordinal()) {
             this.cells[point.getY()][point.getX()] = States.MISS.ordinal();
+            return true;
+        } else {
+            return false;
         }
     }
 }

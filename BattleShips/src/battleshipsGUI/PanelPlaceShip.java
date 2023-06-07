@@ -11,7 +11,7 @@ import javax.swing.*;
  *
  * @author oliver
  */
-public class PlaceShipPanel extends JPanel {
+public class PanelPlaceShip extends JPanel {
 
     private Controller controller;
 
@@ -30,7 +30,7 @@ public class PlaceShipPanel extends JPanel {
 
     private boolean playGameCalled = false; // Flag to track if playGame() has been called
 
-    public PlaceShipPanel(Controller controller, int[] shipLengths, User user) {
+    public PanelPlaceShip(Controller controller, int[] shipLengths, User user) {
         this.controller = controller;
         this.shipLengths = shipLengths;
 
@@ -107,6 +107,7 @@ public class PlaceShipPanel extends JPanel {
     }
 
     public GameGrid getGrid() {
+        System.out.println("Hello");
         return grid;
     }
 

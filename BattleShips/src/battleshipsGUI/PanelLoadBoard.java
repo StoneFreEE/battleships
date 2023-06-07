@@ -23,7 +23,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author oliver
  */
-public class LoadBoardPanel extends JPanel {
+public class PanelLoadBoard extends JPanel {
 
     private JLabel loadBoardTitle;
     private JPanel titlePanel;
@@ -44,9 +44,9 @@ public class LoadBoardPanel extends JPanel {
     private Font buttonFont = new Font("Menlo", Font.PLAIN, 24);
     private Font titleFont = new Font("Menlo", Font.BOLD, 80);
 
-    private PlaceShipPanel initiateBoardPanel;
+    private PanelPlaceShip initiateBoardPanel;
 
-    public LoadBoardPanel(Controller controller) {
+    public PanelLoadBoard(Controller controller) {
         this.controller = controller;
 
         setLayout(null);

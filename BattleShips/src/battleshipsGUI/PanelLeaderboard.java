@@ -13,12 +13,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author oliver
  */
-public class LeaderboardPanel extends JPanel{
+public class PanelLeaderboard extends JPanel{
     private JTable leaderboardTable;
     private DefaultTableModel tableModel;
     private Object[][] users;
     
-    public LeaderboardPanel(Object[][] users) {
+    public PanelLeaderboard(Object[][] users) {
         // Initialize and customize GUI components
         this.users = users;
         // Set layout manager

@@ -20,6 +20,9 @@ public class GameGrid extends JPanel {
     private Controller controller;
     private int shipLength;
     public GridStates gridState;
+    private FrameGame panelGame;
+
+    private boolean enemyTurn = false;
     private boolean startPhase = false;
 
     public GameGrid(Controller controller, User user) {
@@ -43,6 +46,14 @@ public class GameGrid extends JPanel {
                 add(pan);
             }
         }
+    }
+    
+    public void setEnemyTurn(boolean bool){
+        this.enemyTurn = bool;
+    }
+    
+    public void setGamePanel(FrameGame panel){
+        this.panelGame = panel;
     }
 
     public void setShipLength(int shipLength) {
@@ -135,6 +146,10 @@ public class GameGrid extends JPanel {
         }
     }
 
+    public void updateEnemyTargetLabel(String cell){
+        this.panelGame.updateEnemyTargetLabel(cell);
+    }
+    
     public void startShootingPhase() {
         gridState = GridStates.NOCLICK;
         startPhase = true;
