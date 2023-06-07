@@ -1,0 +1,57 @@
+Thu Jun 08 10:24:26 NZST 2023 : Apache Derby Network Server - 10.14.2.0 - (1828579) started and ready to accept connections on port 1527
+----------------------------------------------------------------
+Thu Jun 08 10:24:26 NZST 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0188-97f6-01f8-ffffc4de018b 
+on database directory C:\Users\64272\Documents\uni\uni stuff yr 2\comp603java\projects\battleships\BattleShips\db\sample with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Loaded from file:/C:/Users/64272/Downloads/derby/db-derby-10.14.2.0-bin/db-derby-10.14.2.0-bin/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_361-b09
+user.dir=C:\Users\64272\Downloads\derby\db-derby-10.14.2.0-bin\db-derby-10.14.2.0-bin
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=C:\Users\64272\Documents\uni\uni stuff yr 2\comp603java\projects\battleships\BattleShips\db
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Thu Jun 08 10:29:47 NZST 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance f91a0030-0188-97f6-01f8-ffffc4de018b 
+on database directory C:\Users\64272\Documents\uni\uni stuff yr 2\comp603java\projects\battleships\BattleShips\db\userDatabase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Loaded from file:/C:/Users/64272/Downloads/derby/db-derby-10.14.2.0-bin/db-derby-10.14.2.0-bin/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_361-b09
+user.dir=C:\Users\64272\Downloads\derby\db-derby-10.14.2.0-bin\db-derby-10.14.2.0-bin
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=C:\Users\64272\Documents\uni\uni stuff yr 2\comp603java\projects\battleships\BattleShips\db
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Thu Jun 08 10:29:48 NZST 2023:
+Shutting down instance f91a0030-0188-97f6-01f8-ffffc4de018b on database directory C:\Users\64272\Documents\uni\uni stuff yr 2\comp603java\projects\battleships\BattleShips\db\userDatabase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Thu Jun 08 10:29:48 NZST 2023 Thread[DRDAConnThread_4,5,main] (DATABASE = userDatabase), (DRDAID = {3}), Database 'userDatabase' shutdown.
+----------------------------------------------------------------
+Thu Jun 08 10:29:51 NZST 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance 953a00d1-0188-97f6-01f8-ffffc4de018b 
+on database directory C:\Users\64272\Documents\uni\uni stuff yr 2\comp603java\projects\battleships\BattleShips\db\userDatabase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Loaded from file:/C:/Users/64272/Downloads/derby/db-derby-10.14.2.0-bin/db-derby-10.14.2.0-bin/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_361-b09
+user.dir=C:\Users\64272\Downloads\derby\db-derby-10.14.2.0-bin\db-derby-10.14.2.0-bin
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=C:\Users\64272\Documents\uni\uni stuff yr 2\comp603java\projects\battleships\BattleShips\db
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Thu Jun 08 11:03:13 NZST 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance 140200f0-0188-97f6-01f8-ffffc4de018b 
+on database directory C:\Users\64272\Documents\uni\uni stuff yr 2\comp603java\projects\battleships\BattleShips\db\BattleShipDB with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Loaded from file:/C:/Users/64272/Downloads/derby/db-derby-10.14.2.0-bin/db-derby-10.14.2.0-bin/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_361-b09
+user.dir=C:\Users\64272\Downloads\derby\db-derby-10.14.2.0-bin\db-derby-10.14.2.0-bin
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=C:\Users\64272\Documents\uni\uni stuff yr 2\comp603java\projects\battleships\BattleShips\db
+Database Class Loader started - derby.database.classpath=''
