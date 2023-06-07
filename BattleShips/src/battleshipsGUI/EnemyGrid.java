@@ -17,16 +17,18 @@ import javax.swing.*;
 public class EnemyGrid extends JPanel {
 
     private Board board;
+    private AIEnemy enemy;
     private Controller controller;
     private Model model;
     private int[] shipLengths;
     public GridStates gridState;
     private FrameGame panelGame;
-    
+
     private boolean startPhase = true;
 
     public EnemyGrid(Controller controller, Model model, AIEnemy enemy, int[] shipLengths) {
         this.board = enemy.board;
+        this.enemy = enemy;
 
         this.controller = controller;
         setLayout(new GridLayout(board.cells.length, board.cells.length));
@@ -56,6 +58,10 @@ public class EnemyGrid extends JPanel {
         this.panelGame = panel;
     }
 
+    public AIEnemy getEnemy(){
+        return this.enemy;
+    }
+    
     public void updateGrid(AIEnemy enemy) {
         // Customize how the enemy grid is updated based on the user's board
         // For example, you can use different colors or symbols to represent ship, miss, or empty cells
@@ -119,12 +125,16 @@ public class EnemyGrid extends JPanel {
                 if (board.fireAt(point)) {
                     if (board.isMiss(point)) {
                         clickedBox.setBackground(Color.GRAY);
+                        panelGame.updatePlayerResultLabel("MISS");
                     } else {
                         clickedBox.setBackground(Color.RED);
+                        panelGame.updatePlayerResultLabel("HIT");
+                        controller.updatePlayerScore();
                     }
+                    panelGame.updateShipsRemaining();
                     panelGame.updateTurn();
                     panelGame.updateErrorLabel(true);
-                } else{
+                } else {
                     panelGame.updateErrorLabel(false);
                 }
 
@@ -132,6 +142,9 @@ public class EnemyGrid extends JPanel {
         }
     }
 
+    public Board getBoard(){
+        return this.board;
+    }
     public void startShootingPhase() {
         gridState = GridStates.SHOOTINGAT;
         startPhase = true;

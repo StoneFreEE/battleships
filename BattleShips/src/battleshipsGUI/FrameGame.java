@@ -1,6 +1,7 @@
 package battleshipsGUI;
 
 import java.awt.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 /**
@@ -15,6 +16,7 @@ public class FrameGame extends JFrame {
     private JLabel enemyTargetLabel;
     private JLabel turnCounterLabel;
     private JLabel playerClickLabel;
+    private JLabel shipCellsRemainingLabel;
     private JLabel playerResultLabel;
     private JLabel enemyClickLabel;
     private JLabel enemyResultLabel;
@@ -22,7 +24,9 @@ public class FrameGame extends JFrame {
     private Controller controller;
     private Model model;
 
+    private int enemyShipsRemaining;
     private int turnCounter = 1;
+    private int score;
 
     public FrameGame(Controller controller, Model model) {
         this.controller = controller;
@@ -31,30 +35,37 @@ public class FrameGame extends JFrame {
         // set enemy grid
         controller.setEnemyGrid();
 
-        // Create a new JFrame for the game window
+        this.enemyShipsRemaining = this.model.getEnemyGrid().getEnemy().ships.size() - this.model.getEnemyGrid().getEnemy().shipsSunk;
+        this.score = this.model.getPlayerGrid().getUser().getScore();
+
+// Create a new JFrame for the game window
         gameFrame = new JFrame();
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setSize(1000, 600);
         gameFrame.setLayout(new BorderLayout());
 
         // Create a panel for the top section
-        JPanel topPanel = new JPanel(new GridLayout(4, 1));
+        JPanel topPanel = new JPanel(new GridLayout(5, 1));
 
         // Create a panel for the first row
         JPanel row1Panel = new JPanel(new BorderLayout());
-        turnCounterLabel = new JLabel("Turn: " + turnCounter);
-        turnCounterLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        row1Panel.add(turnCounterLabel, BorderLayout.WEST);
+        turnCounterLabel = new JLabel("Turn: " + turnCounter + "   Score: " + score);
+        turnCounterLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        row1Panel.add(turnCounterLabel, BorderLayout.CENTER);
+        shipCellsRemainingLabel = new JLabel("Enemy Ships Remaining: " + enemyShipsRemaining);
+        shipCellsRemainingLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        row1Panel.add(shipCellsRemainingLabel, BorderLayout.EAST);
+
         topPanel.add(row1Panel);
 
         // Create a panel for the second row
         JPanel row2Panel = new JPanel(new BorderLayout());
-        playerClickLabel = new JLabel("Player clicked cell: ");
+        playerClickLabel = new JLabel("Player targeted cell: ");
         playerClickLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        row2Panel.add(playerClickLabel, BorderLayout.CENTER);
-        playerResultLabel = new JLabel(" test");
+        row2Panel.add(playerClickLabel, BorderLayout.WEST);
+        playerResultLabel = new JLabel("    ");
         playerResultLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        row2Panel.add(playerResultLabel, BorderLayout.EAST);
+        row2Panel.add(playerResultLabel, BorderLayout.CENTER);
         topPanel.add(row2Panel);
 
         // create panel for third row
@@ -70,10 +81,20 @@ public class FrameGame extends JFrame {
         enemyClickLabel = new JLabel("Enemy targeted cell: ");
         enemyClickLabel.setFont(new Font("Arial", Font.BOLD, 16));
         row4Panel.add(enemyClickLabel, BorderLayout.WEST);
-        enemyResultLabel = new JLabel(" test");
+        enemyResultLabel = new JLabel("     ");
         enemyResultLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        row4Panel.add(enemyResultLabel, BorderLayout.EAST);
+        row4Panel.add(enemyResultLabel, BorderLayout.CENTER);
         topPanel.add(row4Panel);
+
+        // Create a panel for the fifth row
+        JPanel row5Panel = new JPanel(new BorderLayout());
+        JLabel playerLabel = new JLabel("Player Board");
+        playerLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        row5Panel.add(playerLabel, BorderLayout.WEST);
+        JLabel enemyLabel = new JLabel("Enemy Board");
+        enemyLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        row5Panel.add(enemyLabel, BorderLayout.EAST);
+        topPanel.add(row5Panel);
 
         // Add the top panel to the game frame
         gameFrame.add(topPanel, BorderLayout.NORTH);
@@ -95,14 +116,23 @@ public class FrameGame extends JFrame {
     }
 
     public void updateUserClickLabel(String cell) {
-        playerClickLabel.setText("Player clicked cell: " + cell);
+        playerClickLabel.setText("Player targeted cell: " + cell);
     }
 
     // player's turn is over, next is AI turn
     public void updateTurn() {
+        model.getPlayerGrid().getUser().setScore(model.getPlayerGrid().getUser().getScore() -10);
+        this.score = model.getPlayerGrid().getUser().getScore();
+        // Decrement the score by 10 after each turn
         turnCounter++;
-        turnCounterLabel.setText("Turn: " + turnCounter);
+        turnCounterLabel.setText("Turn: " + turnCounter + "   Score: " + score);
         controller.updateTurn();
+        checkWinner();
+
+    }
+
+    public void incrementScore() {
+        score += 50;
     }
 
     public void updateErrorLabel(boolean isValid) {
@@ -118,10 +148,39 @@ public class FrameGame extends JFrame {
     }
 
     public void updatePlayerResultLabel(String result) {
-        playerResultLabel.setText(result);
+        playerResultLabel.setText("        " + result);
+    }
+
+    public void updateShipsRemaining() {
+        this.model.getEnemyGrid().getEnemy().checkLose();
+        this.enemyShipsRemaining = this.model.getEnemyGrid().getEnemy().ships.size() - this.model.getEnemyGrid().getEnemy().shipsSunk;
+        shipCellsRemainingLabel.setText("Enemy Ships Remaining: " + enemyShipsRemaining);
     }
 
     public void updateEnemyResultLabel(String result) {
-        enemyResultLabel.setText(result);
+        enemyResultLabel.setText("        " + result);
     }
+
+    // check if enemy or player has won and return the corresponding string
+    public String checkWin() {
+        // if enemy loses
+        if (this.model.getEnemyGrid().getEnemy().checkLose()) {
+            gameFrame.setVisible(false);
+
+            return "PLAYER";
+        } else if (this.model.getPlayerGrid().getUser().checkLose()) {
+            gameFrame.setVisible(false);
+            return "ENEMY";
+        } else {
+            return "nowin";
+        }
+    }
+
+    public void checkWinner() {
+        String winner = checkWin();
+        if (winner.equals("PLAYER") || winner.equals("ENEMY")) {
+            controller.gameOver(winner, score);
+        }
+    }
+
 }

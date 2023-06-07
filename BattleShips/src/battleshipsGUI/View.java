@@ -43,6 +43,8 @@ public class View extends JFrame implements Observer {
     public PanelPlaceShip placeShipPanel;
     public FrameGame frameGame;
     private User user;
+    private FrameGameOver gameOverPanel;
+    private String winner;
 
     // Score
     private PanelLeaderboard leaderboardPanel;
@@ -60,8 +62,12 @@ public class View extends JFrame implements Observer {
         setLayout(null);
         setVisible(true);
         con = getContentPane();
+        initStartScreen();
 
-        // title 
+    }
+
+    public void initStartScreen(){
+                // title 
         titlePanel = new JPanel();
         titlePanel.setBounds(100, 100, 600, 150);
         titlePanel.setBackground(Color.BLACK);
@@ -96,7 +102,7 @@ public class View extends JFrame implements Observer {
         con.add(titlePanel);
         con.add(buttonPanel);
     }
-
+    
     public void setController(Controller controller) {
         this.controller = controller;
     }
@@ -120,7 +126,6 @@ public class View extends JFrame implements Observer {
     }
 
     public void playGame() {
-        dispose();
         con.removeAll();
         frameGame = new FrameGame(controller, model);
         controller.linkFrametoGrid(frameGame);
@@ -128,8 +133,18 @@ public class View extends JFrame implements Observer {
         con = frameGame.getContentPane();
         con.revalidate();
         con.repaint();
+        dispose();
+    }
 
-       // frameGame.setVisible(true); // Show the new frame
+    public void gameOver(String winner, int score) {
+        frameGame.dispose();
+        con.removeAll();
+
+        FrameGameOver gameOverPanel = new FrameGameOver(controller, winner, score);
+
+        con = gameOverPanel.getContentPane();
+        con.revalidate();
+        con.repaint();
 
     }
 

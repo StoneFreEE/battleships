@@ -6,12 +6,12 @@ import java.util.Random;
 import java.util.Set;
 
 public class AIEnemy extends Player {
-        
+
     Random rand = new Random();
 
     /**
-     * Constructor for the AIEnemy class.
-     * It calls the constructor of its superclass Player.
+     * Constructor for the AIEnemy class. It calls the constructor of its
+     * superclass Player.
      */
     public AIEnemy() {
         super();
@@ -19,10 +19,12 @@ public class AIEnemy extends Player {
 
     /**
      * Method to randomly place ships on the board for the AIEnemy player.
-     * @param shipLengths an array of integers representing the length of ships to be placed.
+     *
+     * @param shipLengths an array of integers representing the length of ships
+     * to be placed.
      */
     @Override
-    public void initBoard( int[] shipLengths) {
+    public void initBoard(int[] shipLengths) {
         ships = new ArrayList<>();
         this.board = new Board();
 
@@ -54,9 +56,10 @@ public class AIEnemy extends Player {
         }
     }
 
-     /**
-     * Helper method for the initBoard method.
-     * It returns a random point from the given set of points.
+    /**
+     * Helper method for the initBoard method. It returns a random point from
+     * the given set of points.
+     *
      * @param points a set of Coordinate objects to choose from.
      * @return a randomly chosen Coordinate object from the given set of points.
      */
@@ -72,9 +75,11 @@ public class AIEnemy extends Player {
         return new Coordinate();
     }
 
-     /**
+    /**
      * Method to check if the AIEnemy player has lost the game.
-     * @return a boolean value indicating if all the ships of the AIEnemy player have been sunk or not.
+     *
+     * @return a boolean value indicating if all the ships of the AIEnemy player
+     * have been sunk or not.
      */
     @Override
     public boolean checkLose() {
@@ -84,4 +89,10 @@ public class AIEnemy extends Player {
         }
         return (this.shipsSunk == this.ships.size());
     }
+
+    @Override
+    public ArrayList<Ship> getShipsList(){
+        return this.ships;
+    }
+
 }

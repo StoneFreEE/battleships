@@ -37,16 +37,20 @@ public class Controller {
 
     }
 
+    public void displayLeaderboard() {
+        view.displayLeaderboard(model.getUsers());
+    }
+
     public void setEnemyGrid() {
         // let player choose ship placement and save it on a gamegrid object
         model.initEnemyGrid();
     }
-    
-    public void linkFrametoGrid(FrameGame panel){
+
+    public void linkFrametoGrid(FrameGame panel) {
         model.linkPaneltoGrid(panel);
     }
-    
-    public void updateTurn(){
+
+    public void updateTurn() {
         model.enemyFireCannon();
     }
 
@@ -65,6 +69,10 @@ public class Controller {
         model.updateScore();
     }
 
+    public void updatePlayerScore(){
+        model.updatePlayerScore();
+    }
+
     public void initiateBoard() {
         view.initiateBoard(model.getShipLengths());
     }
@@ -76,6 +84,11 @@ public class Controller {
 
     public void setEnd(Coordinate coordinate) {
         model.setEnd(coordinate);
+    }
+
+    public void gameOver(String winner, int score) {
+        System.out.println("GAME OVEr");
+        view.gameOver(winner, score);
     }
 
     public boolean checkValid(Coordinate coordinate, int shipLength) {

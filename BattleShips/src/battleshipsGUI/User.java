@@ -1,4 +1,3 @@
-
 package battleshipsGUI;
 
 import java.util.ArrayList;
@@ -6,92 +5,91 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Scanner;
 
+public class User extends Player implements Comparable<User> {
 
-public class User extends Player implements Comparable<User>{
     private int score;
     private String name;
-    
 
     public User() {
         super();
         this.score = 500;
         this.name = "";
     }
-    
+
     public User(String name, int score) {
         super();
         this.name = name;
         this.score = score;
     }
-    
+
     public User(String name) {
         super();
         this.name = name;
         this.score = 500;
     }
-    
+
     /**
-    * Sets the name of the user
-    * 
-    * @param name the name to set
-    */
+     * Sets the name of the user
+     *
+     * @param name the name to set
+     */
     public void setName(String name) {
         this.name = name;
     }
-    
+
     /**
-    * Sets the score of the user
-    * 
-    * @param score the score to set
-    */
+     * Sets the score of the user
+     *
+     * @param score the score to set
+     */
     public void setScore(int score) {
         this.score = score;
     }
-    
+
     /**
-    * Returns the score of the user
-    * 
-    * @return the score of the user
-    */
+     * Returns the score of the user
+     *
+     * @return the score of the user
+     */
     public int getScore() {
         return this.score;
     }
-    
+
     /**
-    * Returns the name of the user
-    * 
-    * @return the name of the user
-    */
+     * Returns the name of the user
+     *
+     * @return the name of the user
+     */
     public String getName() {
         return this.name;
     }
-    
+
     /**
      * Returns a string representation of the user
-     * 
+     *
      * @return a string representation of the user
      */
     @Override
     public String toString() {
         return this.name + " " + this.score;
     }
-    
+
     /**
-    * Sets the ships of the user
-    * 
-    * @param ships the ships to set
-    */
+     * Sets the ships of the user
+     *
+     * @param ships the ships to set
+     */
     public void setShips(ArrayList<Ship> ships) {
         this.ships = ships;
     }
-    
+
     /**
-    * Initializes the board for the user by taking input from the console
-    * 
-    * @param shipLengths the array of lengths of the ships
-    */
+     * Initializes the board for the user by taking input from the console
+     *
+     * @param shipLengths the array of lengths of the ships
+     */
     @Override
-    public void initBoard( int[] shipLengths) {
+    public void initBoard(int[] shipLengths) {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -136,12 +134,10 @@ public class User extends Player implements Comparable<User>{
                         Ship newShip = new Ship(shipLengths[i], userOrigin, userEnd);
                         this.ships.add(newShip);
                         this.board.placeShip(newShip);
-                    } 
-                    else {
-                        System.out.println("Invalid end point"); 
+                    } else {
+                        System.out.println("Invalid end point");
                     }
-                }
-                else {
+                } else {
                     System.out.println("Invalid end point");
                 }
                 System.out.println("");
@@ -149,13 +145,14 @@ public class User extends Player implements Comparable<User>{
             this.setShips(ships);
         }
     }
-    
+
     /**
      * Checks if a given point is contained in a HashSet of Points.
      *
      * @param points The HashSet of Points to check.
      * @param end The Coordinate to check for.
-     * @return true if the Coordinate is contained in the HashSet, false otherwise.
+     * @return true if the Coordinate is contained in the HashSet, false
+     * otherwise.
      */
     public boolean contains(HashSet<Coordinate> points, Coordinate end) {
         if (end != null) {
@@ -167,7 +164,7 @@ public class User extends Player implements Comparable<User>{
         }
         return false;
     }
-    
+
     /**
      * Initializes the game board with a set of ships.
      */
@@ -178,11 +175,13 @@ public class User extends Player implements Comparable<User>{
             this.board.placeShip(ship);
         }
     }
-        
+
     /**
-    * Checks if the user has lost the game by calculating the number of sunk ships
-    * @return True if all ships are sunk, False otherwise
-    */
+     * Checks if the user has lost the game by calculating the number of sunk
+     * ships
+     *
+     * @return True if all ships are sunk, False otherwise
+     */
     @Override
     public boolean checkLose() {
         this.shipsSunk = 0;
@@ -191,35 +190,35 @@ public class User extends Player implements Comparable<User>{
         }
         return (this.shipsSunk == this.ships.size());
     }
-    
-    
+
     /**
      * Compares this User object with another User object by score and name.
+     *
      * @param o The User object to compare with
-     * @return A negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
+     * @return A negative integer, zero, or a positive integer as this object is
+     * less than, equal to, or greater than the specified object.
      */
     @Override
     public int compareTo(User o) {
         // if the score are not equal
         if (this.score != o.score) {
             return this.score - o.score;
-        }
-        else {
+        } else {
             // we compare name values
             // if the scores are equal
             return this.name.toUpperCase().compareTo(o.name.toUpperCase());
         }
     }
-    
-    
+
     /**
      * Compares this User object with another Object to check if they are equal
+     *
      * @param o The Object to compare with
      * @return True if the Objects are equal, False otherwise
      */
     @Override
     public boolean equals(Object o) {
-        User user = (User)o;
+        User user = (User) o;
         return user.name.toUpperCase().equals(this.name.toUpperCase());
     }
 
@@ -229,5 +228,10 @@ public class User extends Player implements Comparable<User>{
         hash = 79 * hash + this.score;
         hash = 79 * hash + Objects.hashCode(this.name);
         return hash;
+    }
+
+    @Override
+    public ArrayList<Ship> getShipsList() {
+        return this.ships;
     }
 }

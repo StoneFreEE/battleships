@@ -57,6 +57,10 @@ public class Model extends Observable {
         dbsetup();
     }
 
+    public Object[][] getUsers(){
+    return users;
+}
+    
     public void dbsetup() {
         try {
             conn = DriverManager.getConnection(url, dbusername, dbpassword);
@@ -104,6 +108,10 @@ public class Model extends Observable {
         } catch (SQLException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void updatePlayerScore(){
+        this.playerGrid.getUser().setScore(this.playerGrid.getUser().getScore() + 50);
     }
 
     private boolean checkTableExisting(String newTableName) {
@@ -235,9 +243,11 @@ public class Model extends Observable {
         boolean isHit = this.user.board.isHit(point);
         if (isHit) {
             this.playerGrid.updateEnemyTargetLabel(coordinate);
+            this.playerGrid.updateEnemyResultLabel("HIT");
             System.out.println("Enemy got a hit !!\n");
         } else {
             this.playerGrid.updateEnemyTargetLabel(coordinate);
+            this.playerGrid.updateEnemyResultLabel("MISS");
             System.out.println("Enemy missed!!");
         }
         System.out.println("");
@@ -313,8 +323,8 @@ public class Model extends Observable {
     public void setEnd(Coordinate coordinate) {
 
         currentShip.endPoint = coordinate;
-
         user.board.placeShip(currentShip);
+        user.ships.add(currentShip);
         setChanged();
         notifyObservers(user);
     }
@@ -331,7 +341,7 @@ public class Model extends Observable {
 
         return coordinates;
     }
-
+    
     public boolean checkValid(Coordinate coordinate, int shipLength) {
         boolean valid = true;
         currentShip = new Ship(shipLength, coordinate);

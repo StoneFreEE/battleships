@@ -5,6 +5,7 @@
 package battleshipsGUI;
 
 import java.awt.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 /**
@@ -22,6 +23,7 @@ public class PanelPlaceShip extends JPanel {
     private JLabel shipLengthLabel;
     private JLabel shipLengthNumberLabel;
     private GameGrid grid;
+    private User user;
 
     private int[] shipLengths;
 
@@ -33,6 +35,7 @@ public class PanelPlaceShip extends JPanel {
     public PanelPlaceShip(Controller controller, int[] shipLengths, User user) {
         this.controller = controller;
         this.shipLengths = shipLengths;
+        this.user = user;
 
         setLayout(null);
         setBounds(0, 0, 800, 600);
@@ -92,7 +95,6 @@ public class PanelPlaceShip extends JPanel {
         if (index >= shipLengths.length - 1 && !playGameCalled) {
             // All ships have been placed
             playGameCalled = true; // Set the flag to true to prevent further calls
-
             controller.playGame();
             return;
         }

@@ -17,6 +17,7 @@ import javax.swing.*;
 public class GameGrid extends JPanel {
 
     private Board board;
+    private User user;
     private Controller controller;
     private int shipLength;
     public GridStates gridState;
@@ -26,6 +27,7 @@ public class GameGrid extends JPanel {
     private boolean startPhase = false;
 
     public GameGrid(Controller controller, User user) {
+        this.user = user;
         this.controller = controller;
         this.gridState = GridStates.PLACINGSTART;
         this.board = user.board;
@@ -56,6 +58,9 @@ public class GameGrid extends JPanel {
         this.panelGame = panel;
     }
 
+    public User getUser(){
+        return this.user;
+    }
     public void setShipLength(int shipLength) {
         this.shipLength = shipLength;
     }
@@ -153,5 +158,9 @@ public class GameGrid extends JPanel {
     public void startShootingPhase() {
         gridState = GridStates.NOCLICK;
         startPhase = true;
+    }
+    
+    public void updateEnemyResultLabel(String result){
+        this.panelGame.updateEnemyResultLabel(result);
     }
 }

@@ -39,4 +39,6 @@ public abstract class Player {
      * @return true if the player has lost, false if not.
      */
     public abstract boolean checkLose();
+    
+    public abstract ArrayList<Ship> getShipsList();
 }
