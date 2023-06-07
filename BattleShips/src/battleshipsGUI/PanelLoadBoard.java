@@ -107,6 +107,7 @@ public class PanelLoadBoard extends JPanel {
 
         // Get board name
         textField = new JTextField("Board Name...");
+        textField.setFont(new Font("Menlo", Font.PLAIN, 15));
         textField.setBackground(Color.BLACK);
         textField.setForeground(Color.WHITE);
         textField.addMouseListener(new MouseAdapter() {
@@ -119,6 +120,7 @@ public class PanelLoadBoard extends JPanel {
         enterBoardPanel.add(textField);
 
         enterButton = new JButton("Enter");
+        enterButton.setFont(new Font("Menlo", Font.PLAIN, 15));
         enterBoardPanel.add(enterButton);
         enterButton.addActionListener(new ActionListener() {
             @Override
@@ -132,6 +134,7 @@ public class PanelLoadBoard extends JPanel {
         });
 
         cancelButton = new JButton("Cancel");
+        cancelButton.setFont(new Font("Menlo", Font.PLAIN, 15));
         enterBoardPanel.add(cancelButton);
         cancelButton.addActionListener(new ActionListener() {
             @Override
