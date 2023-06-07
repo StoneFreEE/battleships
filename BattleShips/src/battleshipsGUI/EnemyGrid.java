@@ -17,7 +17,7 @@ import javax.swing.*;
 public class EnemyGrid extends JPanel {
 
     private Board board;
-    private AIEnemy enemy;
+    AIEnemy enemy;
     private Controller controller;
     private Model model;
     private int[] shipLengths;
