@@ -87,6 +87,8 @@ public class FrameGameOver extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // direct user to board initiating panel
                 // controller.initiateBoard();
+                controller.initiateStartScreen();
+                dispose();
             }
         });
 

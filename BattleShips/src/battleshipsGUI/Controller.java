@@ -69,7 +69,7 @@ public class Controller {
         model.updateScore();
     }
 
-    public void updatePlayerScore(){
+    public void updatePlayerScore() {
         model.updatePlayerScore();
     }
 
@@ -80,6 +80,10 @@ public class Controller {
     public void setOrigin(Coordinate coordinate) {
         model.setOrigin(coordinate);
 
+    }
+
+    public void initiateStartScreen (){
+        view.initiateStartScreen();
     }
 
     public void setEnd(Coordinate coordinate) {

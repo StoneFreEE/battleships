@@ -55,19 +55,26 @@ public class View extends JFrame implements Observer {
 
     public View(Model model) {
         this.model = model;
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
-
-        getContentPane().setBackground(Color.BLACK);
-        setLayout(null);
-        setVisible(true);
-        con = getContentPane();
         initStartScreen();
 
     }
 
-    public void initStartScreen(){
-                // title 
+    public void initiateStartScreen() {
+        con.removeAll();
+        initStartScreen();
+        con.revalidate();
+        con.repaint();
+    }
+
+    public void initStartScreen() {
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(800, 600);
+        getContentPane().setBackground(Color.BLACK);
+        setLayout(null);
+        setVisible(true);
+        con = getContentPane();
+        // title 
         titlePanel = new JPanel();
         titlePanel.setBounds(100, 100, 600, 150);
         titlePanel.setBackground(Color.BLACK);
@@ -102,7 +109,7 @@ public class View extends JFrame implements Observer {
         con.add(titlePanel);
         con.add(buttonPanel);
     }
-    
+
     public void setController(Controller controller) {
         this.controller = controller;
     }
