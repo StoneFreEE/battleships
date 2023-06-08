@@ -56,7 +56,7 @@ public class Controller {
 
     public void setPlayerGameGrid() {
         // let player choose ship placement and save it on a gamegrid object
-        GameGrid grid = view.placeShipPanel.getGrid();
+        GridPlayer grid = view.placeShipPanel.getGrid();
         model.initPlayerGrid(grid);
     }
 

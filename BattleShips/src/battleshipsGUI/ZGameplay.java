@@ -8,7 +8,7 @@ import java.util.Scanner;
 /**
  * The Game class represents the Battleship game and handles the game logic.
  */
-public class Gameplay {
+public class ZGameplay {
 
     User user;
     UserDatabase database;
@@ -23,7 +23,7 @@ public class Gameplay {
      * @param enemy the ai enemy playing the game.
      * @param database the database object used to store user data.
      */
-    public Gameplay(User user, AIEnemy enemy, UserDatabase database) {
+    public ZGameplay(User user, AIEnemy enemy, UserDatabase database) {
         this.user = user;
         this.enemy = enemy;
         this.database = database;
@@ -174,11 +174,11 @@ public class Gameplay {
             System.out.print(letter1++ + "   ");
 
             for (int j = 0; j < Board.BOARD_SIZE; j++) {
-                if (this.user.board.cells[i][j] == States.MISS.ordinal()) {
+                if (this.user.board.cells[i][j] == GridCellStates.MISS.ordinal()) {
                     System.out.print(" # ");
-                } else if (this.user.board.cells[i][j] == States.HIT.ordinal()) {
+                } else if (this.user.board.cells[i][j] == GridCellStates.HIT.ordinal()) {
                     System.out.print(" X ");
-                } else if (this.user.board.cells[i][j] == States.SHIP.ordinal()) {
+                } else if (this.user.board.cells[i][j] == GridCellStates.SHIP.ordinal()) {
                     System.out.print(" O ");
                 } else {
                     System.out.print(" . ");
@@ -191,9 +191,9 @@ public class Gameplay {
             // print other board display
             System.out.print(letter2++ + "   ");
             for (int j = 0; j < Board.BOARD_SIZE; j++) {
-                if (this.enemy.board.cells[i][j] == States.MISS.ordinal()) {
+                if (this.enemy.board.cells[i][j] == GridCellStates.MISS.ordinal()) {
                     System.out.print(" # ");
-                } else if (this.enemy.board.cells[i][j] == States.HIT.ordinal()) {
+                } else if (this.enemy.board.cells[i][j] == GridCellStates.HIT.ordinal()) {
                     System.out.print(" X ");
                 } else {
                     System.out.print(" . ");

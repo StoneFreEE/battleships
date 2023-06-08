@@ -18,7 +18,7 @@ public class Board {
     public Board() {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                cells[j][i] = States.NONE.ordinal();
+                cells[j][i] = GridCellStates.NONE.ordinal();
             }
         }
     }
@@ -35,11 +35,11 @@ public class Board {
             // Check if going up or down
             if (ship.origin.getY() < ship.endPoint.getY()) {
                 for (int j = ship.origin.getY(); j < ship.endPoint.getY() + 1; j++) {
-                    cells[j][ship.origin.getX()] = States.SHIP.ordinal();
+                    cells[j][ship.origin.getX()] = GridCellStates.SHIP.ordinal();
                 }
             } else {
                 for (int j = ship.endPoint.getY(); j < ship.origin.getY() + 1; j++) {
-                    cells[j][ship.origin.getX()] = States.SHIP.ordinal();
+                    cells[j][ship.origin.getX()] = GridCellStates.SHIP.ordinal();
                 }
             }
         }
@@ -48,11 +48,11 @@ public class Board {
             // Check if going left or right
             if (ship.origin.getX() < ship.endPoint.getX()) {
                 for (int j = ship.origin.getX(); j < ship.endPoint.getX() + 1; j++) {
-                    cells[ship.origin.getY()][j] = States.SHIP.ordinal();
+                    cells[ship.origin.getY()][j] = GridCellStates.SHIP.ordinal();
                 }
             } else {
                 for (int j = ship.endPoint.getX(); j < ship.origin.getX() + 1; j++) {
-                    cells[ship.origin.getY()][j] = States.SHIP.ordinal();
+                    cells[ship.origin.getY()][j] = GridCellStates.SHIP.ordinal();
                 }
             }
         }
@@ -72,7 +72,7 @@ public class Board {
         boolean place = true;
         if (!(ship.origin.getX() - (ship.length - 1) < 0)) {
             for (int i = 0; i < ship.length; i++) {
-                if (cells[ship.origin.getY()][ship.origin.getX() - i] == States.SHIP.ordinal()) {
+                if (cells[ship.origin.getY()][ship.origin.getX() - i] == GridCellStates.SHIP.ordinal()) {
                     place = false;
                 }
             }
@@ -83,7 +83,7 @@ public class Board {
         }
         if (!(ship.origin.getX() + (ship.length - 1) > Board.BOARD_SIZE - 1)) {
             for (int i = 0; i < ship.length; i++) {
-                if (cells[ship.origin.getY()][ship.origin.getX() + i] == States.SHIP.ordinal()) {
+                if (cells[ship.origin.getY()][ship.origin.getX() + i] == GridCellStates.SHIP.ordinal()) {
                     place = false;
                 }
             }
@@ -94,7 +94,7 @@ public class Board {
         }
         if (!(ship.origin.getY() - (ship.length - 1) < 0)) {
             for (int i = 0; i < ship.length; i++) {
-                if (cells[ship.origin.getY() - i][ship.origin.getX()] == States.SHIP.ordinal()) {
+                if (cells[ship.origin.getY() - i][ship.origin.getX()] == GridCellStates.SHIP.ordinal()) {
                     place = false;
                 }
             }
@@ -105,7 +105,7 @@ public class Board {
         }
         if (!(ship.origin.getY() + (ship.length - 1) > Board.BOARD_SIZE - 1)) {
             for (int i = 0; i < ship.length; i++) {
-                if (cells[ship.origin.getY() + i][ship.origin.getX()] == States.SHIP.ordinal()) {
+                if (cells[ship.origin.getY() + i][ship.origin.getX()] == GridCellStates.SHIP.ordinal()) {
                     place = false;
                 }
             }
@@ -165,11 +165,11 @@ public class Board {
             System.out.print(letter++ + "   ");
 
             for (int element : row) {
-                if (element == States.MISS.ordinal()) {
+                if (element == GridCellStates.MISS.ordinal()) {
                     System.out.print(" # ");
-                } else if (element == States.HIT.ordinal()) {
+                } else if (element == GridCellStates.HIT.ordinal()) {
                     System.out.print(" X ");
-                } else if (element == States.SHIP.ordinal()) {
+                } else if (element == GridCellStates.SHIP.ordinal()) {
                     System.out.print(" O ");
                 } else {
                     System.out.print(" . ");
@@ -189,7 +189,7 @@ public class Board {
      * @return true if the point is free, false otherwise
      */
     public boolean isFree(Coordinate point) {
-        return this.cells[point.getY()][point.getX()] != States.SHIP.ordinal();
+        return this.cells[point.getY()][point.getX()] != GridCellStates.SHIP.ordinal();
     }
 
     public boolean isSpace(Ship ship) {
@@ -203,7 +203,7 @@ public class Board {
      * @return true if the point represents a hit, false otherwise
      */
     public boolean isHit(Coordinate point) {
-        return this.cells[point.getY()][point.getX()] == States.HIT.ordinal();
+        return this.cells[point.getY()][point.getX()] == GridCellStates.HIT.ordinal();
     }
 
     /**
@@ -213,7 +213,7 @@ public class Board {
      * @return true if the point represents a miss, false otherwise
      */
     public boolean isMiss(Coordinate point) {
-        return this.cells[point.getY()][point.getX()] == States.MISS.ordinal();
+        return this.cells[point.getY()][point.getX()] == GridCellStates.MISS.ordinal();
     }
 
     /**
@@ -231,11 +231,11 @@ public class Board {
             for (int i = 0; i < ship.length; i++) {
                 // check if all cells of ship are sunk cells
                 if (ship.origin.getY() > ship.endPoint.getY()) {
-                    if (this.cells[ship.origin.getY() - i][ship.origin.getX()] == States.HIT.ordinal()) {
+                    if (this.cells[ship.origin.getY() - i][ship.origin.getX()] == GridCellStates.HIT.ordinal()) {
                         sunkCellCount++;
                     }
                 } else {
-                    if (this.cells[ship.origin.getY() + i][ship.origin.getX()] == States.HIT.ordinal()) {
+                    if (this.cells[ship.origin.getY() + i][ship.origin.getX()] == GridCellStates.HIT.ordinal()) {
                         sunkCellCount++;
                     }
                 }
@@ -247,11 +247,11 @@ public class Board {
                 // check if all cells of ship are sunk cells
                 // if origin x is greater than endpoint x, ship is oriented from right to left
                 if (ship.origin.getX() > ship.endPoint.getX()) {
-                    if (this.cells[ship.origin.getY()][ship.origin.getX() - i] == States.HIT.ordinal()) {
+                    if (this.cells[ship.origin.getY()][ship.origin.getX() - i] == GridCellStates.HIT.ordinal()) {
                         sunkCellCount++;
                     }
                 } else {
-                    if (this.cells[ship.origin.getY()][ship.origin.getX() + i] == States.HIT.ordinal()) {
+                    if (this.cells[ship.origin.getY()][ship.origin.getX() + i] == GridCellStates.HIT.ordinal()) {
                         sunkCellCount++;
                     }
                 }
@@ -279,12 +279,12 @@ public class Board {
      * @param point the point to fire at
      */
     public boolean fireAt(Coordinate point) {
-        if (this.cells[point.getY()][point.getX()] == States.SHIP.ordinal()) {
-            this.cells[point.getY()][point.getX()] = States.HIT.ordinal();
+        if (this.cells[point.getY()][point.getX()] == GridCellStates.SHIP.ordinal()) {
+            this.cells[point.getY()][point.getX()] = GridCellStates.HIT.ordinal();
             return true;
 
-        } else if (this.cells[point.getY()][point.getX()] == States.NONE.ordinal()) {
-            this.cells[point.getY()][point.getX()] = States.MISS.ordinal();
+        } else if (this.cells[point.getY()][point.getX()] == GridCellStates.NONE.ordinal()) {
+            this.cells[point.getY()][point.getX()] = GridCellStates.MISS.ordinal();
             return true;
         } else {
             return false;

@@ -48,8 +48,8 @@ public class Model extends Observable {
     //
     private PanelPlaceShip placeShipPanel;
 
-    private GameGrid playerGrid;
-    private EnemyGrid enemyGrid;
+    private GridPlayer playerGrid;
+    private GridEnemy enemyGrid;
 
     private Controller controller;
 
@@ -185,18 +185,18 @@ public class Model extends Observable {
     }
 
     // set grid with ship placements
-    public void initPlayerGrid(GameGrid grid) {
-        playerGrid = grid; // Retrieve the GameGrid object from PanelPlaceShip
+    public void initPlayerGrid(GridPlayer grid) {
+        playerGrid = grid; // Retrieve the GridPlayer object from PanelPlaceShip
         playerGrid.startShootingPhase();
     }
 
     public void initEnemyGrid() {
         initEnemy();
-        enemyGrid = new EnemyGrid(controller, this, this.enemy, shipLengths);
+        enemyGrid = new GridEnemy(controller, this, this.enemy, shipLengths);
     }
 
-    public GameGrid getPlayerGrid() {
-        return this.playerGrid; // Retrieve the GameGrid object from PanelPlaceShip
+    public GridPlayer getPlayerGrid() {
+        return this.playerGrid; // Retrieve the GridPlayer object from PanelPlaceShip
     }
 
     public void enemyFireCannon() {
@@ -246,7 +246,7 @@ public class Model extends Observable {
             this.playerGrid.updateEnemyTargetLabel(coordinate);
             this.playerGrid.updateEnemyResultLabel("MISS");
         }
-        this.playerGrid.updateGrid(user);
+        this.playerGrid.updateGrid(user.board);
     }
 
     public void linkPaneltoGrid(FrameGame panel) {
@@ -255,9 +255,9 @@ public class Model extends Observable {
     }
 
     // update grid before returning
-    public EnemyGrid getEnemyGrid() {
-        this.enemyGrid.updateGrid(enemy);
-        return this.enemyGrid; // Retrieve the GameGrid object from PanelPlaceShip
+    public GridEnemy getEnemyGrid() {
+        this.enemyGrid.updateGrid(enemy.board);
+        return this.enemyGrid; // Retrieve the GridPlayer object from PanelPlaceShip
     }
 
     public void setName(String name) {

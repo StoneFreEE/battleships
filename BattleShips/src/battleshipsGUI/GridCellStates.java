@@ -7,7 +7,7 @@ package battleshipsGUI;
  * 
  * @author oliver
  */
-public enum States {
+public enum GridCellStates {
     NONE,
     SHIP,
     HIT,

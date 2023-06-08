@@ -7,7 +7,7 @@ import java.util.Iterator;
 * Main class for the Battleships game.
 * Initializes game variables and starts the game loop.
 */
-public class BattleShips {
+public class ZBattleShips {
     /**
     * Main method for the Battleships game. 
     * Initializes game variables and starts the game loop.
@@ -23,7 +23,7 @@ public class BattleShips {
         
         boolean playerWin = false;
         
-        Gameplay game = new Gameplay(new User(), new AIEnemy(), new UserDatabase());
+        ZGameplay game = new ZGameplay(new User(), new AIEnemy(), new UserDatabase());
         game.load();
         
         // START GAME

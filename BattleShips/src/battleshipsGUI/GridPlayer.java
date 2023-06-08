@@ -14,53 +14,63 @@ import javax.swing.*;
  *
  * @author oliver
  */
-public class GameGrid extends JPanel {
+public class GridPlayer extends JPanel implements GridPanel {
 
     private Board board;
     private User user;
     private Controller controller;
     private int shipLength;
-    public GridStates gridState;
     private FrameGame panelGame;
+    private GridStates gridState;
+    private boolean enemyTurn;
+    private boolean startPhase;
 
-    private boolean enemyTurn = false;
-    private boolean startPhase = false;
-
-    public GameGrid(Controller controller, User user) {
-        this.user = user;
+    public GridPlayer(Controller controller, User user) {
         this.controller = controller;
-        this.gridState = GridStates.PLACINGSTART;
+        this.user = user;
         this.board = user.board;
+        this.gridState = GridStates.PLACINGSTART;
+        this.enemyTurn = false;
+        this.startPhase = false;
+
+        initializeGrid();
+    }
+
+    private void initializeGrid() {
         setLayout(new GridLayout(board.cells.length, board.cells.length));
         setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                JPanel pan = new JPanel();
-
-                pan.setEnabled(true);
-                pan.setPreferredSize(new Dimension(45, 45));
-                pan.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-                pan.setBackground(Color.BLACK);
-                pan.addMouseListener(new GridListener(j, i));
-
-                pan.setName(j + "" + i);
+                JPanel pan = createGridPanel(j, i);
                 add(pan);
             }
         }
     }
-    
-    public void setEnemyTurn(boolean bool){
+
+    private JPanel createGridPanel(int x, int y) {
+        JPanel pan = new JPanel();
+        pan.setEnabled(true);
+        pan.setPreferredSize(new Dimension(45, 45));
+        pan.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        pan.setBackground(Color.BLACK);
+        pan.addMouseListener(new GridListener(x, y));
+        pan.setName(x + "" + y);
+        return pan;
+    }
+
+    public void setEnemyTurn(boolean bool) {
         this.enemyTurn = bool;
     }
-    
-    public void setGamePanel(FrameGame panel){
+
+    public void setGamePanel(FrameGame panel) {
         this.panelGame = panel;
     }
 
-    public User getUser(){
+    public User getUser() {
         return this.user;
     }
+
     public void setShipLength(int shipLength) {
         this.shipLength = shipLength;
     }
@@ -74,23 +84,27 @@ public class GameGrid extends JPanel {
         }
     }
 
-    public void updateGrid(User user) {
-        this.board = user.board;
+    @Override
+    public void updateGrid(Board board) {
+        this.board = board;
         this.gridState = GridStates.PLACINGSTART;
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
+
+        // Customize how the player grid is updated based on the user's board
+        // For example, you can use different colors or symbols to represent ship, miss, or empty cells
+        for (int i = 0; i < board.cells.length; i++) {
+            for (int j = 0; j < board.cells[i].length; j++) {
                 JPanel pan = getComponentAt(j, i);
-                if (board.cells[i][j] == States.SHIP.ordinal()) {
+                int cellState = board.cells[i][j];
+                if (cellState == GridCellStates.SHIP.ordinal()) {
                     pan.setBackground(Color.BLUE);
-                } else if (board.cells[i][j] == States.NONE.ordinal()) {
+                } else if (cellState == GridCellStates.NONE.ordinal()) {
                     pan.setBackground(Color.BLACK);
-                } else if (board.cells[i][j] == States.MISS.ordinal()) {
+                } else if (cellState == GridCellStates.MISS.ordinal()) {
                     pan.setBackground(Color.GRAY);
-                } else if (board.cells[i][j] == States.HIT.ordinal()) {
+                } else if (cellState == GridCellStates.HIT.ordinal()) {
                     pan.setBackground(Color.RED);
                 }
             }
-            this.gridState = GridStates.PLACINGEND;
         }
     }
 
@@ -148,16 +162,16 @@ public class GameGrid extends JPanel {
         }
     }
 
-    public void updateEnemyTargetLabel(String cell){
+    public void updateEnemyTargetLabel(String cell) {
         this.panelGame.updateEnemyTargetLabel(cell);
     }
-    
+
     public void startShootingPhase() {
         gridState = GridStates.NOCLICK;
         startPhase = true;
     }
-    
-    public void updateEnemyResultLabel(String result){
+
+    public void updateEnemyResultLabel(String result) {
         this.panelGame.updateEnemyResultLabel(result);
     }
 }

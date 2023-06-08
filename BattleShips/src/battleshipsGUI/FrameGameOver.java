@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package battleshipsGUI;
 
 import java.awt.Color;
@@ -16,12 +12,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- *
- * @author 64272
+ * Represents the game over screen displayed when the game ends.
  */
 public class FrameGameOver extends JFrame implements KeyListener {
 
-    Controller controller;
+    private Controller controller;
     private JPanel titlePanel;
     private JLabel gameOverTitle;
     private JLabel scoreLabel;
@@ -30,14 +25,14 @@ public class FrameGameOver extends JFrame implements KeyListener {
 
     private JPanel buttonPanel;
     private JButton leaderboardBtn;
-    private JButton playAgainbtn;
+    private JButton playAgainBtn;
 
     private int score;
     private String winner;
 
-    public FrameGameOver(Controller controller, String playerWin, int score) {
+    public FrameGameOver(Controller controller, String winner, int score) {
         this.controller = controller;
-        this.winner = playerWin;
+        this.winner = winner;
         this.score = score;
         addKeyListener(this);
 
@@ -47,6 +42,7 @@ public class FrameGameOver extends JFrame implements KeyListener {
         setLayout(null);
         setVisible(true);
 
+        // Create the title panel
         titlePanel = new JPanel();
         titlePanel.setBounds(100, 100, 600, 150);
         titlePanel.setBackground(Color.BLACK);
@@ -61,50 +57,46 @@ public class FrameGameOver extends JFrame implements KeyListener {
         scoreLabel.setForeground(Color.WHITE);
         titlePanel.add(scoreLabel);
 
-        // Add buttons
+        // Create the button panel
         buttonPanel = new JPanel();
         buttonPanel.setBounds(300, 400, 200, 100);
         buttonPanel.setBackground(Color.BLACK);
 
+        // Create the leaderboard button
         leaderboardBtn = new JButton("Leaderboard");
         leaderboardBtn.setForeground(Color.BLACK);
         leaderboardBtn.setFont(buttonFont);
-
-        buttonPanel.add(leaderboardBtn);
         leaderboardBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // promptBoard();
                 controller.displayLeaderboard();
             }
         });
+        buttonPanel.add(leaderboardBtn);
 
-        playAgainbtn = new JButton("Play Again");
-        playAgainbtn.setForeground(Color.BLACK);
-        playAgainbtn.setFont(buttonFont);
-
-        buttonPanel.add(playAgainbtn);
-        playAgainbtn.addActionListener(new ActionListener() {
+        // Create the play again button
+        playAgainBtn = new JButton("Play Again");
+        playAgainBtn.setForeground(Color.BLACK);
+        playAgainBtn.setFont(buttonFont);
+        playAgainBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // direct user to board initiating panel
-                // controller.initiateBoard();
                 controller.initiateStartScreen();
                 dispose();
             }
         });
+        buttonPanel.add(playAgainBtn);
 
+        // Add components to the frame
         add(buttonPanel);
         add(titlePanel);
         setFocusable(true);
-
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             dispose();
-
             controller.initiateStartScreen();
         }
     }
@@ -118,5 +110,4 @@ public class FrameGameOver extends JFrame implements KeyListener {
     public void keyReleased(KeyEvent e) {
         // Not used, but needs to be implemented
     }
-
 }

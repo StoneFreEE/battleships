@@ -22,7 +22,7 @@ public class PanelPlaceShip extends JPanel {
 
     private JLabel shipLengthLabel;
     private JLabel shipLengthNumberLabel;
-    private GameGrid grid;
+    private GridPlayer grid;
     private User user;
 
     private int[] shipLengths;
@@ -73,7 +73,7 @@ public class PanelPlaceShip extends JPanel {
 
         //playerBoard = new PlayerBoard(shipLengths);
         //playerBoard.draw();
-        grid = new GameGrid(controller, user);
+        grid = new GridPlayer(controller, user);
         grid.setShipLength(shipLengths[index]);
         boardPanel.add(grid);
 
@@ -90,7 +90,7 @@ public class PanelPlaceShip extends JPanel {
 
     public void updateGrid(User user) {
         errorLabel.setText("");
-        grid.updateGrid(user);
+        grid.updateGrid(user.board);
 
         if (index >= shipLengths.length - 1 && !playGameCalled) {
             // All ships have been placed
@@ -108,7 +108,7 @@ public class PanelPlaceShip extends JPanel {
         }
     }
 
-    public GameGrid getGrid() {
+    public GridPlayer getGrid() {
         System.out.println("Hello");
         return grid;
     }
