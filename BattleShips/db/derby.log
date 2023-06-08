@@ -55,3 +55,11 @@ os.arch=amd64
 os.version=10.0
 derby.system.home=C:\Users\64272\Documents\uni\uni stuff yr 2\comp603java\projects\battleships\BattleShips\db
 Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Thu Jun 08 19:28:42 NZST 2023:
+Shutting down instance a816c00e-0188-97f6-01f8-ffffc4de018b on database directory C:\Users\64272\Documents\uni\uni stuff yr 2\comp603java\projects\battleships\BattleShips\db\sample with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Thu Jun 08 19:28:42 NZST 2023 Thread[DRDAConnThread_4,5,main] (DATABASE = sample), (DRDAID = {14}), Database 'sample' shutdown.
+----------------------------------------------------------------
+Thu Jun 08 19:28:43 NZST 2023:
+Shutting down instance 953a00d1-0188-97f6-01f8-ffffc4de018b on database directory C:\Users\64272\Documents\uni\uni stuff yr 2\comp603java\projects\battleships\BattleShips\db\userDatabase with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Thu Jun 08 19:28:43 NZST 2023 Thread[DRDAConnThread_4,5,main] (DATABASE = userDatabase), (DRDAID = {15}), Database 'userDatabase' shutdown.

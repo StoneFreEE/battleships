@@ -57,10 +57,10 @@ public class Model extends Observable {
         dbsetup();
     }
 
-    public Object[][] getUsers(){
-    return users;
-}
-    
+    public Object[][] getUsers() {
+        return users;
+    }
+
     public void dbsetup() {
         try {
             conn = DriverManager.getConnection(url, dbusername, dbpassword);
@@ -74,13 +74,12 @@ public class Model extends Observable {
 
             String tableName2 = "Boards";
             if (!checkTableExisting(tableName2)) {
-                statement.executeUpdate("CREATE TABLE " + tableName2 + " (boardname, VARCHAR(32),"
+                statement.executeUpdate("CREATE TABLE " + tableName2 + " (boardname VARCHAR(32),"
                         + " origin1 VARCHAR(3), end1 VARCHAR(3), length1 INT,"
                         + " origin2 VARCHAR(3), end2 VARCHAR(3), length2 INT,"
                         + " origin3 VARCHAR(3), end3 VARCHAR(3), length3 INT,"
                         + " origin4 VARCHAR(3), end4 VARCHAR(3), length4 INT,"
-                        + " origin5 VARCHAR(3), end5 VARCHAR(3), length5 INT,"
-                );
+                        + " origin5 VARCHAR(3), end5 VARCHAR(3), length5 INT)");
             }
 
             statement.close();
@@ -109,8 +108,8 @@ public class Model extends Observable {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void updatePlayerScore(){
+
+    public void updatePlayerScore() {
         this.playerGrid.getUser().setScore(this.playerGrid.getUser().getScore() + 50);
     }
 
@@ -341,7 +340,7 @@ public class Model extends Observable {
 
         return coordinates;
     }
-    
+
     public boolean checkValid(Coordinate coordinate, int shipLength) {
         boolean valid = true;
         currentShip = new Ship(shipLength, coordinate);

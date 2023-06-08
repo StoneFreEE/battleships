@@ -58,10 +58,10 @@ public class EnemyGrid extends JPanel {
         this.panelGame = panel;
     }
 
-    public AIEnemy getEnemy(){
+    public AIEnemy getEnemy() {
         return this.enemy;
     }
-    
+
     public void updateGrid(AIEnemy enemy) {
         // Customize how the enemy grid is updated based on the user's board
         // For example, you can use different colors or symbols to represent ship, miss, or empty cells
@@ -69,9 +69,7 @@ public class EnemyGrid extends JPanel {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 JPanel pan = getComponentAt(j, i);
-                if (board.cells[i][j] == States.SHIP.ordinal()) {
-                    pan.setBackground(Color.BLUE);
-                } else if (board.cells[i][j] == States.NONE.ordinal()) {
+                if (board.cells[i][j] == States.NONE.ordinal()) {
                     pan.setBackground(Color.BLACK);
                 } else if (board.cells[i][j] == States.MISS.ordinal()) {
                     pan.setBackground(Color.GRAY);
@@ -142,9 +140,10 @@ public class EnemyGrid extends JPanel {
         }
     }
 
-    public Board getBoard(){
+    public Board getBoard() {
         return this.board;
     }
+
     public void startShootingPhase() {
         gridState = GridStates.SHOOTINGAT;
         startPhase = true;
