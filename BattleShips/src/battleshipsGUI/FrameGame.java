@@ -1,6 +1,8 @@
 package battleshipsGUI;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -31,6 +33,8 @@ public class FrameGame extends JFrame {
     public FrameGame(Controller controller, Model model) {
         this.controller = controller;
         this.model = model;
+
+        setFocusable(true);
 
         // set enemy grid
         controller.setEnemyGrid();
@@ -113,6 +117,18 @@ public class FrameGame extends JFrame {
 
         // Set the game frame as visible
         gameFrame.setVisible(true);
+        // Register the KeyEventDispatcher to capture key events
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE && e.getID() == KeyEvent.KEY_PRESSED) {
+                    gameFrame.dispose();  // Close the FrameGame window
+                    controller.initiateStartScreen();
+                }
+                return false;
+            }
+        });
+
     }
 
     public void updateUserClickLabel(String cell) {
@@ -121,7 +137,7 @@ public class FrameGame extends JFrame {
 
     // player's turn is over, next is AI turn
     public void updateTurn() {
-        model.getPlayerGrid().getUser().setScore(model.getPlayerGrid().getUser().getScore() -10);
+        model.getPlayerGrid().getUser().setScore(model.getPlayerGrid().getUser().getScore() - 10);
         this.score = model.getPlayerGrid().getUser().getScore();
         // Decrement the score by 10 after each turn
         turnCounter++;

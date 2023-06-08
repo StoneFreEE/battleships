@@ -19,7 +19,7 @@ import javax.swing.*;
  *
  * @author oliver
  */
-public class View extends JFrame implements Observer {
+public class View extends JFrame implements Observer, KeyListener {
 
     private Model model;
 
@@ -56,10 +56,18 @@ public class View extends JFrame implements Observer {
     public View(Model model) {
         this.model = model;
         initStartScreen();
+        addKeyListener(this);
+        setFocusable(true);
 
     }
 
     public void initiateStartScreen() {
+        if (frameGame != null){
+            frameGame.dispose();
+        }
+        if (gameOverPanel != null){
+            gameOverPanel.dispose();
+        }
         con.removeAll();
         initStartScreen();
         con.revalidate();
@@ -84,6 +92,12 @@ public class View extends JFrame implements Observer {
         titleLabel.setFont(titleFont);
 
         titlePanel.add(titleLabel);
+        
+        JLabel infoLabel = new JLabel("press esc to return to the start menu");
+        infoLabel.setForeground(Color.WHITE);
+        infoLabel.setFont(new Font("Menlo", Font.PLAIN, 18));
+        
+        titlePanel.add(infoLabel);
 
         // start button
         buttonPanel = new JPanel();
@@ -122,6 +136,8 @@ public class View extends JFrame implements Observer {
         con.add(loadBoardPanel);
         con.revalidate();
         con.repaint();
+        setFocusable(true);
+
     }
 
     public void initiateBoard(int[] shipLengths) {
@@ -130,6 +146,8 @@ public class View extends JFrame implements Observer {
         con.add(placeShipPanel);
         con.revalidate();
         con.repaint();
+        setFocusable(true);
+
     }
 
     public void playGame() {
@@ -141,6 +159,8 @@ public class View extends JFrame implements Observer {
         con.revalidate();
         con.repaint();
         dispose();
+        setFocusable(true);
+
     }
 
     public void gameOver(String winner, int score) {
@@ -152,6 +172,7 @@ public class View extends JFrame implements Observer {
         con = gameOverPanel.getContentPane();
         con.revalidate();
         con.repaint();
+        setFocusable(true);
 
     }
 
@@ -161,6 +182,8 @@ public class View extends JFrame implements Observer {
         add(leaderboardPanel);
         con.revalidate();
         con.repaint();
+        setFocusable(true);
+
     }
 
     @Override
@@ -225,9 +248,28 @@ public class View extends JFrame implements Observer {
         buttonPanel.setVisible(false);
         namePanel.setVisible(true);
         add(namePanel);
+        setFocusable(true);
+
     }
 
     public void displayErrorPlacementMessage() {
         placeShipPanel.displayErrorPlacementMessage();
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            initiateStartScreen();
+        }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // Not used, but needs to be implemented
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // Not used, but needs to be implemented
     }
 }
