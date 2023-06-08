@@ -76,7 +76,6 @@ public class GameGrid extends JPanel {
 
     public void updateGrid(User user) {
         this.board = user.board;
-        user.board.printBoard();
         this.gridState = GridStates.PLACINGSTART;
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -118,13 +117,11 @@ public class GameGrid extends JPanel {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            System.out.println("Grid state : " + gridState);
             if (gridState == GridStates.NOCLICK) {
                 return;
             }
             JPanel clickedBox = (JPanel) e.getSource();
             Coordinate point = new Coordinate(x, y);
-            System.out.println(point.getX() + "" + point.getY());
 
             if (gridState == GridStates.PLACINGSTART) {
                 if (startPhase) {

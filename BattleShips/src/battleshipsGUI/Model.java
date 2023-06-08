@@ -237,19 +237,15 @@ public class Model extends Observable {
         lastShot = point;
 
         String coordinate = Coordinate.translatePoint(point);
-        System.out.println("Enemy Shot: " + coordinate);
 
         boolean isHit = this.user.board.isHit(point);
         if (isHit) {
             this.playerGrid.updateEnemyTargetLabel(coordinate);
             this.playerGrid.updateEnemyResultLabel("HIT");
-            System.out.println("Enemy got a hit !!\n");
         } else {
             this.playerGrid.updateEnemyTargetLabel(coordinate);
             this.playerGrid.updateEnemyResultLabel("MISS");
-            System.out.println("Enemy missed!!");
         }
-        System.out.println("");
         this.playerGrid.updateGrid(user);
     }
 

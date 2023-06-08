@@ -91,7 +91,6 @@ public class Controller {
     }
 
     public void gameOver(String winner, int score) {
-        System.out.println("GAME OVEr");
         view.gameOver(winner, score);
     }
 
