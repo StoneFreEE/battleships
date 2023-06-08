@@ -168,7 +168,8 @@ public class View extends JFrame implements Observer, KeyListener {
         con.removeAll();
 
         FrameGameOver gameOverPanel = new FrameGameOver(controller, winner, score);
-
+        controller.updateScoreDB();
+        
         con = gameOverPanel.getContentPane();
         con.revalidate();
         con.repaint();

@@ -31,6 +31,7 @@ public class Model extends Observable {
     private String username = null;
     private String password = null;
     private int score;
+    private DBManager dbManager;
 
     // enemy user setup
     private User user;
@@ -54,58 +55,22 @@ public class Model extends Observable {
     private Controller controller;
 
     public Model() {
-        dbsetup();
+        dbManager = new DBManager();
     }
 
     public Object[][] getUsers() {
         return users;
     }
 
-    public void dbsetup() {
-        try {
-            conn = DriverManager.getConnection(url, dbusername, dbpassword);
-            System.out.println("HI");
-            Statement statement = conn.createStatement();
-
-            String tableName = "UserInfo";
-            if (!checkTableExisting(tableName)) {
-                statement.executeUpdate("CREATE TABLE " + tableName + " (name VARCHAR(32), score INT)");
-            }
-
-            String tableName2 = "Boards";
-            if (!checkTableExisting(tableName2)) {
-                statement.executeUpdate("CREATE TABLE " + tableName2 + " (boardname VARCHAR(32),"
-                        + " origin1 VARCHAR(3), end1 VARCHAR(3), length1 INT,"
-                        + " origin2 VARCHAR(3), end2 VARCHAR(3), length2 INT,"
-                        + " origin3 VARCHAR(3), end3 VARCHAR(3), length3 INT,"
-                        + " origin4 VARCHAR(3), end4 VARCHAR(3), length4 INT,"
-                        + " origin5 VARCHAR(3), end5 VARCHAR(3), length5 INT)");
-            }
-
-            statement.close();
-        } catch (Throwable e) {
-            System.out.println("error");
-        }
-    }
-
     public void checkUnique(String username) {
         boolean userCheck = false;
-        try {
-            Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT name, score FROM UserInfo "
-                    + "WHERE name = '" + username + "'");
-            if (!rs.next()) {
-                System.out.println("no such user");
-                statement.executeUpdate("INSERT INTO UserInfo "
-                        + "VALUES('" + username + "', 500)");
-                user = new User(username);
-            } else {
-                String name = rs.getString(0);
-                int score = rs.getInt(1);
-                user = new User(name, score);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        // Check if the user exists in the database
+        if (dbManager.checkUserExists(username)) {
+            user = dbManager.getUser(username);
+        } else {
+            // If the user does not exist, create a new user and add it to the database
+            user = new User(username);
+            dbManager.addUser(username, 500);
         }
     }
 
@@ -147,7 +112,15 @@ public class Model extends Observable {
         return this.shipLengths;
     }
 
-    public void updateScore() {
+    public void updateScore(int limit) {
+        dbManager.updateUserScore(username, score);
+
+        users = dbManager.getUsersByScore(limit);
+        setChanged();
+        notifyObservers(users);
+    }
+
+    /* public void updateScore() {
         try {
             Statement statement = conn.createStatement();
 
@@ -175,7 +148,7 @@ public class Model extends Observable {
         setChanged();
         notifyObservers(users);
     }
-
+     */
     public void setBoardName(String boardName) {
         this.boardName = boardName;
     }
@@ -260,10 +233,15 @@ public class Model extends Observable {
         return this.enemyGrid; // Retrieve the GridPlayer object from PanelPlaceShip
     }
 
+    public void updateScoreDB() {
+        dbManager.updateUserScore(username, score);
+    }
+
     public void setName(String name) {
         this.user = new User(name);
         setChanged();
         notifyObservers(user);
+        addUserToDatabase(name); // Add the user to the database
     }
 
     public void initEnemy() {
@@ -335,6 +313,17 @@ public class Model extends Observable {
         }
 
         return coordinates;
+    }
+
+    private void addUserToDatabase(String name) {
+        dbManager.addUser(name, score);
+        /*  try {
+            Statement statement = conn.createStatement();
+            statement.executeUpdate("INSERT INTO UserInfo (name, score) VALUES ('" + name + "', 0)");
+            statement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
     }
 
     public boolean checkValid(Coordinate coordinate, int shipLength) {

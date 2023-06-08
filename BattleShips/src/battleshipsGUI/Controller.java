@@ -65,12 +65,17 @@ public class Controller {
         model.setName(name);
     }
 
+    // set limit to top 10 users
     public void updateScore() {
-        model.updateScore();
+        model.updateScore(10);
     }
 
     public void updatePlayerScore() {
         model.updatePlayerScore();
+    }
+
+    public void updateScoreDB() {
+        model.updateScoreDB();
     }
 
     public void initiateBoard() {
@@ -82,7 +87,7 @@ public class Controller {
 
     }
 
-    public void initiateStartScreen (){
+    public void initiateStartScreen() {
         view.initiateStartScreen();
     }
 

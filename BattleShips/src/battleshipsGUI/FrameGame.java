@@ -3,6 +3,7 @@ package battleshipsGUI;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import javax.swing.*;
 
 /**
@@ -12,9 +13,14 @@ import javax.swing.*;
 public class FrameGame extends JFrame {
 
     private JFrame gameFrame;
+    private JLabel userClickLabel;
+    private JLabel errorLabel;
+    private JLabel enemyTargetLabel;
     private JLabel turnCounterLabel;
+    private JLabel playerClickLabel;
     private JLabel shipCellsRemainingLabel;
     private JLabel playerResultLabel;
+    private JLabel enemyClickLabel;
     private JLabel enemyResultLabel;
 
     private Controller controller;
@@ -30,13 +36,13 @@ public class FrameGame extends JFrame {
 
         setFocusable(true);
 
-        // Set enemy grid
+        // set enemy grid
         controller.setEnemyGrid();
 
         this.enemyShipsRemaining = this.model.getEnemyGrid().getEnemy().ships.size() - this.model.getEnemyGrid().getEnemy().shipsSunk;
         this.score = this.model.getPlayerGrid().getUser().getScore();
 
-        // Create a new JFrame for the game window
+// Create a new JFrame for the game window
         gameFrame = new JFrame();
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setSize(1000, 600);
@@ -53,31 +59,45 @@ public class FrameGame extends JFrame {
         shipCellsRemainingLabel = new JLabel("Enemy Ships Remaining: " + enemyShipsRemaining);
         shipCellsRemainingLabel.setFont(new Font("Arial", Font.BOLD, 20));
         row1Panel.add(shipCellsRemainingLabel, BorderLayout.EAST);
+
         topPanel.add(row1Panel);
 
         // Create a panel for the second row
         JPanel row2Panel = new JPanel(new BorderLayout());
-        playerResultLabel = new JLabel("Player targeted cell: ");
+        playerClickLabel = new JLabel("Player targeted cell: ");
+        playerClickLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        row2Panel.add(playerClickLabel, BorderLayout.WEST);
+        playerResultLabel = new JLabel("    ");
         playerResultLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        row2Panel.add(playerResultLabel, BorderLayout.WEST);
+        row2Panel.add(playerResultLabel, BorderLayout.CENTER);
         topPanel.add(row2Panel);
 
-        // Create a panel for the third row
+        // create panel for third row
         JPanel row3Panel = new JPanel(new BorderLayout());
-        row3Panel.add(new JLabel(" "), BorderLayout.WEST); // Create an empty label for error messages
+        errorLabel = new JLabel(" ");
+        errorLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        errorLabel.setForeground(Color.RED);
+        row3Panel.add(errorLabel, BorderLayout.WEST);
         topPanel.add(row3Panel);
 
         // Create a panel for the fourth row
         JPanel row4Panel = new JPanel(new BorderLayout());
-        enemyResultLabel = new JLabel("Enemy targeted cell: ");
+        enemyClickLabel = new JLabel("Enemy targeted cell: ");
+        enemyClickLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        row4Panel.add(enemyClickLabel, BorderLayout.WEST);
+        enemyResultLabel = new JLabel("     ");
         enemyResultLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        row4Panel.add(enemyResultLabel, BorderLayout.WEST);
+        row4Panel.add(enemyResultLabel, BorderLayout.CENTER);
         topPanel.add(row4Panel);
 
         // Create a panel for the fifth row
         JPanel row5Panel = new JPanel(new BorderLayout());
-        row5Panel.add(new JLabel("Player Board"), BorderLayout.WEST);
-        row5Panel.add(new JLabel("Enemy Board"), BorderLayout.EAST);
+        JLabel playerLabel = new JLabel("Player Board");
+        playerLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        row5Panel.add(playerLabel, BorderLayout.WEST);
+        JLabel enemyLabel = new JLabel("Enemy Board");
+        enemyLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        row5Panel.add(enemyLabel, BorderLayout.EAST);
         topPanel.add(row5Panel);
 
         // Add the top panel to the game frame
@@ -97,7 +117,6 @@ public class FrameGame extends JFrame {
 
         // Set the game frame as visible
         gameFrame.setVisible(true);
-
         // Register the KeyEventDispatcher to capture key events
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             @Override
@@ -109,20 +128,23 @@ public class FrameGame extends JFrame {
                 return false;
             }
         });
+
     }
 
     public void updateUserClickLabel(String cell) {
-        playerResultLabel.setText("Player targeted cell: " + cell);
+        playerClickLabel.setText("Player targeted cell: " + cell);
     }
 
-    // Player's turn is over, next is AI's turn
+    // player's turn is over, next is AI turn
     public void updateTurn() {
         model.getPlayerGrid().getUser().setScore(model.getPlayerGrid().getUser().getScore() - 10);
         this.score = model.getPlayerGrid().getUser().getScore();
+        // Decrement the score by 10 after each turn
         turnCounter++;
         turnCounterLabel.setText("Turn: " + turnCounter + "   Score: " + score);
         controller.updateTurn();
         checkWinner();
+
     }
 
     public void incrementScore() {
@@ -131,34 +153,36 @@ public class FrameGame extends JFrame {
 
     public void updateErrorLabel(boolean isValid) {
         if (isValid) {
-            // Clear error message
-            playerResultLabel.setText("Player targeted cell: ");
+            errorLabel.setText(" ");
         } else {
-            playerResultLabel.setText("Invalid point");
+            errorLabel.setText("Invalid point");
         }
     }
 
     public void updateEnemyTargetLabel(String cell) {
-        enemyResultLabel.setText("Enemy targeted cell: " + cell);
+        enemyClickLabel.setText("Enemy targeted cell: " + cell);
     }
 
     public void updatePlayerResultLabel(String result) {
-        playerResultLabel.setText("Player targeted cell: " + result);
+        playerResultLabel.setText("        " + result);
     }
 
     public void updateShipsRemaining() {
+        this.model.getEnemyGrid().getEnemy().checkLose();
         this.enemyShipsRemaining = this.model.getEnemyGrid().getEnemy().ships.size() - this.model.getEnemyGrid().getEnemy().shipsSunk;
         shipCellsRemainingLabel.setText("Enemy Ships Remaining: " + enemyShipsRemaining);
     }
 
     public void updateEnemyResultLabel(String result) {
-        enemyResultLabel.setText("Enemy targeted cell: " + result);
+        enemyResultLabel.setText("        " + result);
     }
 
-    // Check if either the player or the enemy has won and return the corresponding string
+    // check if enemy or player has won and return the corresponding string
     public String checkWin() {
+        // if enemy loses
         if (this.model.getEnemyGrid().getEnemy().checkLose()) {
             gameFrame.setVisible(false);
+
             return "PLAYER";
         } else if (this.model.getPlayerGrid().getUser().checkLose()) {
             gameFrame.setVisible(false);
@@ -174,4 +198,5 @@ public class FrameGame extends JFrame {
             controller.gameOver(winner, score);
         }
     }
+
 }

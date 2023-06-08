@@ -112,7 +112,6 @@ public class GridEnemy extends JPanel implements GridPanel {
         }
     }
 
-
     public JPanel getComponentAt(int x, int y) {
         Component comp = null;
         String pointString = x + "" + y;
@@ -149,6 +148,8 @@ public class GridEnemy extends JPanel implements GridPanel {
 
                 // if successfully fires at point with no errors
                 if (board.fireAt(point)) {
+                    panelGame.updateShipsRemaining();
+
                     if (board.isMiss(point)) {
                         clickedBox.setBackground(Color.GRAY);
                         panelGame.updatePlayerResultLabel("MISS");
@@ -157,7 +158,6 @@ public class GridEnemy extends JPanel implements GridPanel {
                         panelGame.updatePlayerResultLabel("HIT");
                         controller.updatePlayerScore();
                     }
-                    panelGame.updateShipsRemaining();
                     panelGame.updateTurn();
                     panelGame.updateErrorLabel(true);
                 } else {
