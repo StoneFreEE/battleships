@@ -239,6 +239,7 @@ public class Model extends Observable {
 
     public void setName(String name) {
         this.user = new User(name);
+        this.username = name;
         setChanged();
         notifyObservers(user);
         addUserToDatabase(name); // Add the user to the database

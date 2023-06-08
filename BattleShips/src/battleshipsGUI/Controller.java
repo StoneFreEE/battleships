@@ -102,4 +102,7 @@ public class Controller {
     public boolean checkValid(Coordinate coordinate, int shipLength) {
         return model.checkValid(coordinate, shipLength);
     }
+    public void setScore(int score){
+        model.setScore(score);
+    }
 }

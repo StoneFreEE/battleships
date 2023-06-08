@@ -35,6 +35,7 @@ public class FrameGameOver extends JFrame implements KeyListener {
         this.winner = winner;
         this.score = score;
         addKeyListener(this);
+        controller.setScore(score);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
