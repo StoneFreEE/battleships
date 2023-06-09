@@ -105,6 +105,10 @@ public class GameGrid extends JPanel {
         }
         return (JPanel) comp;
     }
+    
+    public Board getBoard() {
+        return this.board;
+    }
 
     private class GridListener extends MouseAdapter {
 
