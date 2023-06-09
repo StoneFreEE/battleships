@@ -44,9 +44,9 @@ public class PanelSaveBoard extends JPanel {
     private Font buttonFont = new Font("Menlo", Font.PLAIN, 24);
     private Font titleFont = new Font("Menlo", Font.BOLD, 80);
     
-    private GameGrid grid;
+    private GridPlayer grid;
 
-    public PanelSaveBoard(Controller controller, GameGrid grid) {
+    public PanelSaveBoard(Controller controller, GridPlayer grid) {
         this.controller = controller;
         this.grid = grid;
 
