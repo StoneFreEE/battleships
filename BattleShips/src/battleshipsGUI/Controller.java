@@ -61,7 +61,7 @@ public class Controller {
     }
 
     public void setName(String name) {
-        //model.checkUnique(name);
+        model.checkUnique(name);
         model.setName(name);
     }
 
@@ -91,10 +91,20 @@ public class Controller {
     }
 
     public void gameOver(String winner, int score) {
+
+        model.updateScore();
         view.gameOver(winner, score);
     }
 
     public boolean checkValid(Coordinate coordinate, int shipLength) {
         return model.checkValid(coordinate, shipLength);
+    }
+    
+    public void saveBoard(String boardName, Board board) {
+        model.insertBoard(boardName, board);
+    }
+    
+    public void promptSave(GameGrid grid) {
+        view.promptSave(grid);
     }
 }

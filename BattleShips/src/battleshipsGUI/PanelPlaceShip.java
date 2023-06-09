@@ -94,8 +94,8 @@ public class PanelPlaceShip extends JPanel {
 
         if (index >= shipLengths.length - 1 && !playGameCalled) {
             // All ships have been placed
+            controller.promptSave(grid);
             playGameCalled = true; // Set the flag to true to prevent further calls
-            controller.playGame();
             return;
         }
 
@@ -109,7 +109,6 @@ public class PanelPlaceShip extends JPanel {
     }
 
     public GameGrid getGrid() {
-        System.out.println("Hello");
         return grid;
     }
 

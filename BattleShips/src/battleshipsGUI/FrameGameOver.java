@@ -69,12 +69,14 @@ public class FrameGameOver extends JFrame implements KeyListener {
         leaderboardBtn = new JButton("Leaderboard");
         leaderboardBtn.setForeground(Color.BLACK);
         leaderboardBtn.setFont(buttonFont);
-
+        
         buttonPanel.add(leaderboardBtn);
         leaderboardBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // promptBoard();
+                titlePanel.setVisible(false);
+                buttonPanel.setVisible(false);
                 controller.displayLeaderboard();
             }
         });
