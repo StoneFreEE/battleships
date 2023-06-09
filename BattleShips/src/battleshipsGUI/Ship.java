@@ -41,4 +41,16 @@ public class Ship {
         this.origin = origin;
         this.endPoint = end;
     }
+
+    Coordinate getOrigin() {
+        return this.origin;
+    }
+
+    int getLength(){
+        return this.length;
+    }
+    
+    Coordinate getEndPoint() {
+        return this.endPoint;
+    }
 }

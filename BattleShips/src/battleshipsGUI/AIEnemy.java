@@ -15,6 +15,7 @@ public class AIEnemy extends Player {
      */
     public AIEnemy() {
         super();
+        ships = new ArrayList<>();
     }
 
     /**
@@ -25,7 +26,6 @@ public class AIEnemy extends Player {
      */
     @Override
     public void initBoard(int[] shipLengths) {
-        ships = new ArrayList<>();
         this.board = new Board();
 
         // store all generated origin points to check for repitition
@@ -91,8 +91,12 @@ public class AIEnemy extends Player {
     }
 
     @Override
-    public ArrayList<Ship> getShipsList(){
+    public ArrayList<Ship> getShipsList() {
         return this.ships;
+    }
+
+    public Board getBoard() {
+        return this.board;
     }
 
 }

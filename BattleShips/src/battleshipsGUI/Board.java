@@ -261,6 +261,26 @@ public class Board {
         return (sunkCellCount == ship.length);
     }
 
+    public void sinkShip(Ship ship) {
+        if (ship.getOrigin().getX() == ship.getEndPoint().getX()) {
+            for (int i = 0; i < ship.getLength(); i++) {
+                int row = ship.getOrigin().getY() + ((ship.getOrigin().getY() > ship.getEndPoint().getY()) ? -i : i);
+                int col = ship.getOrigin().getX();
+
+                // Set the cell as sunk
+                this.cells[row][col] = GridCellStates.HIT.ordinal();
+            }
+        } else {
+            for (int i = 0; i < ship.getLength(); i++) {
+                int row = ship.getOrigin().getY();
+                int col = ship.getOrigin().getX() + ((ship.getOrigin().getX() > ship.getEndPoint().getX()) ? -i : i);
+
+                // Set the cell as sunk
+                this.cells[row][col] = GridCellStates.HIT.ordinal();
+            }
+        }
+    }
+
     /**
      * Determines whether a given point is within the boundaries of the board.
      *

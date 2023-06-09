@@ -1,45 +1,28 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
- */
 package battleshipsGUI;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author oliver
- */
 public class ShipTest {
-    
-    public ShipTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
+
+    @Test
+    public void testGetOrigin() {
+        Coordinate origin = new Coordinate(2, 3);
+        Ship ship = new Ship(4, origin);
+        assertEquals(origin, ship.getOrigin());
     }
 
     @Test
-    public void testSomeMethod() {
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testGetLength() {
+        int length = 4;
+        Ship ship = new Ship(length, new Coordinate(2, 3));
+        assertEquals(length, ship.getLength());
     }
-    
+
+    @Test
+    public void testGetEndPoint() {
+        Coordinate endPoint = new Coordinate(5, 3);
+        Ship ship = new Ship(4, new Coordinate(2, 3), endPoint);
+        assertEquals(endPoint, ship.getEndPoint());
+    }
 }

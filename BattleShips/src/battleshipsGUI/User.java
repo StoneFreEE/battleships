@@ -234,4 +234,8 @@ public class User extends Player implements Comparable<User> {
     public ArrayList<Ship> getShipsList() {
         return this.ships;
     }
+
+    public Board getBoard() {
+        return this.board;
+    }
 }

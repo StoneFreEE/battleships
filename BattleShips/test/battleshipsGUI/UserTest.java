@@ -1,235 +1,111 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
- */
 package battleshipsGUI;
 
+import battleshipsGUI.Coordinate;
+import battleshipsGUI.Ship;
+import battleshipsGUI.User;
 import java.util.ArrayList;
 import java.util.HashSet;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author oliver
- */
 public class UserTest {
-    
-    public UserTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
 
-    /**
-     * Test of setName method, of class User.
-     */
     @Test
     public void testSetName() {
-        System.out.println("setName");
-        String name = "";
         User instance = new User();
-        instance.setName(name);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.setName("John");
+        assertEquals("John", instance.getName());
     }
 
-    /**
-     * Test of setScore method, of class User.
-     */
     @Test
     public void testSetScore() {
-        System.out.println("setScore");
-        int score = 0;
         User instance = new User();
-        instance.setScore(score);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.setScore(100);
+        assertEquals(100, instance.getScore());
     }
 
-    /**
-     * Test of getScore method, of class User.
-     */
     @Test
     public void testGetScore() {
-        System.out.println("getScore");
         User instance = new User();
-        int expResult = 0;
-        int result = instance.getScore();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(500, instance.getScore());
     }
 
-    /**
-     * Test of getName method, of class User.
-     */
     @Test
     public void testGetName() {
-        System.out.println("getName");
         User instance = new User();
-        String expResult = "";
-        String result = instance.getName();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals("", instance.getName());
     }
 
-    /**
-     * Test of toString method, of class User.
-     */
     @Test
     public void testToString() {
-        System.out.println("toString");
-        User instance = new User();
-        String expResult = "";
-        String result = instance.toString();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        User instance = new User("John", 100);
+        assertEquals("John 100", instance.toString());
     }
 
-    /**
-     * Test of setShips method, of class User.
-     */
     @Test
     public void testSetShips() {
-        System.out.println("setShips");
-        ArrayList<Ship> ships = null;
         User instance = new User();
+        ArrayList<Ship> ships = new ArrayList<>();
+        Ship ship = new Ship(3, new Coordinate(1, 1), new Coordinate(1, 3));
+        ships.add(ship);
         instance.setShips(ships);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(ships, instance.getShipsList());
     }
 
-    /**
-     * Test of initBoard method, of class User.
-     */
-    @Test
-    public void testInitBoard() {
-        System.out.println("initBoard");
-        int[] shipLengths = null;
-        User instance = new User();
-        instance.initBoard(shipLengths);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of contains method, of class User.
-     */
     @Test
     public void testContains() {
-        System.out.println("contains");
-        HashSet<Coordinate> points = null;
-        Coordinate end = null;
         User instance = new User();
-        boolean expResult = false;
-        boolean result = instance.contains(points, end);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        HashSet<Coordinate> points = new HashSet<>();
+        Coordinate end = new Coordinate(1, 2);
+        points.add(new Coordinate(1, 1));
+        points.add(new Coordinate(1, 2));
+        points.add(new Coordinate(1, 3));
+        assertTrue(instance.contains(points, end));
     }
 
-    /**
-     * Test of initLoadDatabase method, of class User.
-     */
-    @Test
-    public void testInitLoadDatabase() {
-        System.out.println("initLoadDatabase");
-        User instance = new User();
-        instance.initLoadDatabase();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of checkLose method, of class User.
-     */
     @Test
     public void testCheckLose() {
-        System.out.println("checkLose");
         User instance = new User();
-        boolean expResult = false;
-        boolean result = instance.checkLose();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(instance.checkLose());
+
+        ArrayList<Ship> ships = new ArrayList<>();
+        ships.add(new Ship(2, new Coordinate(1, 1), new Coordinate(1, 2)));
+        instance.setShips(ships);
+        assertFalse(instance.checkLose());
+
+        instance.getBoard().fireAt(new Coordinate(1, 1));
+        instance.getBoard().fireAt(new Coordinate(1, 2));
+        assertFalse(instance.checkLose());
     }
 
-    /**
-     * Test of compareTo method, of class User.
-     */
     @Test
     public void testCompareTo() {
-        System.out.println("compareTo");
-        User o = null;
-        User instance = new User();
-        int expResult = 0;
-        int result = instance.compareTo(o);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        User user1 = new User("John", 100);
+        User user2 = new User("Jane", 200);
+        assertTrue(user1.compareTo(user2) < 0);
+        assertTrue(user2.compareTo(user1) > 0);
+
+        User user3 = new User("John", 200);
+        // should be equal to difference in scores 
+        // (john100 has less of a score than john200)
+        assertEquals(-100, user1.compareTo(user3));
     }
 
-    /**
-     * Test of equals method, of class User.
-     */
     @Test
     public void testEquals() {
-        System.out.println("equals");
-        Object o = null;
-        User instance = new User();
-        boolean expResult = false;
-        boolean result = instance.equals(o);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        User user1 = new User("John", 100);
+        User user2 = new User("John", 200);
+        User user3 = new User("Jane", 100);
+
+        assertTrue(user1.equals(user2));
+        assertFalse(user1.equals(user3));
     }
 
-    /**
-     * Test of hashCode method, of class User.
-     */
     @Test
     public void testHashCode() {
-        System.out.println("hashCode");
-        User instance = new User();
-        int expResult = 0;
-        int result = instance.hashCode();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+        User user1 = new User("John", 100);
+        User user2 = new User("John", 100);
 
-    /**
-     * Test of getShipsList method, of class User.
-     */
-    @Test
-    public void testGetShipsList() {
-        System.out.println("getShipsList");
-        User instance = new User();
-        ArrayList<Ship> expResult = null;
-        ArrayList<Ship> result = instance.getShipsList();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(user1.hashCode(), user2.hashCode());
     }
-    
 }

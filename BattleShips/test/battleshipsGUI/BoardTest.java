@@ -1,199 +1,115 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
- */
 package battleshipsGUI;
 
-import java.util.HashSet;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author oliver
- */
-public class BoardTest {
-    
-    public BoardTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
+import java.util.HashSet;
 
-    /**
-     * Test of placeShip method, of class Board.
-     */
+public class BoardTest {
+
     @Test
     public void testPlaceShip() {
-        System.out.println("placeShip");
-        Ship ship = null;
-        Board instance = new Board();
-        instance.placeShip(ship);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Board board = new Board();
+        Ship ship = new Ship(3, new Coordinate(0, 0), new Coordinate(0, 2));
+        board.placeShip(ship);
+
+        assertEquals(GridCellStates.SHIP.ordinal(), board.cells[0][0]);
+        assertEquals(GridCellStates.SHIP.ordinal(), board.cells[1][0]);
+        assertEquals(GridCellStates.SHIP.ordinal(), board.cells[2][0]);
+
+        ship = new Ship(3, new Coordinate(5, 5), new Coordinate(7, 5));
+        board.placeShip(ship);
+
+        assertEquals(GridCellStates.SHIP.ordinal(), board.cells[5][5]);
+        assertEquals(GridCellStates.SHIP.ordinal(), board.cells[5][6]);
+        assertEquals(GridCellStates.SHIP.ordinal(), board.cells[5][7]);
     }
 
-    /**
-     * Test of checkPossible method, of class Board.
-     */
     @Test
     public void testCheckPossible() {
-        System.out.println("checkPossible");
-        Ship ship = null;
-        Board instance = new Board();
-        HashSet<Coordinate> expResult = null;
-        HashSet<Coordinate> result = instance.checkPossible(ship);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Board board = new Board();
+
+        Ship ship = new Ship(3, new Coordinate(5, 5), new Coordinate(7, 5));
+        HashSet<Coordinate> expected = new HashSet<>();
+
+        // test for possible end points
+        expected = new HashSet<>();
+        expected.add(new Coordinate(5, 3));
+        expected.add(new Coordinate(5, 7));
+        expected.add(new Coordinate(3, 5));
+        expected.add(new Coordinate(7, 5));
+
+        assertEquals(expected, board.checkPossible(ship));
     }
 
-    /**
-     * Test of parsePoint method, of class Board.
-     */
     @Test
     public void testParsePoint() {
-        System.out.println("parsePoint");
-        String text = "";
-        Board instance = new Board();
-        Coordinate expResult = null;
-        Coordinate result = instance.parsePoint(text);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Board board = new Board();
+
+        assertEquals(new Coordinate(0, 0), board.parsePoint("A1"));
+        assertEquals(new Coordinate(4, 6), board.parsePoint("G5"));
+        assertEquals(new Coordinate(9, 9), board.parsePoint("J10"));
+        assertNull(board.parsePoint("AA1"));
+        assertNull(board.parsePoint("A0"));
+        assertNull(board.parsePoint("K1"));
     }
 
-    /**
-     * Test of printBoard method, of class Board.
-     */
-    @Test
-    public void testPrintBoard() {
-        System.out.println("printBoard");
-        Board instance = new Board();
-        instance.printBoard();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of isFree method, of class Board.
-     */
     @Test
     public void testIsFree() {
-        System.out.println("isFree");
-        Coordinate point = null;
-        Board instance = new Board();
-        boolean expResult = false;
-        boolean result = instance.isFree(point);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Board board = new Board();
+        board.cells[0][0] = GridCellStates.SHIP.ordinal();
+        board.cells[3][5] = GridCellStates.SHIP.ordinal();
+
+        assertFalse(board.isFree(new Coordinate(0, 0)));
+        assertTrue(board.isFree(new Coordinate(0, 1)));
+        assertFalse(board.isFree(new Coordinate(5, 3)));
+        assertTrue(board.isFree(new Coordinate(4, 5)));
     }
 
-    /**
-     * Test of isSpace method, of class Board.
-     */
-    @Test
-    public void testIsSpace() {
-        System.out.println("isSpace");
-        Ship ship = null;
-        Board instance = new Board();
-        boolean expResult = false;
-        boolean result = instance.isSpace(ship);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of isHit method, of class Board.
-     */
     @Test
     public void testIsHit() {
-        System.out.println("isHit");
-        Coordinate point = null;
-        Board instance = new Board();
-        boolean expResult = false;
-        boolean result = instance.isHit(point);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Board board = new Board();
+        board.cells[0][0] = GridCellStates.HIT.ordinal();
+        board.cells[3][5] = GridCellStates.HIT.ordinal();
+
+        assertTrue(board.isHit(new Coordinate(0, 0)));
+        assertFalse(board.isHit(new Coordinate(0, 1)));
+        assertTrue(board.isHit(new Coordinate(5, 3)));
+        assertFalse(board.isHit(new Coordinate(5, 4)));
     }
 
-    /**
-     * Test of isMiss method, of class Board.
-     */
     @Test
     public void testIsMiss() {
-        System.out.println("isMiss");
-        Coordinate point = null;
-        Board instance = new Board();
-        boolean expResult = false;
-        boolean result = instance.isMiss(point);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Board board = new Board();
+        board.cells[0][0] = GridCellStates.MISS.ordinal();
+        board.cells[3][5] = GridCellStates.MISS.ordinal();
+
+        assertTrue(board.isMiss(new Coordinate(0, 0)));
+        assertFalse(board.isMiss(new Coordinate(0, 1)));
+        assertTrue(board.isMiss(new Coordinate(5, 3)));
+        assertFalse(board.isMiss(new Coordinate(4, 5)));
     }
 
-    /**
-     * Test of isSunk method, of class Board.
-     */
     @Test
     public void testIsSunk() {
-        System.out.println("isSunk");
-        Ship ship = null;
-        Board instance = new Board();
-        boolean expResult = false;
-        boolean result = instance.isSunk(ship);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+        Board board = new Board();
+        Ship ship1 = new Ship(3, new Coordinate(0, 0), new Coordinate(0, 2));
+        Ship ship2 = new Ship(3, new Coordinate(3, 5), new Coordinate(3, 7));
 
-    /**
-     * Test of isValid method, of class Board.
-     */
-    @Test
-    public void testIsValid() {
-        System.out.println("isValid");
-        Coordinate point = null;
-        boolean expResult = false;
-        boolean result = Board.isValid(point);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+        board.placeShip(ship1);
+        board.placeShip(ship2);
 
-    /**
-     * Test of fireAt method, of class Board.
-     */
-    @Test
-    public void testFireAt() {
-        System.out.println("fireAt");
-        Coordinate point = null;
-        Board instance = new Board();
-        boolean expResult = false;
-        boolean result = instance.fireAt(point);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        board.cells[0][0] = GridCellStates.HIT.ordinal();
+        board.cells[0][1] = GridCellStates.HIT.ordinal();
+        board.cells[0][2] = GridCellStates.HIT.ordinal();
+
+        assertFalse(board.isSunk(ship1));
+        assertFalse(board.isSunk(ship2));
+
+        board.cells[5][3] = GridCellStates.HIT.ordinal();
+        board.cells[6][3] = GridCellStates.HIT.ordinal();
+        board.cells[7][3] = GridCellStates.HIT.ordinal();
+
+        assertTrue(board.isSunk(ship2));
     }
-    
 }
