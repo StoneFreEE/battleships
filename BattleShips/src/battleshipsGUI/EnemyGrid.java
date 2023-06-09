@@ -65,6 +65,7 @@ public class EnemyGrid extends JPanel {
     public void updateGrid(AIEnemy enemy) {
         // Customize how the enemy grid is updated based on the user's board
         // For example, you can use different colors or symbols to represent ship, miss, or empty cells
+        enemy.board.printBoard();
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 JPanel pan = getComponentAt(j, i);
@@ -103,12 +104,15 @@ public class EnemyGrid extends JPanel {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+            System.out.println("Grid state : " + gridState);
+            board.printBoard();
             if (gridState == GridStates.NOCLICK) {
                 return;
             }
             JPanel clickedBox = (JPanel) e.getSource();
             Coordinate point = new Coordinate(x, y);
 
+            System.out.println(point.getX() + "" + point.getY());
 
             if (gridState == GridStates.SHOOTINGAT) {
                 String clickedCell = Coordinate.translatePoint(point);

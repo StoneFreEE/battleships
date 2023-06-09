@@ -91,7 +91,6 @@ public class Controller {
     }
 
     public void gameOver(String winner, int score) {
-
         model.updateScore();
         view.gameOver(winner, score);
     }
