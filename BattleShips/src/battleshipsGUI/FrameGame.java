@@ -30,6 +30,12 @@ public class FrameGame extends JFrame {
     private int turnCounter = 1;
     private int score;
 
+    /**
+     * Constructs a FrameGame object with the specified controller and model.
+     *
+     * @param controller The controller object associated with the game.
+     * @param model The model object associated with the game.
+     */
     public FrameGame(Controller controller, Model model) {
         this.controller = controller;
         this.model = model;
@@ -131,11 +137,18 @@ public class FrameGame extends JFrame {
 
     }
 
+    /**
+     * Updates the label displaying the player's click.
+     *
+     * @param cell The cell that the player clicked on.
+     */
     public void updateUserClickLabel(String cell) {
         playerClickLabel.setText("Player targeted cell: " + cell);
     }
 
-    // player's turn is over, next is AI turn
+    /**
+     * Updates the turn counter and score after the player's turn is over.
+     */
     public void updateTurn() {
         model.getPlayerGrid().getUser().setScore(model.getPlayerGrid().getUser().getScore() - 10);
         this.score = model.getPlayerGrid().getUser().getScore();
@@ -147,10 +160,19 @@ public class FrameGame extends JFrame {
 
     }
 
+    /**
+     * Increments the player's score by 50.
+     */
     public void incrementScore() {
         score += 50;
     }
 
+    /**
+     * Updates the error label based on the validity of the point clicked by the
+     * player.
+     *
+     * @param isValid Indicates whether the clicked point is valid.
+     */
     public void updateErrorLabel(boolean isValid) {
         if (isValid) {
             errorLabel.setText(" ");
@@ -159,25 +181,48 @@ public class FrameGame extends JFrame {
         }
     }
 
+    /**
+     * Updates the label displaying the enemy's target.
+     *
+     * @param cell The cell that the enemy targeted.
+     */
     public void updateEnemyTargetLabel(String cell) {
         enemyClickLabel.setText("Enemy targeted cell: " + cell);
     }
 
+    /**
+     * Updates the label displaying the result of the player's move.
+     *
+     * @param result The result of the player's move.
+     */
     public void updatePlayerResultLabel(String result) {
         playerResultLabel.setText("        " + result);
     }
 
+    /**
+     * Updates the remaining enemy ships label.
+     */
     public void updateShipsRemaining() {
         this.model.getEnemyGrid().getEnemy().checkLose();
         this.enemyShipsRemaining = this.model.getEnemyGrid().getEnemy().ships.size() - this.model.getEnemyGrid().getEnemy().shipsSunk;
         shipCellsRemainingLabel.setText("Enemy Ships Remaining: " + enemyShipsRemaining);
     }
 
+    /**
+     * Updates the label displaying the result of the enemy's move.
+     *
+     * @param result The result of the enemy's move.
+     */
     public void updateEnemyResultLabel(String result) {
         enemyResultLabel.setText("        " + result);
     }
 
-    // check if enemy or player has won and return the corresponding string
+    /**
+     * Checks if either the player or the enemy has won the game.
+     *
+     * @return The string representation of the winner ("PLAYER" or "ENEMY") or
+     * "nowin" if no winner yet.
+     */
     public String checkWin() {
         // if enemy loses
         if (this.model.getEnemyGrid().getEnemy().checkLose()) {
@@ -192,9 +237,13 @@ public class FrameGame extends JFrame {
         }
     }
 
+    /**
+     * Checks for a winner and initiates game over if there is one.
+     */
     public void checkWinner() {
         String winner = checkWin();
         if (winner.equals("PLAYER") || winner.equals("ENEMY")) {
+            controller.setScore(score);
             controller.gameOver(winner, score);
         }
     }

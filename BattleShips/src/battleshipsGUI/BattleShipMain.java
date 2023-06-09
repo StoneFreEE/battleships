@@ -15,7 +15,6 @@ public class BattleShipMain {
         Controller controller = new Controller(model, view);
         model.setController(controller);
         
-        System.out.println(model.getShipLengths().length);
         view.setVisible(true);
     }
 }

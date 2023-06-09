@@ -20,32 +20,36 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- *
- * @author oliver
+ * Represents a panel for loading a game board.
+ * Extends JPanel.
  */
 public class PanelLoadBoard extends JPanel {
 
-    private JLabel loadBoardTitle;
-    private JPanel titlePanel;
+    public JLabel loadBoardTitle;
+    public JPanel titlePanel;
 
-    private JLabel loadBoardLabel;
-    private JPanel buttonPanel;
-    private JButton yesButton;
-    private JButton noButton;
+    public JLabel loadBoardLabel;
+    public JPanel buttonPanel;
+    public JButton yesButton;
+    public JButton noButton;
 
-    private JPanel enterBoardPanel;
-    private JTextField textField;
-    private String boardName;
-    private JButton cancelButton;
-    private JButton enterButton;
+    public JPanel enterBoardPanel;
+    public JTextField textField;
+    public String boardName;
+    public JButton cancelButton;
+    public JButton enterButton;
 
-    private Controller controller;
+    public Controller controller;
 
-    private Font buttonFont = new Font("Menlo", Font.PLAIN, 24);
-    private Font titleFont = new Font("Menlo", Font.BOLD, 80);
+    public Font buttonFont = new Font("Menlo", Font.PLAIN, 24);
+    public Font titleFont = new Font("Menlo", Font.BOLD, 80);
 
-    private PanelPlaceShip initiateBoardPanel;
-
+    public PanelPlaceShip initiateBoardPanel;
+/**
+     * Constructs a PanelLoadBoard object with the specified controller.
+     *
+     * @param controller The controller object associated with the game.
+     */
     public PanelLoadBoard(Controller controller) {
         this.controller = controller;
 
@@ -95,7 +99,11 @@ public class PanelLoadBoard extends JPanel {
         add(buttonPanel);
         add(titlePanel);
     }
-
+/**
+     * Retrieves the name of the loaded board.
+     *
+     * @return The name of the loaded board.
+     */
     public String getBoardName() {
         return this.boardName;
     }
@@ -128,7 +136,7 @@ public class PanelLoadBoard extends JPanel {
                 boardName = textField.getText();
                 System.out.println(boardName);
                 // Send user to game
-                controller.loadBoard();
+                controller.loadBoard(boardName);
                 removeAll();
             }
         });

@@ -20,6 +20,18 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
+ * A panel that displays the save board prompt and handles user input for saving
+ * the game board. Provides options to save the board or cancel the saving
+ * process. Allows the user to enter a name for the board to be saved.
+ * Communicates with the controller to initiate the saving process. Extends
+ * JPanel class.
+ *
+ * The panel is displayed when the player wants to save the current game board.
+ * It allows the player to enter a name for the board and save it, or cancel the
+ * saving process. The panel interacts with the controller to perform the saving
+ * action.
+ *
+ * The panel is used in the BattleshipsGUI application.
  *
  * @author oliver
  */
@@ -43,9 +55,16 @@ public class PanelSaveBoard extends JPanel {
 
     private Font buttonFont = new Font("Menlo", Font.PLAIN, 24);
     private Font titleFont = new Font("Menlo", Font.BOLD, 80);
-    
+
     private GridPlayer grid;
 
+    /**
+     * Constructs a PanelSaveBoard object with the specified controller and game
+     * grid.
+     *
+     * @param controller the Controller object
+     * @param grid the GridPlayer object representing the game grid
+     */
     public PanelSaveBoard(Controller controller, GridPlayer grid) {
         this.controller = controller;
         this.grid = grid;
@@ -89,7 +108,8 @@ public class PanelSaveBoard extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // direct user to board initiating panel
-                controller.initiateBoard();
+                controller.playGame();
+                removeAll();
             }
         });
 
@@ -97,6 +117,11 @@ public class PanelSaveBoard extends JPanel {
         add(titlePanel);
     }
 
+    /**
+     * Returns the name of the board entered by the user.
+     *
+     * @return the board name
+     */
     public String getBoardName() {
         return this.boardName;
     }
@@ -128,11 +153,8 @@ public class PanelSaveBoard extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 boardName = textField.getText();
                 System.out.println(boardName);
-                controller.saveBoard(boardName, grid.getBoard());
-                
-                // Ask to save
-            
-                controller.playGame();
+                controller.saveBoard(boardName);
+                //controller.playGame();
                 removeAll();
             }
         });
