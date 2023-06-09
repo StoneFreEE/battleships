@@ -128,7 +128,7 @@ public class PanelLoadBoard extends JPanel {
                 boardName = textField.getText();
                 System.out.println(boardName);
                 // Send user to game
-                controller.loadBoard();
+                controller.loadBoard(boardName);
                 removeAll();
             }
         });

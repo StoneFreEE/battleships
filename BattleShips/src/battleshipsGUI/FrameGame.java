@@ -195,6 +195,7 @@ public class FrameGame extends JFrame {
     public void checkWinner() {
         String winner = checkWin();
         if (winner.equals("PLAYER") || winner.equals("ENEMY")) {
+            controller.setScore(score);
             controller.gameOver(winner, score);
         }
     }

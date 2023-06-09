@@ -44,10 +44,10 @@ public class View extends JFrame implements Observer, KeyListener {
     public PanelPlaceShip placeShipPanel;
     public FrameGame frameGame;
     private User user;
+    private GridPlayer grid;
     private FrameGameOver gameOverPanel;
     private String winner;
-    
-    
+
     // Score
     private PanelLeaderboard leaderboardPanel;
 
@@ -64,10 +64,10 @@ public class View extends JFrame implements Observer, KeyListener {
     }
 
     public void initiateStartScreen() {
-        if (frameGame != null){
+        if (frameGame != null) {
             frameGame.dispose();
         }
-        if (gameOverPanel != null){
+        if (gameOverPanel != null) {
             gameOverPanel.dispose();
         }
         con.removeAll();
@@ -94,11 +94,11 @@ public class View extends JFrame implements Observer, KeyListener {
         titleLabel.setFont(titleFont);
 
         titlePanel.add(titleLabel);
-        
+
         JLabel infoLabel = new JLabel("press esc to return to the start menu");
         infoLabel.setForeground(Color.WHITE);
         infoLabel.setFont(new Font("Menlo", Font.PLAIN, 18));
-        
+
         titlePanel.add(infoLabel);
 
         // start button
@@ -108,12 +108,11 @@ public class View extends JFrame implements Observer, KeyListener {
 
         JButton startButton = new JButton("START");
         startButton.setBackground(Color.BLACK);
-        startButton.setForeground(Color.LIGHT_GRAY);
+        startButton.setForeground(Color.BLACK);
         // Set the preferred size of the button
         startButton.setPreferredSize(new Dimension(200, 50));
         startButton.setFont(buttonFont);
         startButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Action to perform when the Start button is clicked
@@ -141,11 +140,12 @@ public class View extends JFrame implements Observer, KeyListener {
         setFocusable(true);
 
     }
-    
+
     public void promptSave(GridPlayer grid) {
+        System.out.println("Save");
         con.removeAll();
 
-        // load board
+        // save board
         saveBoardPanel = new PanelSaveBoard(controller, grid);
         con.add(saveBoardPanel);
         con.revalidate();
@@ -179,7 +179,6 @@ public class View extends JFrame implements Observer, KeyListener {
         frameGame.dispose();
         con.removeAll();
 
-
         gameOverPanel = new FrameGameOver(controller, winner, score);
 
         con = gameOverPanel.getContentPane();
@@ -190,14 +189,14 @@ public class View extends JFrame implements Observer, KeyListener {
     }
 
     public void displayLeaderboard(Object[][] users) {
-        System.out.println("view reached");
-        
-        leaderboardPanel = new PanelLeaderboard(users);
-        gameOverPanel.add(leaderboardPanel);
+        if (leaderboardPanel != null) {
+            con.remove(leaderboardPanel);
+        }
+        leaderboardPanel = new PanelLeaderboard(users, gameOverPanel);
+        con.add(leaderboardPanel);
         con.revalidate();
         con.repaint();
         setFocusable(true);
-
     }
 
     @Override
@@ -218,7 +217,46 @@ public class View extends JFrame implements Observer, KeyListener {
         } else if (arg instanceof Coordinate[]) {
             Coordinate[] points = (Coordinate[]) arg;
             placeShipPanel.displayPossiblePoints(points);
+        } else if (arg instanceof Board) {
+            Board board = (Board) arg;
+            this.grid = new GridPlayer(controller, user);
+            grid.updateGrid(user.board);
+            controller.playFromLoad();
+        } else if (arg instanceof String) {
+            String argument = (String) arg;
+            if (argument.equals("invalidboard")) {
+                displayErrorBoard();
+            } else if (argument.contains("existingboard")) {
+                String boardName = argument.substring("existingboard".length());
+                displayOverwritePrompt(boardName);
+            } else if (argument.equals("playgame")) {
+                controller.playGame();
+            }
         }
+    }
+
+    public void displayErrorBoard() {
+        JOptionPane.showMessageDialog(this,
+                "Could not find board.",
+                "Error",
+                JOptionPane.PLAIN_MESSAGE);
+        controller.startGame();
+    }
+
+    public void displayOverwritePrompt(String boardName) {
+        int option = JOptionPane.showConfirmDialog(this,
+                "Overwrite existing board?",
+                "Existing Board",
+                JOptionPane.YES_NO_OPTION);
+        if (option == 0) {
+            controller.updateBoard(boardName);
+        } else if (option == 1) {
+            promptSave(grid);
+        }
+    }
+
+    public GridPlayer getGrid() {
+        return this.grid;
     }
 
     private void promptName() {
@@ -251,9 +289,17 @@ public class View extends JFrame implements Observer, KeyListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String name = textField.getText();
-                controller.setName(name);
-                namePanel.setVisible(false);
-                controller.startGame();
+                if (!name.equals("")) {
+                    controller.setName(name);
+                    namePanel.setVisible(false);
+                    controller.startGame();
+                }
+                else {
+                    JOptionPane.showMessageDialog(null,
+                    "Empty name",
+                    "Error",
+                    JOptionPane.PLAIN_MESSAGE);
+                }
             }
         });
 

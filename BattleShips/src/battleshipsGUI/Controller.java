@@ -30,11 +30,22 @@ public class Controller {
         setPlayerGameGrid();
         view.playGame();
     }
+    
+    public void playFromLoad() {
+        System.out.println("Loaded board");
+        loadPlayerGameGrid(view.getGrid());
+        view.playGame();
+    }
+    
+    public void loadPlayerGameGrid(GridPlayer grid) {
+        model.initPlayerGrid(grid);
+    }
 
-    public void loadBoard() {
+    public void loadBoard(String boardName) {
         // Set board to loadedboard
-        model.setBoardName(view.loadBoardPanel.getBoardName());
-
+        model.setBoardName(boardName);
+        model.loadBoard();
+        
     }
 
     public void displayLeaderboard() {
@@ -104,8 +115,12 @@ public class Controller {
         model.setScore(score);
     }
     
-    public void saveBoard(String boardName, Board board) {
-        model.insertBoard(boardName, board);
+    public void saveBoard(String boardName) {
+        model.insertBoard(boardName, model.getUser());
+    }
+    
+    public void updateBoard(String boardName) {
+        model.updateBoard(boardName, model.getUser());
     }
     
     public void promptSave(GridPlayer grid) {

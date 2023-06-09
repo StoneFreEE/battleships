@@ -89,7 +89,8 @@ public class PanelSaveBoard extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // direct user to board initiating panel
-                controller.initiateBoard();
+                controller.playGame();
+                removeAll();
             }
         });
 
@@ -128,11 +129,8 @@ public class PanelSaveBoard extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 boardName = textField.getText();
                 System.out.println(boardName);
-                controller.saveBoard(boardName, grid.getBoard());
-                
-                // Ask to save
-            
-                controller.playGame();
+                controller.saveBoard(boardName);
+                //controller.playGame();
                 removeAll();
             }
         });

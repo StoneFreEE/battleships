@@ -73,9 +73,7 @@ public class FrameGameOver extends JFrame implements KeyListener {
         leaderboardBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // promptBoard();
-                titlePanel.setVisible(false);
-                buttonPanel.setVisible(false);
+                setAllVisible(false);
                 controller.displayLeaderboard();
             }
         });
@@ -116,5 +114,10 @@ public class FrameGameOver extends JFrame implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         // Not used, but needs to be implemented
+    }
+    
+    public void setAllVisible(boolean visibile) {
+        titlePanel.setVisible(visibile);
+        buttonPanel.setVisible(visibile);
     }
 }

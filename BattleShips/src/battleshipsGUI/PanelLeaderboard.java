@@ -10,7 +10,10 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 /**
  *
@@ -26,55 +29,82 @@ public class PanelLeaderboard extends JPanel{
     private JPanel buttonPanel;
     private JButton backButton;
     
-    public PanelLeaderboard(Object[][] users) {
+    public PanelLeaderboard(Object[][] users, FrameGameOver frameGameOver) {
         System.out.println("leaderboard reached");
         // Initialize and customize GUI components
         this.users = users;
         // Set layout manager
-        setBackground(Color.GREEN);
+        setBounds(0, 0, 800, 600);
+        setBackground(Color.BLACK);
 
         setLayout(null);
-        setVisible(true);
         
         // Create the title label
         titlePanel = new JPanel();
-        titlePanel.setBounds(100, 20, 600, 150);
-        titlePanel.setBackground(Color.GREEN);
+        titlePanel.setBounds(50, 10, 700, 100);
+        titlePanel.setBackground(Color.BLACK);
         
-        titleLabel = new JLabel("Leaderboard");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel = new JLabel("LEADERBOARD");
+        titleLabel.setFont(new Font("Menlo", Font.BOLD, 80));
         titleLabel.setForeground(Color.WHITE);
         titlePanel.add(titleLabel);
         
         // Create the leaderboard table
-        tablePanel = new JPanel();
-        tablePanel.setBounds(100, 200, 600, 400);
-        tablePanel.setBackground(Color.GREEN);
+        tablePanel = new JPanel(new BorderLayout());
+        tablePanel.setBounds(100, 120, 600, 340);
+        tablePanel.setBackground(Color.BLACK);
         
         tableModel = new DefaultTableModel();
         leaderboardTable = new JTable(tableModel);
         
         // Add table columns
-        tableModel.addColumn("Rank");
-        tableModel.addColumn("Player");
-        tableModel.addColumn("Score");
+        tableModel.addColumn("RANK");
+        tableModel.addColumn("PLAYER");
+        tableModel.addColumn("SCORE");
         
         // Add the table to a scroll pane for scrolling if necessary
         JScrollPane scrollPane = new JScrollPane(leaderboardTable);
+        scrollPane.setBounds(100, 120, 600, 340);
+        scrollPane.setBackground(Color.BLACK);
+        // Set the scroll pane's properties
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);   
         // Add the scroll pane to the panel
-        tablePanel.add(scrollPane);
+        tablePanel.add(scrollPane, BorderLayout.CENTER);
         
-         // Set table properties
-        leaderboardTable.setFont(new Font("Arial", Font.PLAIN, 16));
-        leaderboardTable.setRowHeight(users.length);
+        // Set table properties
+        leaderboardTable.setFont(new Font("Menlo", Font.PLAIN, 16));
+        JTableHeader header = leaderboardTable.getTableHeader();
+        header.setFont(new Font("Menlo", Font.BOLD, 24));
+        leaderboardTable.setRowHeight(30);
+        leaderboardTable.setEnabled(false);
         
+        // Disable column reordering
+        leaderboardTable.getTableHeader().setReorderingAllowed(false);  
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        leaderboardTable.setDefaultRenderer(Object.class, centerRenderer);
+        // Get the table header and set the custom renderer
+        header.setDefaultRenderer(centerRenderer);
+
+        
+        leaderboardTable.setGridColor(Color.BLACK);
+        leaderboardTable.setBackground(Color.BLACK);
+        leaderboardTable.setForeground(Color.WHITE);
+        header.setBackground(Color.BLACK);
+        header.setForeground(Color.WHITE);
+        
+        // Create a custom border for the table
+        Border border = BorderFactory.createLineBorder(Color.BLACK, 2); // Customize the color and thickness
+        // Set the custom border on the table
+        leaderboardTable.setBorder(border);
+
         buttonPanel = new JPanel();
-        buttonPanel.setBounds(300, 650, 200, 100);
-        buttonPanel.setBackground(Color.GREEN);
+        buttonPanel.setBounds(300, 480, 200, 90);
+        buttonPanel.setBackground(Color.BLACK);
         
         backButton = new JButton("BACK");
         backButton.setBackground(Color.BLACK);
-        backButton.setForeground(Color.LIGHT_GRAY);
+        backButton.setForeground(Color.BLACK);
         
         // Set the preferred size of the button
         backButton.setPreferredSize(new Dimension(200, 50));
@@ -83,6 +113,10 @@ public class PanelLeaderboard extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("back");
+                removeAll();
+                frameGameOver.setAllVisible(true);
+                frameGameOver.revalidate();
+                frameGameOver.repaint();
             }
         });
         buttonPanel.add(backButton);
@@ -93,9 +127,12 @@ public class PanelLeaderboard extends JPanel{
         add(titlePanel);
         add(tablePanel);
         add(buttonPanel);
+        
+        setVisible(true);
     }
     
     public void updateLeaderboard(Object[][] users) {
+        System.out.println("updating leaderboard");
         // Clear the existing table data
         tableModel.setRowCount(0);
         
@@ -104,6 +141,4 @@ public class PanelLeaderboard extends JPanel{
             tableModel.addRow(rowData);
         }
     }
-    
-    // Add other methods and event listeners as needed
 }

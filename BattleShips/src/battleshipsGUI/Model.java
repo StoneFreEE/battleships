@@ -31,6 +31,7 @@ public class Model extends Observable {
     private String username = null;
     private String password = null;
     private int score;
+    private boolean uniqueName;
 
     private int prevScore;
 
@@ -90,21 +91,16 @@ public class Model extends Observable {
     }
 
     public void checkUnique(String username) {
-        this.username = username;
-        boolean userCheck = false;
         try {
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery("SELECT name, score FROM UserInfo "
-                    + "WHERE name = '" + username + "'");
+                    + "WHERE name = '" + username.toUpperCase() + "'");
             if (!rs.next()) {
-                System.out.println("no such user");
-                statement.executeUpdate("INSERT INTO UserInfo "
-                        + "VALUES('" + username + "', 500)");
-                user = new User(username);
+                prevScore = 500;
+                uniqueName = true;
             } else {
-                String name = rs.getString(1);
                 prevScore = rs.getInt(2);
-                user = new User(name, prevScore);
+                uniqueName = false;
             }
             statement.close();
         } catch (SQLException ex) {
@@ -112,21 +108,53 @@ public class Model extends Observable {
         }
     }
     
-    public void insertBoard(String boardName, Board board) {
+    public void insertBoard(String boardName, User user) {
         try {
             Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT boardname FROM UserInfo "
-                    + "WHERE name = '" + boardName + "'");
+            ResultSet rs = statement.executeQuery("SELECT boardname FROM Boards "
+                    + "WHERE boardname = '" + boardName + "'");
             if (!rs.next()) {
-                System.out.println("no such user");
-                statement.executeUpdate("INSERT INTO UserInfo "
-                        + "VALUES('" + boardName + "', 500)");
-                user = new User(username);
+                String insertScript = "INSERT INTO Boards VALUES('" + boardName + "'";
+                for (Ship ship : user.getShipsList()) {
+                    insertScript += ", '" + Coordinate.translatePoint(ship.origin) + "', '" 
+                            + Coordinate.translatePoint(ship.endPoint) + "', " 
+                            + ship.length;
+                }
+                insertScript += ")";
+                statement.executeUpdate(insertScript);
+                String playGame = "playgame";
+                setChanged();
+                notifyObservers(playGame);
             } else {
-                String name = rs.getString(1);
-                prevScore = rs.getInt(2);
-                user = new User(name, prevScore);
+                // Overwrite
+                System.out.println("Existing database found");
+                String existingItem = "existingboard" + boardName;
+                setChanged();
+                notifyObservers(existingItem);
             }
+            statement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void updateBoard(String boardName, User user) {
+        try {
+            Statement statement = conn.createStatement();
+                String updateScript = "UPDATE Boards SET boardname='" + boardName + "'";
+                int row = 1;
+                for (Ship ship : user.getShipsList()) {
+                    updateScript += ", origin" + row + " = '" + Coordinate.translatePoint(ship.origin) + "', "
+                            + "end" + row + " = '" + Coordinate.translatePoint(ship.endPoint) + "', " 
+                            + "length" + row + " = " + ship.length;
+                    row++;
+                }
+                updateScript += " WHERE boardname = '" + boardName + "'";
+                System.out.println(updateScript);
+                statement.executeUpdate(updateScript);
+                String playGame = "playgame";
+                setChanged();
+                notifyObservers(playGame);
             statement.close();
         } catch (SQLException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
@@ -171,13 +199,23 @@ public class Model extends Observable {
     public int[] getShipLengths() {
         return this.shipLengths;
     }
+    
+    public User getUser() {
+        return this.user;
+    }
 
      public void updateScore() {
         try {
             Statement statement = conn.createStatement();
-            
-            if (score > prevScore) {
-                statement.executeUpdate("UPDATE UserInfo SET score=" + score + " WHERE name='" + username + "'");
+            if (uniqueName) {
+                System.out.println("unique");
+                statement.executeUpdate("INSERT INTO UserInfo VALUES('" + username + "', " + score + ")");
+            }
+            else {
+                if (score > prevScore) {
+                    System.out.println("better than old score");
+                    statement.executeUpdate("UPDATE UserInfo SET name='" + username + "', score=" + score + " WHERE name = '" + username + "'");
+                }
             }
             ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM UserInfo");
             if (rs.next()) {
@@ -286,8 +324,8 @@ public class Model extends Observable {
     }
 
     public void setName(String name) {
-        this.user = new User(name);
-        this.username = name;
+        this.username = name.toUpperCase();
+        this.user = new User(this.username);
         setChanged();
         notifyObservers(user);
     }
@@ -303,15 +341,15 @@ public class Model extends Observable {
 
             ResultSet rs = statement.executeQuery("SELECT "
                     + "origin1, end1, length1,"
-                    + "origin2 end2 length2,"
-                    + "origin3 end3 length3,"
-                    + "origin4 end4 length4,"
-                    + "origin5 end5 length5,"
+                    + "origin2, end2, length2,"
+                    + "origin3, end3, length3,"
+                    + "origin4, end4, length4,"
+                    + "origin5, end5, length5 "
                     + "FROM Boards "
-                    + "WHERE boardname = '" + boardName + "';");
+                    + "WHERE boardname = '" + boardName + "'");
 
-            if (!rs.next()) {
-                for (int i = 0; i <= 12; i += 3) {
+            if (rs.next()) {
+                for (int i = 1; i <= 13; i += 3) {
                     Coordinate firstPoint = user.board.parsePoint(rs.getString(i));
                     Coordinate endPoint = user.board.parsePoint(rs.getString(i + 1));
                     Ship ship = new Ship(rs.getInt(i + 2), firstPoint, endPoint);
@@ -319,12 +357,14 @@ public class Model extends Observable {
                 }
 
                 user.initLoadDatabase();
-            } else {
-                //invalid
-                boolean invalid = true;
                 setChanged();
-                notifyObservers(invalid);
-
+                notifyObservers(user.board);
+            } else {
+               // Cant find name
+                System.out.println("Couldnt find");
+                String invalidName = "invalidboard";
+                setChanged();
+                notifyObservers(invalidName);
             }
 
         } catch (SQLException ex) {
