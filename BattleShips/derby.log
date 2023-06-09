@@ -1,0 +1,37 @@
+Fri Jun 09 01:07:19 NZST 2023 : Apache Derby Network Server - 10.14.2.0 - (1828579) started and ready to accept connections on port 1527
+----------------------------------------------------------------
+Fri Jun 09 01:07:56 NZST 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0188-9b1e-5fd6-0000150a8719 
+on database directory /Users/oliver/NetBeansProjects/battleshipsGUI/BattleShips/BattleShipDB with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Loaded from file:/Users/oliver/NetBeansProjects/battleshipsGUI/BattleShips/db-derby-10.14.2.0-bin/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_361-b09
+user.dir=/Users/oliver/NetBeansProjects/battleshipsGUI/BattleShips/db-derby-10.14.2.0-bin
+os.name=Mac OS X
+os.arch=x86_64
+os.version=13.2.1
+derby.system.home=/Users/oliver/NetBeansProjects/battleshipsGUI/BattleShips
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Fri Jun 09 01:07:57 NZST 2023:
+Shutting down instance a816c00e-0188-9b1e-5fd6-0000150a8719 on database directory /Users/oliver/NetBeansProjects/battleshipsGUI/BattleShips/BattleShipDB with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Fri Jun 09 01:07:57 NZST 2023 Thread[DRDAConnThread_2,5,main] (DATABASE = BattleShipDB), (DRDAID = {2}), Database 'BattleShipDB' shutdown.
+----------------------------------------------------------------
+Fri Jun 09 01:10:20 NZST 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance 6ede40af-0188-9b1e-5fd6-0000150a8719 
+on database directory /Users/oliver/NetBeansProjects/battleshipsGUI/BattleShips/BattleShipDB with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+Loaded from file:/Users/oliver/NetBeansProjects/battleshipsGUI/BattleShips/db-derby-10.14.2.0-bin/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_361-b09
+user.dir=/Users/oliver/NetBeansProjects/battleshipsGUI/BattleShips/db-derby-10.14.2.0-bin
+os.name=Mac OS X
+os.arch=x86_64
+os.version=13.2.1
+derby.system.home=/Users/oliver/NetBeansProjects/battleshipsGUI/BattleShips
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Fri Jun 09 03:07:05 NZST 2023: Shutting down Derby engine
+----------------------------------------------------------------
+Fri Jun 09 03:07:05 NZST 2023:
+Shutting down instance 6ede40af-0188-9b1e-5fd6-0000150a8719 on database directory /Users/oliver/NetBeansProjects/battleshipsGUI/BattleShips/BattleShipDB with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
+----------------------------------------------------------------

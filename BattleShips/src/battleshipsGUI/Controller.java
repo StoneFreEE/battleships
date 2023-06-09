@@ -61,21 +61,17 @@ public class Controller {
     }
 
     public void setName(String name) {
-        //model.checkUnique(name);
+        model.checkUnique(name);
         model.setName(name);
     }
 
     // set limit to top 10 users
     public void updateScore() {
-        model.updateScore(10);
+        model.updateScore();
     }
 
     public void updatePlayerScore() {
         model.updatePlayerScore();
-    }
-
-    public void updateScoreDB() {
-        model.updateScoreDB();
     }
 
     public void initiateBoard() {
@@ -96,6 +92,8 @@ public class Controller {
     }
 
     public void gameOver(String winner, int score) {
+
+        model.updateScore();
         view.gameOver(winner, score);
     }
 
@@ -104,5 +102,13 @@ public class Controller {
     }
     public void setScore(int score){
         model.setScore(score);
+    }
+    
+    public void saveBoard(String boardName, Board board) {
+        model.insertBoard(boardName, board);
+    }
+    
+    public void promptSave(GridPlayer grid) {
+        view.promptSave(grid);
     }
 }

@@ -40,12 +40,14 @@ public class View extends JFrame implements Observer, KeyListener {
 
     // Game
     public PanelLoadBoard loadBoardPanel;
+    public PanelSaveBoard saveBoardPanel;
     public PanelPlaceShip placeShipPanel;
     public FrameGame frameGame;
     private User user;
     private FrameGameOver gameOverPanel;
     private String winner;
-
+    
+    
     // Score
     private PanelLeaderboard leaderboardPanel;
 
@@ -139,6 +141,16 @@ public class View extends JFrame implements Observer, KeyListener {
         setFocusable(true);
 
     }
+    
+    public void promptSave(GridPlayer grid) {
+        con.removeAll();
+
+        // load board
+        saveBoardPanel = new PanelSaveBoard(controller, grid);
+        con.add(saveBoardPanel);
+        con.revalidate();
+        con.repaint();
+    }
 
     public void initiateBoard(int[] shipLengths) {
         con.removeAll();
@@ -167,9 +179,9 @@ public class View extends JFrame implements Observer, KeyListener {
         frameGame.dispose();
         con.removeAll();
 
-        FrameGameOver gameOverPanel = new FrameGameOver(controller, winner, score);
-        controller.updateScoreDB();
-        
+
+        gameOverPanel = new FrameGameOver(controller, winner, score);
+
         con = gameOverPanel.getContentPane();
         con.revalidate();
         con.repaint();
@@ -178,9 +190,10 @@ public class View extends JFrame implements Observer, KeyListener {
     }
 
     public void displayLeaderboard(Object[][] users) {
+        System.out.println("view reached");
+        
         leaderboardPanel = new PanelLeaderboard(users);
-        getContentPane().removeAll();
-        add(leaderboardPanel);
+        gameOverPanel.add(leaderboardPanel);
         con.revalidate();
         con.repaint();
         setFocusable(true);
@@ -192,7 +205,6 @@ public class View extends JFrame implements Observer, KeyListener {
         if (arg instanceof Object[][]) {
             // Handle score update
             Object[][] users = (Object[][]) arg;
-            displayLeaderboard(users);
         } else if (arg instanceof Boolean) {
             boolean valid = (boolean) arg;
             if (!valid) {
