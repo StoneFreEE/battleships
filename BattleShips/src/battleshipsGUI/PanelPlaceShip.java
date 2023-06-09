@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 /**
+ * The panel responsible for placing ships on the player's board. It displays
+ * the current ship length being placed and the player's board. It also handles
+ * updating the grid with ships and displaying error messages. Once all ships
+ * have been placed, it prompts the player to save the board or start the game.
+ * Implements the graphical user interface for ship placement.
  *
  * @author oliver
  */
@@ -32,6 +37,13 @@ public class PanelPlaceShip extends JPanel {
 
     private boolean playGameCalled = false; // Flag to track if playGame() has been called
 
+    /**
+     * Constructs a PanelPlaceShip object.
+     *
+     * @param controller the controller object
+     * @param shipLengths an array of ship lengths
+     * @param user the user object
+     */
     public PanelPlaceShip(Controller controller, int[] shipLengths, User user) {
         this.controller = controller;
         this.shipLengths = shipLengths;
@@ -84,10 +96,22 @@ public class PanelPlaceShip extends JPanel {
         repaint();
     }
 
+    /**
+     * Displays the possible points for ship placement on the grid.
+     *
+     * @param points an array of possible points for ship placement
+     */
     public void displayPossiblePoints(Coordinate[] points) {
         grid.displayPossiblePoints(points);
     }
 
+    /**
+     * Updates the grid with the player's board and progresses to the next ship
+     * length. If all ships have been placed, it prompts the player to save the
+     * board or start the game.
+     *
+     * @param user the user object
+     */
     public void updateGrid(User user) {
         errorLabel.setText("");
         grid.updateGrid(user.board);
@@ -108,11 +132,18 @@ public class PanelPlaceShip extends JPanel {
         }
     }
 
-
+    /**
+     * Gets the grid object.
+     *
+     * @return the grid object
+     */
     public GridPlayer getGrid() {
         return grid;
     }
 
+    /**
+     * Displays an error message indicating invalid ship placement.
+     */
     public void displayErrorPlacementMessage() {
         errorLabel.setText("Invalid point");
         System.out.println("invalid");

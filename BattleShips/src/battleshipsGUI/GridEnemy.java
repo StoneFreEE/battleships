@@ -11,8 +11,8 @@ import java.util.Set;
 import javax.swing.*;
 
 /**
- *
- * @author 64272
+ * Represents the enemy's grid in the game, allowing interaction with it.
+ * Extends JPanel and implements GridPanel.
  */
 public class GridEnemy extends JPanel implements GridPanel {
 
@@ -25,6 +25,15 @@ public class GridEnemy extends JPanel implements GridPanel {
 
     private boolean startPhase = true;
 
+    /**
+     * Constructs a GridEnemy object with the specified controller, model,
+     * enemy, and ship lengths.
+     *
+     * @param controller The controller object associated with the game.
+     * @param model The model object associated with the game.
+     * @param enemy The AIEnemy object representing the enemy.
+     * @param shipLengths An array of ship lengths.
+     */
     public GridEnemy(Controller controller, Model model, AIEnemy enemy, int[] shipLengths) {
         this.controller = controller;
         this.model = model;
@@ -85,10 +94,20 @@ public class GridEnemy extends JPanel implements GridPanel {
         this.model = model;
     }
 
+    /**
+     * Sets the game panel associated with the grid.
+     *
+     * @param panel The FrameGame panel object.
+     */
     public void setGamePanel(FrameGame panel) {
         this.panelGame = panel;
     }
 
+    /**
+     * Retrieves the enemy object associated with the grid.
+     *
+     * @return The AIEnemy object.
+     */
     public AIEnemy getEnemy() {
         return this.enemy;
     }
@@ -112,6 +131,13 @@ public class GridEnemy extends JPanel implements GridPanel {
         }
     }
 
+    /**
+     * Retrieves the component at the specified coordinates.
+     *
+     * @param x The x-coordinate.
+     * @param y The y-coordinate.
+     * @return The JPanel component at the specified coordinates.
+     */
     public JPanel getComponentAt(int x, int y) {
         Component comp = null;
         String pointString = x + "" + y;
@@ -168,10 +194,18 @@ public class GridEnemy extends JPanel implements GridPanel {
         }
     }
 
+    /**
+     * Retrieves the board associated with the grid.
+     *
+     * @return The Board object.
+     */
     public Board getBoard() {
         return this.board;
     }
 
+    /**
+     * Starts the shooting phase of the game.
+     */
     public void startShootingPhase() {
         gridState = GridStates.SHOOTINGAT;
         startPhase = true;

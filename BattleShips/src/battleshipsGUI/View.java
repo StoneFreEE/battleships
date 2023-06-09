@@ -16,24 +16,29 @@ import java.util.Observer;
 import javax.swing.*;
 
 /**
- *
- * @author oliver
+ * The View class represents the GUI view of the Battleships game. It extends
+ * the JFrame class and implements the Observer and KeyListener interfaces. It
+ * displays the start screen, game screens, leaderboard, and handles user
+ * interactions.
  */
 public class View extends JFrame implements Observer, KeyListener {
 
+    /**
+     * The model object associated with the view.
+     */
     private Model model;
 
     // Title
     public JPanel titlePanel;
     public JLabel titleLabel;
     public JButton startButton;
-    private JPanel buttonPanel;
-    private Font titleFont = new Font("Menlo", Font.BOLD, 80);
+    public JPanel buttonPanel;
+    public Font titleFont = new Font("Menlo", Font.BOLD, 80);
 
     // Name
-    private JPanel namePanel;
-    private JTextField textField;
-    private JButton enterButton;
+    public JPanel namePanel;
+    public JTextField textField;
+    public JButton enterButton;
 
     // button font
     private Font buttonFont = new Font("Menlo", Font.PLAIN, 24);
@@ -43,10 +48,10 @@ public class View extends JFrame implements Observer, KeyListener {
     public PanelSaveBoard saveBoardPanel;
     public PanelPlaceShip placeShipPanel;
     public FrameGame frameGame;
-    private User user;
-    private GridPlayer grid;
-    private FrameGameOver gameOverPanel;
-    private String winner;
+    public User user;
+    public GridPlayer grid;
+    public FrameGameOver gameOverPanel;
+    public String winner;
 
     // Score
     private PanelLeaderboard leaderboardPanel;
@@ -55,6 +60,11 @@ public class View extends JFrame implements Observer, KeyListener {
 
     private Container con;
 
+    /**
+     * Constructs a View object with the specified model.
+     *
+     * @param model The model object to associate with the view.
+     */
     public View(Model model) {
         this.model = model;
         initStartScreen();
@@ -63,6 +73,9 @@ public class View extends JFrame implements Observer, KeyListener {
 
     }
 
+    /**
+     * Initializes the start screen of the game.
+     */
     public void initiateStartScreen() {
         if (frameGame != null) {
             frameGame.dispose();
@@ -76,6 +89,9 @@ public class View extends JFrame implements Observer, KeyListener {
         con.repaint();
     }
 
+    /**
+     * Initializes the start screen of the game.
+     */
     public void initStartScreen() {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -125,10 +141,18 @@ public class View extends JFrame implements Observer, KeyListener {
         con.add(buttonPanel);
     }
 
+    /**
+     * Sets the controller object associated with the view.
+     *
+     * @param controller The controller object to associate with the view.
+     */
     public void setController(Controller controller) {
         this.controller = controller;
     }
 
+    /**
+     * Starts the game by displaying the load board panel.
+     */
     public void startGame() {
         con.removeAll();
 
@@ -141,6 +165,11 @@ public class View extends JFrame implements Observer, KeyListener {
 
     }
 
+    /**
+     * Prompts the user to save their board configuration.
+     *
+     * @param grid The GridPlayer object representing the player's board.
+     */
     public void promptSave(GridPlayer grid) {
         System.out.println("Save");
         con.removeAll();
@@ -152,6 +181,11 @@ public class View extends JFrame implements Observer, KeyListener {
         con.repaint();
     }
 
+    /**
+     * Initializes the board for placing ships with the specified ship lengths.
+     *
+     * @param shipLengths An array of ship lengths.
+     */
     public void initiateBoard(int[] shipLengths) {
         con.removeAll();
         placeShipPanel = new PanelPlaceShip(controller, shipLengths, user);
@@ -162,6 +196,9 @@ public class View extends JFrame implements Observer, KeyListener {
 
     }
 
+    /**
+     * Starts the game by displaying the game frame.
+     */
     public void playGame() {
         con.removeAll();
         frameGame = new FrameGame(controller, model);
@@ -175,6 +212,12 @@ public class View extends JFrame implements Observer, KeyListener {
 
     }
 
+    /**
+     * Displays the game over screen with the winner and score.
+     *
+     * @param winner The name of the winner.
+     * @param score The score of the game.
+     */
     public void gameOver(String winner, int score) {
         frameGame.dispose();
         con.removeAll();
@@ -188,6 +231,11 @@ public class View extends JFrame implements Observer, KeyListener {
 
     }
 
+    /**
+     * Displays the leaderboard with the specified user data.
+     *
+     * @param users A 2D array representing the user data.
+     */
     public void displayLeaderboard(Object[][] users) {
         if (leaderboardPanel != null) {
             con.remove(leaderboardPanel);
@@ -199,6 +247,9 @@ public class View extends JFrame implements Observer, KeyListener {
         setFocusable(true);
     }
 
+    /**
+     * Updates the view based on changes in the model.
+     */
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof Object[][]) {
@@ -235,6 +286,9 @@ public class View extends JFrame implements Observer, KeyListener {
         }
     }
 
+    /**
+     * Displays an error message when the board is not found.
+     */
     public void displayErrorBoard() {
         JOptionPane.showMessageDialog(this,
                 "Could not find board.",
@@ -243,6 +297,11 @@ public class View extends JFrame implements Observer, KeyListener {
         controller.startGame();
     }
 
+    /**
+     * Displays a prompt to overwrite an existing board.
+     *
+     * @param boardName The name of the existing board.
+     */
     public void displayOverwritePrompt(String boardName) {
         int option = JOptionPane.showConfirmDialog(this,
                 "Overwrite existing board?",
@@ -255,10 +314,18 @@ public class View extends JFrame implements Observer, KeyListener {
         }
     }
 
+    /**
+     * Retrieves the GridPlayer object representing the player's board.
+     *
+     * @return The GridPlayer object.
+     */
     public GridPlayer getGrid() {
         return this.grid;
     }
 
+    /**
+     * Prompts the user to enter their name before starting the game.
+     */
     private void promptName() {
         // name input panel
         namePanel = new JPanel();
@@ -293,12 +360,11 @@ public class View extends JFrame implements Observer, KeyListener {
                     controller.setName(name);
                     namePanel.setVisible(false);
                     controller.startGame();
-                }
-                else {
+                } else {
                     JOptionPane.showMessageDialog(null,
-                    "Empty name",
-                    "Error",
-                    JOptionPane.PLAIN_MESSAGE);
+                            "Empty name",
+                            "Error",
+                            JOptionPane.PLAIN_MESSAGE);
                 }
             }
         });
@@ -311,10 +377,17 @@ public class View extends JFrame implements Observer, KeyListener {
 
     }
 
+    /**
+     * Displays an error message for invalid ship placement.
+     */
     public void displayErrorPlacementMessage() {
         placeShipPanel.displayErrorPlacementMessage();
     }
 
+    /**
+     * Handles the key pressed event, specifically the ESC key to return to the
+     * start menu.
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

@@ -30,6 +30,14 @@ public class FrameGameOver extends JFrame implements KeyListener {
     private int score;
     private String winner;
 
+    /**
+     * Constructs a FrameGameOver object with the specified controller, winner,
+     * and score.
+     *
+     * @param controller The controller object associated with the game.
+     * @param winner The winner of the game.
+     * @param score The score achieved in the game.
+     */
     public FrameGameOver(Controller controller, String winner, int score) {
         this.controller = controller;
         this.winner = winner;
@@ -68,7 +76,6 @@ public class FrameGameOver extends JFrame implements KeyListener {
         leaderboardBtn.setForeground(Color.BLACK);
         leaderboardBtn.setFont(buttonFont);
 
-        
         buttonPanel.add(leaderboardBtn);
         leaderboardBtn.addActionListener(new ActionListener() {
             @Override
@@ -115,7 +122,12 @@ public class FrameGameOver extends JFrame implements KeyListener {
     public void keyReleased(KeyEvent e) {
         // Not used, but needs to be implemented
     }
-    
+
+    /**
+     * Sets the visibility of all components in the game over screen.
+     *
+     * @param visible The visibility status to set.
+     */
     public void setAllVisible(boolean visibile) {
         titlePanel.setVisible(visibile);
         buttonPanel.setVisible(visibile);

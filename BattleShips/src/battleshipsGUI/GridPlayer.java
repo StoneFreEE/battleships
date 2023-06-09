@@ -11,8 +11,8 @@ import java.util.Set;
 import javax.swing.*;
 
 /**
- *
- * @author oliver
+ * Represents the player's grid in the game, allowing the player to interact
+ * with it. Extends JPanel and implements GridPanel.
  */
 public class GridPlayer extends JPanel implements GridPanel {
 
@@ -25,6 +25,12 @@ public class GridPlayer extends JPanel implements GridPanel {
     private boolean enemyTurn;
     private boolean startPhase;
 
+    /**
+     * Constructs a GridPlayer object with the specified controller and user.
+     *
+     * @param controller The controller object associated with the game.
+     * @param user The user controlling the grid.
+     */
     public GridPlayer(Controller controller, User user) {
         this.controller = controller;
         this.user = user;
@@ -59,22 +65,47 @@ public class GridPlayer extends JPanel implements GridPanel {
         return pan;
     }
 
+    /**
+     * Sets the turn of the enemy player.
+     *
+     * @param bool The boolean value indicating if it's the enemy's turn.
+     */
     public void setEnemyTurn(boolean bool) {
         this.enemyTurn = bool;
     }
 
+    /**
+     * Sets the game panel associated with the grid.
+     *
+     * @param panel The FrameGame panel object.
+     */
     public void setGamePanel(FrameGame panel) {
         this.panelGame = panel;
     }
 
+    /**
+     * Retrieves the user associated with the grid.
+     *
+     * @return The User object.
+     */
     public User getUser() {
         return this.user;
     }
 
+    /**
+     * Sets the length of the ship to be placed.
+     *
+     * @param shipLength The length of the ship.
+     */
     public void setShipLength(int shipLength) {
         this.shipLength = shipLength;
     }
 
+    /**
+     * Displays the possible points to place a ship.
+     *
+     * @param points The array of Coordinate objects representing the points.
+     */
     public void displayPossiblePoints(Coordinate[] points) {
         for (Coordinate point : points) {
             int x = point.getX();
@@ -108,6 +139,13 @@ public class GridPlayer extends JPanel implements GridPanel {
         }
     }
 
+    /**
+     * Retrieves the component at the specified coordinates.
+     *
+     * @param x The x-coordinate.
+     * @param y The y-coordinate.
+     * @return The JPanel component at the specified coordinates.
+     */
     public JPanel getComponentAt(int x, int y) {
         Component comp = null;
         String pointString = x + "" + y;
@@ -118,7 +156,12 @@ public class GridPlayer extends JPanel implements GridPanel {
         }
         return (JPanel) comp;
     }
-    
+
+    /**
+     * Retrieves the board associated with the grid.
+     *
+     * @return The Board object.
+     */
     public Board getBoard() {
         return this.board;
     }
@@ -166,15 +209,28 @@ public class GridPlayer extends JPanel implements GridPanel {
         }
     }
 
+    /**
+     * Updates the label displaying the enemy's target cell.
+     *
+     * @param cell The cell coordinates.
+     */
     public void updateEnemyTargetLabel(String cell) {
         this.panelGame.updateEnemyTargetLabel(cell);
     }
 
+    /**
+     * Starts the shooting phase of the game.
+     */
     public void startShootingPhase() {
         gridState = GridStates.NOCLICK;
         startPhase = true;
     }
 
+    /**
+     * Updates the label displaying the result of the enemy's attack.
+     *
+     * @param result The result of the attack.
+     */
     public void updateEnemyResultLabel(String result) {
         this.panelGame.updateEnemyResultLabel(result);
     }

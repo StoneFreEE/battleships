@@ -18,8 +18,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author oliver
+ * The Model class represents the data and business logic of the Battleships
+ * game. It interacts with the database, manages user information, game boards,
+ * and coordinates communication between the various components of the game.
  */
 public class Model extends Observable {
 
@@ -56,14 +57,25 @@ public class Model extends Observable {
 
     private Controller controller;
 
+    /**
+     * Constructs a Model object and sets up the database.
+     */
     public Model() {
         dbsetup();
     }
 
+    /**
+     * Retrieves the list of users from the database.
+     *
+     * @return The list of users as a two-dimensional array.
+     */
     public Object[][] getUsers() {
         return users;
     }
 
+    /**
+     * Sets up the database tables if they don't exist.
+     */
     public void dbsetup() {
         try {
             conn = DriverManager.getConnection(url, dbusername, dbpassword);
@@ -90,6 +102,11 @@ public class Model extends Observable {
         }
     }
 
+    /**
+     * Checks if the given username is unique in the database.
+     *
+     * @param username The username to check for uniqueness.
+     */
     public void checkUnique(String username) {
         try {
             Statement statement = conn.createStatement();
@@ -107,7 +124,15 @@ public class Model extends Observable {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+    /**
+     * Inserts a board into the database. If the board with the given name
+     * already exists, it overwrites the existing board. Notifies the observers
+     * after the insertion is complete.
+     *
+     * @param boardName The name of the board to be inserted.
+     * @param user The User object containing the ship placements for the board.
+     */
     public void insertBoard(String boardName, User user) {
         try {
             Statement statement = conn.createStatement();
@@ -116,8 +141,8 @@ public class Model extends Observable {
             if (!rs.next()) {
                 String insertScript = "INSERT INTO Boards VALUES('" + boardName + "'";
                 for (Ship ship : user.getShipsList()) {
-                    insertScript += ", '" + Coordinate.translatePoint(ship.origin) + "', '" 
-                            + Coordinate.translatePoint(ship.endPoint) + "', " 
+                    insertScript += ", '" + Coordinate.translatePoint(ship.origin) + "', '"
+                            + Coordinate.translatePoint(ship.endPoint) + "', "
                             + ship.length;
                 }
                 insertScript += ")";
@@ -137,42 +162,59 @@ public class Model extends Observable {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+    /**
+     * Updates the board in the database with the new ship placements. Notifies
+     * the observers after the update is complete.
+     *
+     * @param boardName The name of the board to be updated.
+     * @param user The User object containing the new ship placements for the
+     * board.
+     */
     public void updateBoard(String boardName, User user) {
         try {
             Statement statement = conn.createStatement();
-                String updateScript = "UPDATE Boards SET boardname='" + boardName + "'";
-                int row = 1;
-                for (Ship ship : user.getShipsList()) {
-                    updateScript += ", origin" + row + " = '" + Coordinate.translatePoint(ship.origin) + "', "
-                            + "end" + row + " = '" + Coordinate.translatePoint(ship.endPoint) + "', " 
-                            + "length" + row + " = " + ship.length;
-                    row++;
-                }
-                updateScript += " WHERE boardname = '" + boardName + "'";
-                System.out.println(updateScript);
-                statement.executeUpdate(updateScript);
-                String playGame = "playgame";
-                setChanged();
-                notifyObservers(playGame);
+            String updateScript = "UPDATE Boards SET boardname='" + boardName + "'";
+            int row = 1;
+            for (Ship ship : user.getShipsList()) {
+                updateScript += ", origin" + row + " = '" + Coordinate.translatePoint(ship.origin) + "', "
+                        + "end" + row + " = '" + Coordinate.translatePoint(ship.endPoint) + "', "
+                        + "length" + row + " = " + ship.length;
+                row++;
+            }
+            updateScript += " WHERE boardname = '" + boardName + "'";
+            System.out.println(updateScript);
+            statement.executeUpdate(updateScript);
+            String playGame = "playgame";
+            setChanged();
+            notifyObservers(playGame);
             statement.close();
         } catch (SQLException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+    /**
+     * Updates the player's score and the score variable.
+     */
     public void updatePlayerScore() {
         this.playerGrid.getUser().setScore(this.playerGrid.getUser().getScore() + 50);
         this.score = this.playerGrid.getUser().getScore();
     }
 
+    /**
+     * Checks if a table with the given name already exists in the database.
+     *
+     * @param newTableName The name of the table to check.
+     * @return True if the table exists, false otherwise.
+     */
     private boolean checkTableExisting(String newTableName) {
         boolean flag = false;
         try {
             System.out.println("check existing tables.... ");
             String[] types = {"TABLE"};
             DatabaseMetaData dbmd = conn.getMetaData();
-            ResultSet rsDBMeta = dbmd.getTables(null, null, null, null);
+            ResultSet rsDBMeta = dbmd.getTables(null, null, null, types);
             while (rsDBMeta.next()) {
                 String tableName = rsDBMeta.getString("TABLE_NAME");
                 if (tableName.compareToIgnoreCase(newTableName) == 0) {
@@ -188,30 +230,53 @@ public class Model extends Observable {
         return flag;
     }
 
+    /**
+     * Gets the current score.
+     *
+     * @return The current score.
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     * Sets the score to the given value.
+     *
+     * @param score The new score value.
+     */
     public void setScore(int score) {
         this.score = score;
     }
 
+    /**
+     * Gets the ship lengths array.
+     *
+     * @return The array of ship lengths.
+     */
     public int[] getShipLengths() {
         return this.shipLengths;
     }
-    
+
+    /**
+     * Gets the User object.
+     *
+     * @return The User object.
+     */
     public User getUser() {
         return this.user;
     }
 
-     public void updateScore() {
+    /**
+     * Updates the score in the database based on the current score and
+     * username. Retrieves the updated leaderboard and notifies the observers.
+     */
+    public void updateScore() {
         try {
             Statement statement = conn.createStatement();
             if (uniqueName) {
                 System.out.println("unique");
                 statement.executeUpdate("INSERT INTO UserInfo VALUES('" + username + "', " + score + ")");
-            }
-            else {
+            } else {
                 if (score > prevScore) {
                     System.out.println("better than old score");
                     statement.executeUpdate("UPDATE UserInfo SET name='" + username + "', score=" + score + " WHERE name = '" + username + "'");
@@ -238,30 +303,56 @@ public class Model extends Observable {
         setChanged();
         notifyObservers(users);
     }
-     
+
+    /**
+     * Sets the board name.
+     *
+     * @param boardName The name of the board.
+     */
     public void setBoardName(String boardName) {
         this.boardName = boardName;
     }
 
+    /**
+     * Sets the Controller object.
+     *
+     * @param controller The Controller object.
+     */
     public void setController(Controller controller) {
         this.controller = controller;
     }
 
-    // set grid with ship placements
+    /**
+     * Initializes the player grid with ship placements.
+     *
+     * @param grid The GridPlayer object representing the player's grid.
+     */
     public void initPlayerGrid(GridPlayer grid) {
-        playerGrid = grid; // Retrieve the GridPlayer object from PanelPlaceShip
+        playerGrid = grid;
         playerGrid.startShootingPhase();
     }
 
+    /**
+     * Initializes the enemy grid.
+     */
     public void initEnemyGrid() {
         initEnemy();
         enemyGrid = new GridEnemy(controller, this, this.enemy, shipLengths);
     }
 
+    /**
+     * Gets the player's grid.
+     *
+     * @return The GridPlayer object representing the player's grid.
+     */
     public GridPlayer getPlayerGrid() {
-        return this.playerGrid; // Retrieve the GridPlayer object from PanelPlaceShip
+        return this.playerGrid;
     }
 
+    /**
+     * Fires the enemy cannon by selecting a coordinate to shoot at. Updates the
+     * player's grid and notifies the observers.
+     */
     public void enemyFireCannon() {
         Random rand = new Random();
         Coordinate point = new Coordinate();
@@ -312,17 +403,31 @@ public class Model extends Observable {
         this.playerGrid.updateGrid(user.board);
     }
 
+    /**
+     * Links the game panel to the player and enemy grids.
+     *
+     * @param panel The game panel to link.
+     */
     public void linkPaneltoGrid(FrameGame panel) {
         this.playerGrid.setGamePanel(panel);
         this.enemyGrid.setGamePanel(panel);
     }
 
-    // update grid before returning
+    /**
+     * Updates the enemy grid before returning it.
+     *
+     * @return The updated GridEnemy object.
+     */
     public GridEnemy getEnemyGrid() {
         this.enemyGrid.updateGrid(enemy.board);
         return this.enemyGrid; // Retrieve the GridPlayer object from PanelPlaceShip
     }
 
+    /**
+     * Sets the name of the user.
+     *
+     * @param name The name to set.
+     */
     public void setName(String name) {
         this.username = name.toUpperCase();
         this.user = new User(this.username);
@@ -330,11 +435,17 @@ public class Model extends Observable {
         notifyObservers(user);
     }
 
+    /**
+     * Initializes the enemy AI and its game board.
+     */
     public void initEnemy() {
         this.enemy = new AIEnemy();
         this.enemy.initBoard(shipLengths);
     }
 
+    /**
+     * Loads the user's game board from the database.
+     */
     public void loadBoard() {
         try {
             Statement statement = conn.createStatement();
@@ -360,7 +471,7 @@ public class Model extends Observable {
                 setChanged();
                 notifyObservers(user.board);
             } else {
-               // Cant find name
+                // Cant find name
                 System.out.println("Couldnt find");
                 String invalidName = "invalidboard";
                 setChanged();
@@ -373,6 +484,11 @@ public class Model extends Observable {
         }
     }
 
+    /**
+     * Sets the origin coordinate for placing a ship.
+     *
+     * @param coordinate The origin coordinate to set.
+     */
     public void setOrigin(Coordinate coordinate) {
         HashSet<Coordinate> possiblePoints = user.board.checkPossible(currentShip);
         Coordinate[] coordinates = convertToPrimitive(possiblePoints);
@@ -381,6 +497,11 @@ public class Model extends Observable {
         notifyObservers(coordinates);
     }
 
+    /**
+     * Sets the end coordinate for placing a ship and updates the user's board.
+     *
+     * @param coordinate The end coordinate to set.
+     */
     public void setEnd(Coordinate coordinate) {
 
         currentShip.endPoint = coordinate;
@@ -390,6 +511,13 @@ public class Model extends Observable {
         notifyObservers(user);
     }
 
+    /**
+     * Converts a HashSet of Coordinate objects to an array of primitive
+     * coordinates.
+     *
+     * @param possiblePoints The HashSet of possible coordinates.
+     * @return An array of Coordinate objects.
+     */
     public Coordinate[] convertToPrimitive(HashSet<Coordinate> possiblePoints) {
         // instanceof doesn't support in 1.8 hashset so convert to primitive
         Coordinate[] coordinates = new Coordinate[possiblePoints.size()];
@@ -403,6 +531,14 @@ public class Model extends Observable {
         return coordinates;
     }
 
+    /**
+     * Checks if a ship placement is valid at the given coordinate with the
+     * specified length.
+     *
+     * @param coordinate The coordinate to check.
+     * @param shipLength The length of the ship.
+     * @return {@code true} if the placement is valid, {@code false} otherwise.
+     */
     public boolean checkValid(Coordinate coordinate, int shipLength) {
         boolean valid = true;
         currentShip = new Ship(shipLength, coordinate);
@@ -411,4 +547,5 @@ public class Model extends Observable {
         notifyObservers(valid);
         return valid;
     }
+
 }
